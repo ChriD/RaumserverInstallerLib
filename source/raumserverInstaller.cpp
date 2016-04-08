@@ -48,6 +48,19 @@ namespace RaumserverInstaller
         // TODO: @@@
         sigDeviceRemovedForInstall.fire(_deviceInformation);
     }
+
+
+    std::vector<NetworkAdaperInformation> RaumserverInstaller::getNetworkAdapterList()
+    {
+        // use the list directly from the UPNP stack who is so gentle to give us this informations
+        return deviceDiscoveryUPNP.getNetworkAdaptersInformation();
+    }
+
+
+    void RaumserverInstaller::setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation)
+    {
+        deviceDiscoveryUPNP.setNetworkAdapter(_networkAdapterInformation);
+    }
    
 
     void RaumserverInstaller::startInstallToDevice(DeviceInformation _deviceInformation)

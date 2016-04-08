@@ -50,6 +50,15 @@ namespace RaumserverInstaller
             * This method will do an async install. The current status and progress can be consumed by attaching to the installProgress signal
             */
             EXPORT void startInstallToDevice(DeviceInformation _deviceInformation);
+            /**
+            * Returns a vector of NetworkAdapters structures
+            * init has to be run before this will return any stuff
+            */
+            EXPORT std::vector<NetworkAdaperInformation> getNetworkAdapterList();
+            /**
+            * sets the network adapter we are searching for devices  to install the component
+            */
+            EXPORT void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation);
 
             /**
             * will be fired if a device was found where we can install the component on

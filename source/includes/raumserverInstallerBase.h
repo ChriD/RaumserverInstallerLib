@@ -30,14 +30,17 @@
 
 namespace RaumserverInstaller
 {
-    /*
+  
+    /**
+    * Network adapter information
+    */
     struct NetworkAdaperInformation
     {
-        std::string name;
-        std::string fullName;        
-        std::uint16_t id;
+        std::string name = "";
+        std::string fullName = "";
+        std::uint32_t address = 0;
+        std::uint16_t id = 0;
     };
-    */
 
 
     /**

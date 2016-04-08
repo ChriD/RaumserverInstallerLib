@@ -41,15 +41,7 @@ namespace RaumserverInstaller
 {
     namespace DeviceDiscovery
     {
-        struct NetworkAdaperInformation
-        {
-            std::string name;
-            std::string fullName;
-            TIpAddress address;
-            std::uint16_t id;
-        };
-
-
+   
         class DeviceDiscovery_UPNP : public DeviceDiscovery
         {
             public:
@@ -58,7 +50,7 @@ namespace RaumserverInstaller
 
                 virtual void init() override;
                 virtual void startDiscover();
-                virtual void selectAdapterId(const std::uint8_t &_adapterId);
+                virtual void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapter);
                 virtual void loadNetworkAdaptersInformation();
                 virtual std::vector<NetworkAdaperInformation> getNetworkAdaptersInformation();                
 
@@ -66,7 +58,8 @@ namespace RaumserverInstaller
                 OpenHome::Net::CpDeviceListCppUpnpAll* upupDeviceListAll;
 
                 std::vector<NetworkAdaperInformation> networkAdapterInfomationList;
-                std::uint8_t selectedAdapterId;
+                NetworkAdaperInformation selectedNetworkAdapter;
+                bool upnpStarted;
 
                 void initAdapter();
                 void discover();

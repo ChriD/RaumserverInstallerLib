@@ -8,8 +8,8 @@ namespace RaumserverInstaller
     {
 
         DeviceDiscovery_UPNP::DeviceDiscovery_UPNP() : DeviceDiscovery()
-        {
-            selectedAdapterId = 0;
+        {        
+            upnpStarted = false;
             upupDeviceListAll = nullptr;
         }
 
@@ -39,7 +39,7 @@ namespace RaumserverInstaller
                 OpenHome::Net::UpnpLibrary::Initialise(initParams);    
 
                 // after initialisation get the available network adapters
-                networkAdapterInfomationList = getNetworkAdaptersInformation();
+                loadNetworkAdaptersInformation();
 
             }
             catch (Raumkernel::Exception::RaumkernelException &e)
@@ -66,9 +66,9 @@ namespace RaumserverInstaller
         }
 
 
-        void DeviceDiscovery_UPNP::selectAdapterId(const std::uint8_t &_adapterId)
+        void DeviceDiscovery_UPNP::setNetworkAdapter(const NetworkAdaperInformation &_networkAdapter)
         {
-            selectedAdapterId = _adapterId;
+            selectedNetworkAdapter = _networkAdapter;
         }
 
 
@@ -81,25 +81,22 @@ namespace RaumserverInstaller
 
         void DeviceDiscovery_UPNP::initAdapter()
         {
-            if (!networkAdapterInfomationList.size())
+            if (!selectedNetworkAdapter.id)
                 return;
 
-            if (selectedAdapterId <= 0)
-                return;
-
-            if (selectedAdapterId > networkAdapterInfomationList.size())
-                return;
-
-            NetworkAdaperInformation selectedAdapterInformation =  networkAdapterInfomationList[selectedAdapterId - 1];
+            logInfo("Starting OpenHome UPNP Control Stack with network adapter: " + selectedNetworkAdapter.name, CURRENT_POSITION);
+            OpenHome::Net::UpnpLibrary::StartCp(selectedNetworkAdapter.address);
             
-            logInfo("Starting OpenHome UPNP Control Stack with network adapter: " + selectedAdapterInformation.name, CURRENT_POSITION);
-            OpenHome::Net::UpnpLibrary::StartCp(selectedAdapterInformation.address);
+            upnpStarted = true;
 
         }
 
 
         void DeviceDiscovery_UPNP::discover()
         {
+            if (!upnpStarted)
+                return;
+
             if (upupDeviceListAll != nullptr)
                 delete upupDeviceListAll;
 

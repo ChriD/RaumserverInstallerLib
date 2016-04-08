@@ -14,10 +14,9 @@ int main()
     {
         std::cout << item.name + " - " + item.fullName;
         std::cout << std::endl;
-    }
+    } 
 
-    rlutil::getkey();
-
+    raumServerInstaller.setNetworkAdapter(adapterList[3]);
     raumServerInstaller.startDiscoverDevicesForInstall();
 
     rlutil::getkey();

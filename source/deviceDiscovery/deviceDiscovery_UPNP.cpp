@@ -176,6 +176,22 @@ namespace RaumserverInstaller
 
             //sigDeviceFound.fire()
 
+            /*
+            --> find this ones and aybe fill name by other map (UDN: name)
+
+            <deviceType>urn:schemas-raumfeld-com:device:RaumfeldDevice:1</deviceType> 
+          <friendlyName>Raumfeld Device</friendlyName> 
+
+         <UDN>uuid:6a1e8f58-beca-4837-b8f0-630941227e34</UDN> 
+
+        <modelName>Raumfeld One S</modelName> 
+          <modelNumber>1</modelNumber> 
+          <serialNumber>6c:ec:eb:f1:84:b7</serialNumber> 
+          <raumfeld:protocolVersion>223</raumfeld:protocolVersion> 
+          <raumfeld:hardwareType>13</raumfeld:hardwareType> 
+            
+            */
+
         }
 
 

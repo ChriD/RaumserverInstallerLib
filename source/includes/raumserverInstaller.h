@@ -33,23 +33,23 @@ namespace RaumserverInstaller
     class RaumserverInstaller : public RaumserverInstallerBase
     {
         public:
-            RaumserverInstaller();
-            ~RaumserverInstaller();      
+            EXPORT RaumserverInstaller();
+            EXPORT  ~RaumserverInstaller();
 
             /**
             * Does the Initialisation of the RaumserverInstallerLib
             */
-            void init();            
+            EXPORT void init();            
             /**
             * Starts the discovering of devices where we can install the component on
             * this method is async
             */
-            void startDiscoverDevicesForInstall();
+            EXPORT void startDiscoverDevicesForInstall();
             /**
             * Starts installing the Raumserver to the given device
             * This method will do an async install. The current status and progress can be consumed by attaching to the installProgress signal
             */
-            void startInstallToDevice(DeviceInformation _deviceInformation);
+            EXPORT void startInstallToDevice(DeviceInformation _deviceInformation);
 
             /**
             * will be fired if a device was found where we can install the component on

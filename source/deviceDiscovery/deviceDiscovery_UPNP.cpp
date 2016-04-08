@@ -1,5 +1,6 @@
 
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
+#include "tools/urlParser.h"
 
 
 namespace RaumserverInstaller
@@ -25,10 +26,7 @@ namespace RaumserverInstaller
         {
             DeviceDiscovery::init();
             
-            OpenHome::Net::InitialisationParams*		initParams;
-            std::vector<OpenHome::NetworkAdapter*>*		networkAdapterList;
-            std::uint8_t                                networkAdapterIdx = -1;
-            TIpAddress									networkAdapterAddress;
+            OpenHome::Net::InitialisationParams*		initParams;                             
 
             try
             {
@@ -115,7 +113,7 @@ namespace RaumserverInstaller
             _device.GetAttribute("Upnp.DeviceXml", deviceXml);
 
             logDebug("UPNP Device found: " + deviceFriendlyName + "(" + _device.Udn() + ")", CURRENT_POSITION);
-            
+                   
             addInstallableDevice(location, deviceXml);
         }
 
@@ -135,7 +133,7 @@ namespace RaumserverInstaller
         {
             pugi::xml_document doc;
             pugi::xml_node deviceNode, rootNode, valueNode;
-            std::string deviceType, modelName;
+            std::string deviceType, modelName, friendlyName, udn;
 
             pugi::xml_parse_result result = doc.load_string(_deviceXML.c_str());
 
@@ -163,35 +161,75 @@ namespace RaumserverInstaller
             }
             deviceType = valueNode.child_value();
 
-
             valueNode = deviceNode.child("modelName");
             if (!valueNode)
             {
-                logError("Device XML from device does not contain model information!", CURRENT_POSITION);
+                logError("Device XML from device does not contain modelName information!", CURRENT_POSITION);
                 return;
             }
             modelName = valueNode.child_value();
 
-            // TODO: @@@
 
-            //sigDeviceFound.fire()
+            valueNode = deviceNode.child("friendlyName");
+            if (!valueNode)
+            {
+                logError("Device XML from device does not contain friendlyName information!", CURRENT_POSITION);
+                return;
+            }
+            friendlyName = valueNode.child_value();
 
-            /*
-            --> find this ones and aybe fill name by other map (UDN: name)
 
-            <deviceType>urn:schemas-raumfeld-com:device:RaumfeldDevice:1</deviceType> 
-          <friendlyName>Raumfeld Device</friendlyName> 
+            valueNode = deviceNode.child("UDN");
+            if (!valueNode)
+            {
+                logError("Device XML from device does not contain friendlyName information!", CURRENT_POSITION);
+                return;
+            }
+            udn = valueNode.child_value();
 
-         <UDN>uuid:6a1e8f58-beca-4837-b8f0-630941227e34</UDN> 
 
-        <modelName>Raumfeld One S</modelName> 
-          <modelNumber>1</modelNumber> 
-          <serialNumber>6c:ec:eb:f1:84:b7</serialNumber> 
-          <raumfeld:protocolVersion>223</raumfeld:protocolVersion> 
-          <raumfeld:hardwareType>13</raumfeld:hardwareType> 
-            
-            */
+            if (deviceType      == "urn:schemas-raumfeld-com:device:RaumfeldDevice:1" &&
+                friendlyName    == "Raumfeld Device")
+            {
+                // parse the location uri to get the ip
+                LUrlParser::clParseURL url = LUrlParser::clParseURL::ParseURL(_location);
 
+                // device may be suitable, so we create a device information and add it to the internal map (ip | info)
+                DeviceInformation   deviceInformation;                
+                deviceInformation.ip = url.m_Host;
+                deviceInformation.name = modelName;               
+                deviceInformation.UDN = udn;
+                deviceInformation.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;                           
+                
+                try
+                {
+                    // lock map when inserting a value 
+                    mutexDeviceInformationMap.lock();
+                    try
+                    {
+
+                        deviceInformationMap.insert(std::make_pair(deviceInformation.ip, deviceInformation));
+                    }
+                    catch (...)
+                    {
+                        logError("Exception ocurred while adding device to map!", CURRENT_POSITION);
+                    }
+                    mutexDeviceInformationMap.unlock();
+                }
+                // be sure we will find recursive locks (deadlocks) created by the application!
+                catch (...)
+                {
+                    logError("Exception ocurred while locking device map!", CURRENT_POSITION);
+                }
+                
+                sigDeviceFound.fire(deviceInformation);
+
+            }
+            else
+            {
+                logWarning("Device not suitable for installation!", CURRENT_POSITION);
+                return;
+            } 
         }
 
 
@@ -252,6 +290,14 @@ namespace RaumserverInstaller
             {
                 throw std::runtime_error("Unknown exception! [DeviceFinder_Raumfeld::getNetworkAdaptersInformation]");
             }            
+        }
+
+
+        std::map<std::string, RaumserverInstaller::DeviceInformation> DeviceDiscovery_UPNP::getDeviceMap()
+        {
+            // lock while copying the map
+            std::unique_lock<std::mutex> lock(mutexDeviceInformationMap);
+            return deviceInformationMap;
         }
 
 

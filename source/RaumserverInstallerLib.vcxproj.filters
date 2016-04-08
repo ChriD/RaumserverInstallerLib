@@ -40,6 +40,9 @@
     <Filter Include="logger">
       <UniqueIdentifier>{56afb193-c952-45b7-bf05-c6e44c1910f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{636dd2fb-0d5c-42a9-9b99-1a3e89ade1b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -58,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="logger\loggerAdapter.cpp">
       <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\urlParser.cpp">
+      <Filter>tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

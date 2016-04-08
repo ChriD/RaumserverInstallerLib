@@ -32,8 +32,8 @@
 #include <sstream>
 #include <unordered_map>
 #include <algorithm>
-#include <raumkernel/tools/stringUtil.h>
-#include <raumkernel/tools/urlParser.h>
+#include <tools/stringUtil.h>
+#include <tools/urlParser.h>
 
 namespace Raumkernel
 {

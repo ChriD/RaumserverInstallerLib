@@ -84,6 +84,7 @@
     <ClCompile Include="logger\loggerAdapter.cpp" />
     <ClCompile Include="raumserverInstaller.cpp" />
     <ClCompile Include="raumserverInstallerBase.cpp" />
+    <ClCompile Include="tools\urlParser.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>

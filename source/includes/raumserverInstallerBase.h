@@ -30,6 +30,8 @@
 
 namespace RaumserverInstaller
 {
+
+    enum DeviceType { DT_UNKNOWN = 0 , DT_UPNPDEVICE_RAUMFELD = 1};
   
     /**
     * Network adapter information
@@ -48,8 +50,10 @@ namespace RaumserverInstaller
     */
     struct DeviceInformation
     {
-        std::string name;
-        std::string ip;
+        std::string name = "";
+        std::string ip = "";
+        std::string UDN = "";
+        DeviceType type = DeviceType::DT_UNKNOWN;
     };
 
 

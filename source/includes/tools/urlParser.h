@@ -28,7 +28,7 @@
 #pragma once
 
 #include <string>
-#include <raumkernel/os/os.h>
+#include <os/os.h>
 
 namespace LUrlParser
 {

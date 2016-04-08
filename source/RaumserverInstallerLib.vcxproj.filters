@@ -31,10 +31,33 @@
     <Filter Include="includes\logger">
       <UniqueIdentifier>{7ad20201-3c41-47bb-a102-5ba0db19cf6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\deviceDiscovery">
+      <UniqueIdentifier>{0c335731-aba3-48dd-828e-16e8cae6fa9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deviceDiscovery">
+      <UniqueIdentifier>{47444430-812d-4e14-b716-ed50c1f65dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logger">
+      <UniqueIdentifier>{56afb193-c952-45b7-bf05-c6e44c1910f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
       <Filter>xml\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="raumserverInstaller.cpp" />
+    <ClCompile Include="raumserverInstallerBase.cpp" />
+    <ClCompile Include="deviceDiscovery\deviceDiscovery.cpp">
+      <Filter>deviceDiscovery</Filter>
+    </ClCompile>
+    <ClCompile Include="deviceDiscovery\deviceDiscovery_UPNP.cpp">
+      <Filter>deviceDiscovery</Filter>
+    </ClCompile>
+    <ClCompile Include="logger\logger.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="logger\loggerAdapter.cpp">
+      <Filter>logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +117,18 @@
     </ClInclude>
     <ClInclude Include="includes\logger\loggerBase.h">
       <Filter>includes\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\raumserverInstaller.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\raumserverInstallerBase.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\deviceDiscovery\deviceDiscovery.h">
+      <Filter>includes\deviceDiscovery</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\deviceDiscovery\deviceDiscovery_UPNP.h">
+      <Filter>includes\deviceDiscovery</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

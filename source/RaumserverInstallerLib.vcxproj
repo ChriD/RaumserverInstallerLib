@@ -78,14 +78,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="deviceDiscovery\deviceDiscovery.cpp" />
+    <ClCompile Include="deviceDiscovery\deviceDiscovery_UPNP.cpp" />
+    <ClCompile Include="logger\logger.cpp" />
+    <ClCompile Include="logger\loggerAdapter.cpp" />
+    <ClCompile Include="raumserverInstaller.cpp" />
+    <ClCompile Include="raumserverInstallerBase.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="includes\deviceDiscovery\deviceDiscovery.h" />
+    <ClInclude Include="includes\deviceDiscovery\deviceDiscovery_UPNP.h" />
     <ClInclude Include="includes\exception\exception.h" />
     <ClInclude Include="includes\logger\logger.h" />
     <ClInclude Include="includes\logger\loggerAdapter.h" />
     <ClInclude Include="includes\logger\loggerBase.h" />
     <ClInclude Include="includes\os\os.h" />
+    <ClInclude Include="includes\raumserverInstaller.h" />
+    <ClInclude Include="includes\raumserverInstallerBase.h" />
     <ClInclude Include="includes\signals\config.hpp" />
     <ClInclude Include="includes\signals\connection.hpp" />
     <ClInclude Include="includes\signals\connections.hpp" />

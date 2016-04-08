@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="includes">
+      <UniqueIdentifier>{10a755f6-2279-4624-b5fe-2e1c4063a98a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml">
+      <UniqueIdentifier>{b0ebe8ec-840d-4222-bcad-bed17a2178f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml\pugixml">
+      <UniqueIdentifier>{87c10a0b-0505-4e0f-9cd7-c25c5b99ad34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\exception">
+      <UniqueIdentifier>{afd99ff7-9d77-46d1-8499-76284d1526f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\xml">
+      <UniqueIdentifier>{aa58ba47-4643-4e7a-b8c9-d1cbd0b17f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\tools">
+      <UniqueIdentifier>{ae3b02d6-ccae-472e-93ad-13695f03c2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\signals">
+      <UniqueIdentifier>{c3f97786-75f6-4e2f-b45e-bbde7b7d1b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\os">
+      <UniqueIdentifier>{173ec04a-cc3d-423c-8b61-3b66f5f630e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\xml\pugixml">
+      <UniqueIdentifier>{bbc083a3-397a-4dcf-b8e1-dd3f09e1e7d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\logger">
+      <UniqueIdentifier>{7ad20201-3c41-47bb-a102-5ba0db19cf6b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="xml\pugixml\pugixml.cpp">
+      <Filter>xml\pugixml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp">
+      <Filter>includes\xml\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\xml\pugixml\pugixml.hpp">
+      <Filter>includes\xml\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\commonUtil.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\dateUtil.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\numUtil.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\stringUtil.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\uriUtil.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\urlParser.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\versionInfo.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\signals\config.hpp">
+      <Filter>includes\signals</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\signals\connection.hpp">
+      <Filter>includes\signals</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\signals\connections.hpp">
+      <Filter>includes\signals</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\signals\signal.hpp">
+      <Filter>includes\signals</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\signals\signals.hpp">
+      <Filter>includes\signals</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\os\os.h">
+      <Filter>includes\os</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\exception\exception.h">
+      <Filter>includes\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\logger\logger.h">
+      <Filter>includes\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\logger\loggerAdapter.h">
+      <Filter>includes\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\logger\loggerBase.h">
+      <Filter>includes\logger</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

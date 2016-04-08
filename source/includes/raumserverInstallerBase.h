@@ -30,23 +30,44 @@
 
 namespace RaumserverInstaller
 {
+    /*
+    struct NetworkAdaperInformation
+    {
+        std::string name;
+        std::string fullName;        
+        std::uint16_t id;
+    };
+    */
+
+
+    /**
+    * Device information struct where the raumserver can be installed on
+    */
+    struct DeviceInformation
+    {
+        std::string name;
+        std::string ip;
+    };
+
+
+
     class RaumserverInstallerBase
     {
-    public:
-        RaumserverInstallerBase();
-        ~RaumserverInstallerBase();
+        public:
+            RaumserverInstallerBase();
+            ~RaumserverInstallerBase();
 
-        EXPORT void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _log);
-        EXPORT std::shared_ptr<Raumkernel::Log::Log> getLogObject();
+            EXPORT void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _log);
+            EXPORT std::shared_ptr<Raumkernel::Log::Log> getLogObject();
 
-    protected:
-        std::shared_ptr<Raumkernel::Log::Log> logObject;
+        protected:
+            std::shared_ptr<Raumkernel::Log::Log> logObject;
 
-        EXPORT virtual void logDebug(const std::string &_log, const std::string &_location);
-        EXPORT virtual void logWarning(const std::string &_log, const std::string &_location);
-        EXPORT virtual void logInfo(const std::string &_log, const std::string &_location);
-        EXPORT virtual void logError(const std::string &_log, const std::string &_location);
-        EXPORT virtual void logCritical(const std::string &_log, const std::string &_location);
+            EXPORT virtual void logDebug(const std::string &_log, const std::string &_location);
+            EXPORT virtual void logWarning(const std::string &_log, const std::string &_location);
+            EXPORT virtual void logInfo(const std::string &_log, const std::string &_location);
+            EXPORT virtual void logError(const std::string &_log, const std::string &_location);
+            EXPORT virtual void logCritical(const std::string &_log, const std::string &_location);
 
     };
 

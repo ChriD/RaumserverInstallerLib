@@ -72,7 +72,7 @@ namespace RaumserverInstaller
         }
 
 
-        void DeviceDiscovery_UPNP::startSearchingForDevices()
+        void DeviceDiscovery_UPNP::startDiscover()
         {
             initAdapter();
             discover();
@@ -177,6 +177,7 @@ namespace RaumserverInstaller
 
             // TODO: @@@
 
+            //sigDeviceFound.fire()
 
         }
 

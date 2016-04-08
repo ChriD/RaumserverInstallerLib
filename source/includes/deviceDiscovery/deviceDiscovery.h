@@ -42,6 +42,15 @@ namespace RaumserverInstaller
 
                 virtual void init();
 
+                /**
+                * this signal will be fired when a device was found
+                */
+                sigs::signal<void(DeviceInformation)> sigDeviceFound;
+                /**
+                * this signal will be fired when a device was removed
+                */
+                sigs::signal<void(DeviceInformation)> sigDeviceRemoved;
+
             private:
 
         };

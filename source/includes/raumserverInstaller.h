@@ -26,17 +26,58 @@
 #define RAUMSERVERINSTALLER_H
 
 #include "raumserverInstallerBase.h"
+#include "deviceDiscovery/deviceDiscovery_UPNP.h"
 
 namespace RaumserverInstaller
 {
     class RaumserverInstaller : public RaumserverInstallerBase
     {
-    public:
-        RaumserverInstaller();
-        ~RaumserverInstaller();      
+        public:
+            RaumserverInstaller();
+            ~RaumserverInstaller();      
 
-    protected:       
+            /**
+            * Does the Initialisation of the RaumserverInstallerLib
+            */
+            void init();            
+            /**
+            * Starts the discovering of devices where we can install the component on
+            * this method is async
+            */
+            void startDiscoverDevicesForInstall();
+            /**
+            * Starts installing the Raumserver to the given device
+            * This method will do an async install. The current status and progress can be consumed by attaching to the installProgress signal
+            */
+            void startInstallToDevice(DeviceInformation _deviceInformation);
 
+            /**
+            * will be fired if a device was found where we can install the component on
+            */
+            sigs::signal<void(DeviceInformation)> sigDeviceFoundForInstall;
+            /**
+            * will be fired if a device was removed where we can install the component on
+            */
+            sigs::signal<void(DeviceInformation)> sigDeviceRemovedForInstall;
+            /**
+            * this signal will be fired once in a while when installing the component
+            */
+            sigs::signal<void(/*InstallProgressInformation*/)> sigInstallProgressInformation;
+            /**
+            * this signal will be fired when the installation is complete or there was an error
+            */
+            sigs::signal<void(/*InstallProgressInformation, successful*/)> sigInstallCompleted;
+
+        protected:       
+
+            DeviceDiscovery::DeviceDiscovery_UPNP   deviceDiscoveryUPNP;
+         
+            void initDiscover();
+
+            void onDeviceFound(DeviceInformation _deviceInformation);
+            void onDeviceRemoved(DeviceInformation _deviceInformation);
+
+            sigs::connections connections;
     };
 
 }

@@ -50,13 +50,6 @@ namespace RaumserverInstaller
         };
 
 
-        struct DeviceInformation
-        {
-            std::string name;
-            std::string ip;                        
-        };
-
-
         class DeviceDiscovery_UPNP : public DeviceDiscovery
         {
             public:
@@ -64,7 +57,7 @@ namespace RaumserverInstaller
                 ~DeviceDiscovery_UPNP();
 
                 virtual void init() override;
-                virtual void startSearchingForDevices();
+                virtual void startDiscover();
                 virtual void selectAdapterId(const std::uint8_t &_adapterId);
                 virtual void loadNetworkAdaptersInformation();
                 virtual std::vector<NetworkAdaperInformation> getNetworkAdaptersInformation();                

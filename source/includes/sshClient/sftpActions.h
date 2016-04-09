@@ -47,10 +47,13 @@ namespace RaumserverInstaller
                 ~SFTPActions();
 
                 EXPORT void setSessions(ssh_session _sshSession, sftp_session _sftpSession);
+                EXPORT void cancelActions();
 
             protected:
                 ssh_session sshSession;
                 sftp_session sftpSession;
+
+                bool sessionsExists();
         };
        
     }

@@ -134,6 +134,7 @@ namespace RaumserverInstaller
         SSHClient::SSHClient sshClient;
 
         sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, "10.0.0.1");
+        sshClient.setAuth("root", "");
         sshClient.connectSSH();
         sshClient.connectSFTP();
 

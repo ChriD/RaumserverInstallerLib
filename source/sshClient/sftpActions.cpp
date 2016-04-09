@@ -37,6 +37,20 @@ namespace RaumserverInstaller
         }
 
 
+        void SFTPActions::cancelActions()
+        {
+            // TODO: cancel all actions
+        }
+
+
+        bool SFTPActions::sessionsExists()
+        {
+            if (sshSession == nullptr || sftpSession == nullptr)
+                return false;
+            return true;
+        }
+
+
         void SFTPActions::setSessions(ssh_session _sshSession, sftp_session _sftpSession)
         {
             sshSession = _sshSession;

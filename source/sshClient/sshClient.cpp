@@ -64,6 +64,7 @@ namespace RaumserverInstaller
             {
                 std::string sshError = ssh_get_error(sshSession);
                 ssh_free(sshSession);
+                sshSession = nullptr;
                 return failed("Error connecting to host!", sshError, returnCode);
             }
 
@@ -74,8 +75,11 @@ namespace RaumserverInstaller
                 std::string sshError = ssh_get_error(sshSession);
                 ssh_disconnect(sshSession);
                 ssh_free(sshSession);
+                sshSession = nullptr;
                 return failed("Error authenticating with user '" + user + "' and password: '" + password +  "' !", sshError, returnCode);               
             }
+
+            sftp.setSessions(sshSession, nullptr);
         }
 
 
@@ -103,8 +107,11 @@ namespace RaumserverInstaller
             {
                 std::int32_t sftpErrorCode = sftp_get_error(sftpSession);
                 sftp_free(sftpSession);
+                sftpSession = nullptr;
                 return failed("Error initializing SFTP session!", "", sftpErrorCode);
             }
+
+            sftp.setSessions(sshSession, sftpSession);
         }
 
 
@@ -119,6 +126,9 @@ namespace RaumserverInstaller
 
             ssh_disconnect(sshSession);
             ssh_free(sshSession);
+            sshSession = nullptr;
+
+            sftp.setSessions(nullptr, nullptr);
         }
 
 
@@ -126,7 +136,12 @@ namespace RaumserverInstaller
         {
             if (sftpSession == nullptr)
                 return failed("No SFTP session to close!");
+            
+            sftp.cancelActions();
             sftp_free(sftpSession);
+            sftpSession = nullptr;
+
+            sftp.setSessions(sshSession, nullptr);
         }
 
     }

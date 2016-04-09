@@ -49,6 +49,13 @@ namespace RaumserverInstaller
                 EXPORT void setSessions(ssh_session _sshSession, sftp_session _sftpSession);
                 EXPORT void cancelActions();
 
+                //EXPORT bool createDir(std::string _dir)
+                //EXPORT bool moveToDir(std::string _dir)
+
+                // will be sync or async (signal fileCopyStatus(FileCopyStatus _)
+                //EXPORT bool copyDir(std::string _clientDir, std::string _remoteDir, bool _sync = false) --> starts thread
+                //EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile, bool _sync = false) --> starts thread
+
             protected:
                 ssh_session sshSession;
                 sftp_session sftpSession;

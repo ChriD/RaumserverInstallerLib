@@ -26,6 +26,21 @@ namespace RaumserverInstaller
         */
 
 
+        /*
+        ifstream fin("file.doc", ios::binary);
+            if (fin) {
+              fin.seekg(0, ios::end);
+              ios::pos_type bufsize = fin.tellg(); // get file size in bytes
+              fin.seekg(0); // rewind to beginning of file
+
+              char* buf = new char[bufsize];
+              fin.read(buf, bufsize); // read file contents into buffer
+
+              sftp_write(file, buf, bufsize); // write to remote file
+            }
+        */
+
+
 
         SFTPActions::SFTPActions()
         {           
@@ -40,6 +55,7 @@ namespace RaumserverInstaller
         void SFTPActions::cancelActions()
         {
             // TODO: cancel all actions
+            //
         }
 
 

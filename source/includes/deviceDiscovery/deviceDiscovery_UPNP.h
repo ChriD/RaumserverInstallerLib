@@ -52,10 +52,7 @@ namespace RaumserverInstaller
                 virtual void startDiscover();
                 virtual void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapter);
                 virtual void loadNetworkAdaptersInformation();
-                /**
-                * returns a copy of the device map
-                */
-                virtual std::map<std::string, RaumserverInstaller::DeviceInformation> getDeviceMap();
+               
                 virtual std::vector<NetworkAdaperInformation> getNetworkAdaptersInformation();                
 
             protected:
@@ -71,12 +68,7 @@ namespace RaumserverInstaller
 
                 void onDeviceFound(OpenHome::Net::CpDeviceCpp& _device);
                 void onDeviceLost(OpenHome::Net::CpDeviceCpp& _device);
-
-                // a mutex that will secure our device list 
-                std::mutex mutexDeviceInformationMap;
-                
-                std::map<std::string, RaumserverInstaller::DeviceInformation> deviceInformationMap;
-
+               
         };
 
     }

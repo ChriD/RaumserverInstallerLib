@@ -21,12 +21,17 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+// libssh http://stackoverflow.com/questions/8204259/how-to-use-libssh-in-vs10
+
+
 #pragma once
 #ifndef RAUMSERVERINSTALLER_H
 #define RAUMSERVERINSTALLER_H
 
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
+
+#include <libssh/libssh.h> 
 
 namespace RaumserverInstaller
 {
@@ -39,7 +44,12 @@ namespace RaumserverInstaller
             /**
             * Does the Initialisation of the RaumserverInstallerLib
             */
-            EXPORT void init();            
+            EXPORT void init(); 
+            /**
+            * initializes the log object
+            * has to be called before init!
+            */
+            EXPORT virtual void initLogObject(Raumkernel::Log::LogType _defaultLogLevel = Raumkernel::Log::LogType::LOGTYPE_ERROR, const std::string &_logFilePath = "logs/", const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList = std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>>());
             /**
             * Starts the discovering of devices where we can install the component on
             * this method is async
@@ -59,6 +69,19 @@ namespace RaumserverInstaller
             * sets the network adapter we are searching for devices  to install the component
             */
             EXPORT void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation);
+            /**
+            * returns a copy of the device map
+            */
+            EXPORT std::map<std::string, DeviceInformation> getDeviceMap();
+            /**
+            * returns a copy of the device map
+            */
+            EXPORT void initDiscover();
+
+            /**
+            * only for testp
+            */
+            EXPORT void test();
 
             /**
             * will be fired if a device was found where we can install the component on
@@ -79,12 +102,14 @@ namespace RaumserverInstaller
 
         protected:       
 
-            DeviceDiscovery::DeviceDiscovery_UPNP   deviceDiscoveryUPNP;
-         
-            void initDiscover();
+            DeviceDiscovery::DeviceDiscovery_UPNP   deviceDiscoveryUPNP;                    
 
             void onDeviceFound(DeviceInformation _deviceInformation);
             void onDeviceRemoved(DeviceInformation _deviceInformation);
+
+            // a mutex that will secure our device list 
+            std::mutex mutexDeviceInformationMap;
+            std::map<std::string, DeviceInformation> deviceInformationMap;
 
             sigs::connections connections;
     };

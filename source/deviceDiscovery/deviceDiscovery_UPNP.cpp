@@ -201,33 +201,14 @@ namespace RaumserverInstaller
                 deviceInformation.UDN = udn;
                 deviceInformation.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;                           
                 
-                try
-                {
-                    // lock map when inserting a value 
-                    mutexDeviceInformationMap.lock();
-                    try
-                    {
+                logInfo("Device (" + deviceInformation.ip + ") '" + deviceInformation.name + "' found for installation!", CURRENT_POSITION);
 
-                        deviceInformationMap.insert(std::make_pair(deviceInformation.ip, deviceInformation));
-                    }
-                    catch (...)
-                    {
-                        logError("Exception ocurred while adding device to map!", CURRENT_POSITION);
-                    }
-                    mutexDeviceInformationMap.unlock();
-                }
-                // be sure we will find recursive locks (deadlocks) created by the application!
-                catch (...)
-                {
-                    logError("Exception ocurred while locking device map!", CURRENT_POSITION);
-                }
-                
                 sigDeviceFound.fire(deviceInformation);
 
             }
             else
             {
-                logWarning("Device not suitable for installation!", CURRENT_POSITION);
+                logWarning("Device '" + friendlyName + "' not suitable for installation!", CURRENT_POSITION);
                 return;
             } 
         }
@@ -290,14 +271,6 @@ namespace RaumserverInstaller
             {
                 throw std::runtime_error("Unknown exception! [DeviceFinder_Raumfeld::getNetworkAdaptersInformation]");
             }            
-        }
-
-
-        std::map<std::string, RaumserverInstaller::DeviceInformation> DeviceDiscovery_UPNP::getDeviceMap()
-        {
-            // lock while copying the map
-            std::unique_lock<std::mutex> lock(mutexDeviceInformationMap);
-            return deviceInformationMap;
         }
 
 

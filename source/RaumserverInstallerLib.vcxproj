@@ -56,8 +56,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ohNetCore.lib;ohNetProxies.lib;ohNetDevices.lib;Ws2_32.lib;Dbghelp.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\windows_x86\VS2013\Debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ohNetCore.lib;ohNetProxies.lib;ohNetDevices.lib;Ws2_32.lib;Dbghelp.lib;Iphlpapi.lib;ssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\windows_x86\;$(SolutionDir)\libs\windows_x86\VS2013\Debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,8 +73,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ohNetCore.lib;ohNetProxies.lib;ohNetDevices.lib;Ws2_32.lib;Dbghelp.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\windows_x86\VS2013\Release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ohNetCore.lib;ohNetProxies.lib;ohNetDevices.lib;Ws2_32.lib;Dbghelp.lib;Iphlpapi.lib;ssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\windows_x86\;$(SolutionDir)\libs\windows_x86\VS2013\Release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

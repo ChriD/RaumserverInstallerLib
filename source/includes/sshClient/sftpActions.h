@@ -30,6 +30,7 @@
 #include <map>
 
 #include "raumserverInstallerBase.h"
+#include "tools/tinydircpp.h"
 
 #include <libssh/libssh.h> 
 #include <libssh/sftp.h>
@@ -49,18 +50,35 @@ namespace RaumserverInstaller
                 EXPORT void setSessions(ssh_session _sshSession, sftp_session _sftpSession);
                 EXPORT void cancelActions();
 
+                //EXPORT void copyFiles(std::vector<std::string>)
+
                 //EXPORT bool createDir(std::string _dir)
                 //EXPORT bool moveToDir(std::string _dir)
 
+                // http://api.libssh.org/master/libssh_tutor_sftp.html
+
                 // will be sync or async (signal fileCopyStatus(FileCopyStatus _)
-                //EXPORT bool copyDir(std::string _clientDir, std::string _remoteDir, bool _sync = false) --> starts thread
-                //EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile, bool _sync = false) --> starts thread
+                EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _sync = false);
+                EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile);
 
             protected:
                 ssh_session sshSession;
                 sftp_session sftpSession;
 
+                // threads vector for copying files (each thread will handle one file)
+                //std::vector<std::thread*> copyFilesThreadList;
+
+                // Threads for copying multiple files. 
+                // There is only one thread fo rthos so only one "copyFiles" action is allowed at a time
+                //void copyFilesThread();
+                std::thread copyDirThreadObject;
+
+                bool stopThreads;
+
+                void copyDirThread(std::string _clientDir, std::string _remoteDir);
+
                 bool sessionsExists();
+
         };
        
     }

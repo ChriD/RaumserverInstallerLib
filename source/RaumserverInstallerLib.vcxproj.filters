@@ -77,6 +77,9 @@
     <ClCompile Include="sshClient\sftpActions.cpp">
       <Filter>sshClient</Filter>
     </ClCompile>
+    <ClCompile Include="tools\tinydircpp.cpp">
+      <Filter>tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp">
@@ -153,6 +156,12 @@
     </ClInclude>
     <ClInclude Include="includes\sshClient\sftpActions.h">
       <Filter>includes\sshClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\tinydir.h">
+      <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\tools\tinydircpp.h">
+      <Filter>includes\tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -47,10 +47,10 @@ namespace RaumserverInstaller
                 SSHClient();
                 ~SSHClient();
 
-                EXPORT boolean connectSSH();
-                EXPORT boolean connectSFTP();
-                EXPORT boolean closeSSH();
-                EXPORT boolean closeSFTP();
+                EXPORT bool connectSSH();
+                EXPORT bool connectSFTP();
+                EXPORT bool closeSSH();
+                EXPORT bool closeSFTP();
 
                 EXPORT void setOption(const ssh_options_e &_option, const std::string &_value);
                 EXPORT void setAuth(const std::string &_user, const std::string &_password);
@@ -66,7 +66,7 @@ namespace RaumserverInstaller
 
                 std::map<ssh_options_e, std::string> sshOptions;
 
-                boolean failed(std::string _error, std::string _libError = "", std::int32_t _errorCode = 0);
+                bool failed(std::string _error, std::string _libError = "", std::int32_t _errorCode = 0);
 
         };
     }

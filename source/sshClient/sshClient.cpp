@@ -19,7 +19,7 @@ namespace RaumserverInstaller
         }
 
 
-        boolean SSHClient::failed(std::string _error, std::string _libError, std::int32_t _errorCode )
+        bool SSHClient::failed(std::string _error, std::string _libError, std::int32_t _errorCode)
         {
             return false;
         }
@@ -38,7 +38,7 @@ namespace RaumserverInstaller
         }
 
 
-        boolean SSHClient::connectSSH()
+        bool SSHClient::connectSSH()
         {
             std::int32_t returnCode;
 
@@ -80,10 +80,12 @@ namespace RaumserverInstaller
             }
 
             sftp.setSessions(sshSession, nullptr);
+
+            return true;
         }
 
 
-        boolean SSHClient::connectSFTP()
+        bool SSHClient::connectSFTP()
         {
             std::int32_t returnCode;
 
@@ -112,10 +114,12 @@ namespace RaumserverInstaller
             }
 
             sftp.setSessions(sshSession, sftpSession);
+
+            return true;
         }
 
 
-        boolean SSHClient::closeSSH()
+        bool SSHClient::closeSSH()
         {
             if (sshSession == nullptr)
                 return failed("No SSH session to close!");
@@ -129,10 +133,12 @@ namespace RaumserverInstaller
             sshSession = nullptr;
 
             sftp.setSessions(nullptr, nullptr);
+
+            return true;
         }
 
 
-        boolean SSHClient::closeSFTP()
+        bool SSHClient::closeSFTP()
         {
             if (sftpSession == nullptr)
                 return failed("No SFTP session to close!");
@@ -142,6 +148,8 @@ namespace RaumserverInstaller
             sftpSession = nullptr;
 
             sftp.setSessions(sshSession, nullptr);
+
+            return true;
         }
 
     }

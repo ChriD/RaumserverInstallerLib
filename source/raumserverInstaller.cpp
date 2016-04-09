@@ -138,6 +138,8 @@ namespace RaumserverInstaller
         sshClient.connectSSH();
         sshClient.connectSFTP();
 
+        sshClient.sftp.copyDir("binaries/raumserverDaemon/", "raumserverDaemon/", true);        
+
         sshClient.closeSFTP();
         sshClient.closeSSH();
         

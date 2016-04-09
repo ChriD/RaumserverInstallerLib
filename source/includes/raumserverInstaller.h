@@ -32,10 +32,6 @@
 
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
-
-#include <libssh/libssh.h> 
-#include <libssh/sftp.h>
-
 #include "sshClient/sshClient.h"
 
 

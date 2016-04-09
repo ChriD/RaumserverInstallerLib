@@ -43,6 +43,12 @@
     <Filter Include="tools">
       <UniqueIdentifier>{636dd2fb-0d5c-42a9-9b99-1a3e89ade1b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\sshClient">
+      <UniqueIdentifier>{ab931190-27d9-4672-a308-ce5ec65b371e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sshClient">
+      <UniqueIdentifier>{afd197cd-ad96-48bd-b22f-98df8a69dc37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -64,6 +70,12 @@
     </ClCompile>
     <ClCompile Include="tools\urlParser.cpp">
       <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="sshClient\sshClient.cpp">
+      <Filter>sshClient</Filter>
+    </ClCompile>
+    <ClCompile Include="sshClient\sftpActions.cpp">
+      <Filter>sshClient</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +147,12 @@
     </ClInclude>
     <ClInclude Include="includes\deviceDiscovery\deviceDiscovery_UPNP.h">
       <Filter>includes\deviceDiscovery</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\sshClient\sshClient.h">
+      <Filter>includes\sshClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\sshClient\sftpActions.h">
+      <Filter>includes\sshClient</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

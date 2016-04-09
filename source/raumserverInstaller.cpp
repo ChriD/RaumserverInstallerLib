@@ -131,52 +131,39 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::test()
     {
-        // http://api.libssh.org/master/libssh_tutor_guided_tour.html
-        ssh_session my_ssh_session;
-        int rc;
-        char *password;
-        // Open session and set options
-        my_ssh_session = ssh_new();
-        if (my_ssh_session == NULL)
-            exit(-1);
-        ssh_options_set(my_ssh_session, SSH_OPTIONS_HOST, "10.0.0.1");
-        // Connect to server
-        rc = ssh_connect(my_ssh_session);
+        SSHClient::SSHClient sshClient;
+
+        sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, "10.0.0.1");
+        sshClient.connectSSH();
+        sshClient.connectSFTP();
+
+        sshClient.closeSFTP();
+        sshClient.closeSSH();
+        
+        /*
+        // TODO : @@@
+        //rc = sftp_mkdir(sftp, "helloworld", S_IRWXU);
+        rc = sftp_mkdir(sftp, "helloworld", 0777);
         if (rc != SSH_OK)
         {
-            fprintf(stderr, "Error connecting to localhost: %s\n",
-                ssh_get_error(my_ssh_session));
-            ssh_free(my_ssh_session);
-            exit(-1);
+            if (sftp_get_error(sftp) != SSH_FX_FILE_ALREADY_EXISTS)
+            {
+                fprintf(stderr, "Can't create directory: %s\n",
+                    ssh_get_error(my_ssh_session));
+                return;
+            }
         }
-        // Verify the server's identity
-        // For the source code of verify_knowhost(), check previous example
-        /*
-        if (verify_knownhost(my_ssh_session) < 0)
-        {
-            ssh_disconnect(my_ssh_session);
-            ssh_free(my_ssh_session);
-            exit(-1);
-        }
-        */
+    
+       sftp_free(sftp);
 
-        // Authenticate ourselves
-        password = "";
-        rc = ssh_userauth_password(my_ssh_session, "root", password);
-        if (rc != SSH_AUTH_SUCCESS)
-        {
-            logError(ssh_get_error(my_ssh_session), CURRENT_POSITION);
-            fprintf(stderr, "Error authenticating with password: %s\n",
-                ssh_get_error(my_ssh_session));
-            ssh_disconnect(my_ssh_session);
-            ssh_free(my_ssh_session);
-            exit(-1);
-        }
 
-        // TODO: @@@
+        // ------------------------------------------------------- SFTP
+
+
     
         ssh_disconnect(my_ssh_session);
         ssh_free(my_ssh_session);
+        */
     }
 
 }

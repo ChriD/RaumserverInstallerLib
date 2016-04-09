@@ -23,6 +23,8 @@
 
 // libssh http://stackoverflow.com/questions/8204259/how-to-use-libssh-in-vs10
 
+// http://stackoverflow.com/questions/13691520/how-to-copy-a-file-in-c-c-with-libssh-and-sftp
+
 
 #pragma once
 #ifndef RAUMSERVERINSTALLER_H
@@ -32,6 +34,10 @@
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
 
 #include <libssh/libssh.h> 
+#include <libssh/sftp.h>
+
+#include "sshClient/sshClient.h"
+
 
 namespace RaumserverInstaller
 {

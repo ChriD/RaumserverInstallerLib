@@ -49,6 +49,12 @@
     <Filter Include="sshClient">
       <UniqueIdentifier>{afd197cd-ad96-48bd-b22f-98df8a69dc37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\deviceInstaller">
+      <UniqueIdentifier>{c1ae84e9-3c42-4257-9573-bdbc08ce10b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deviceInstaller">
+      <UniqueIdentifier>{3e6f3bfe-8da0-41c8-923f-1960d78f2d08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -79,6 +85,12 @@
     </ClCompile>
     <ClCompile Include="tools\tinydircpp.cpp">
       <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="deviceInstaller\deviceInstaller.cpp">
+      <Filter>deviceInstaller</Filter>
+    </ClCompile>
+    <ClCompile Include="deviceInstaller\deviceInstaller_RF.cpp">
+      <Filter>deviceInstaller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +174,12 @@
     </ClInclude>
     <ClInclude Include="includes\tools\tinydircpp.h">
       <Filter>includes\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\deviceInstaller\deviceInstaller.h">
+      <Filter>includes\deviceInstaller</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\deviceInstaller\deviceInstaller_RF.h">
+      <Filter>includes\deviceInstaller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -80,6 +80,8 @@
   <ItemGroup>
     <ClCompile Include="deviceDiscovery\deviceDiscovery.cpp" />
     <ClCompile Include="deviceDiscovery\deviceDiscovery_UPNP.cpp" />
+    <ClCompile Include="deviceInstaller\deviceInstaller.cpp" />
+    <ClCompile Include="deviceInstaller\deviceInstaller_RF.cpp" />
     <ClCompile Include="logger\logger.cpp" />
     <ClCompile Include="logger\loggerAdapter.cpp" />
     <ClCompile Include="raumserverInstaller.cpp" />
@@ -93,6 +95,8 @@
   <ItemGroup>
     <ClInclude Include="includes\deviceDiscovery\deviceDiscovery.h" />
     <ClInclude Include="includes\deviceDiscovery\deviceDiscovery_UPNP.h" />
+    <ClInclude Include="includes\deviceInstaller\deviceInstaller.h" />
+    <ClInclude Include="includes\deviceInstaller\deviceInstaller_RF.h" />
     <ClInclude Include="includes\exception\exception.h" />
     <ClInclude Include="includes\logger\logger.h" />
     <ClInclude Include="includes\logger\loggerAdapter.h" />

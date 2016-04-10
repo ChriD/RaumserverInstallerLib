@@ -16,8 +16,12 @@ namespace RaumserverInstaller
 
 
     void RaumserverInstaller::init()
-    {   
+    {  
+        connections.connect(deviceDiscoveryUPNP.sigDeviceFound, this, &RaumserverInstaller::onDeviceFound);
+        connections.connect(deviceDiscoveryUPNP.sigDeviceRemoved, this, &RaumserverInstaller::onDeviceRemoved);
 
+        connections.connect(deviceInstaller.sigInstallProgress, this, &RaumserverInstaller::onInstallProgress);
+        connections.connect(deviceInstaller.sigInstallDone, this, &RaumserverInstaller::onInstallDone);
     }
 
     void RaumserverInstaller::initLogObject(Raumkernel::Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList)
@@ -60,10 +64,7 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::startDiscoverDevicesForInstall()
     {
-        // start the dsicovering for UPNP Devices where we can install the component on
-        // the object will create a device information where we do subscribe on add
-        connections.connect(deviceDiscoveryUPNP.sigDeviceFound, this, &RaumserverInstaller::onDeviceFound);
-        connections.connect(deviceDiscoveryUPNP.sigDeviceRemoved, this, &RaumserverInstaller::onDeviceRemoved);
+        // start the dsicovering for UPNP Devices where we can install the component on               
         deviceDiscoveryUPNP.startDiscover();         
     }
 
@@ -111,6 +112,18 @@ namespace RaumserverInstaller
     }
 
 
+    void RaumserverInstaller::onInstallProgress(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo)
+    {
+        sigInstallProgressInformation.fire(_progressInfo);       
+    }
+
+
+    void RaumserverInstaller::onInstallDone(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo)
+    {
+        sigInstallCompleted.fire(_progressInfo);        
+    }
+
+
     std::vector<NetworkAdaperInformation> RaumserverInstaller::getNetworkAdapterList()
     {
         // use the list directly from the UPNP stack who is so gentle to give us this informations
@@ -126,7 +139,12 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::startInstallToDevice(DeviceInformation _deviceInformation)
     {
-        stopSSHAccessCheckerThreads();
+        // commented because it makes some problems i have to investigate further
+        //stopSSHAccessCheckerThreads();
+        
+        deviceInstaller.setLogObject(getLogObject());
+        deviceInstaller.setDevice(_deviceInformation);
+        deviceInstaller.startInstall();
 
     }
 
@@ -201,42 +219,19 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::test()
     {
-        SSHClient::SSHClient sshClient;
-
-        sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, "10.0.0.1");
-        sshClient.setAuth("root", "");
-        sshClient.connectSSH();
-        sshClient.connectSFTP();
-
-        sshClient.sftp.copyDir("binaries/raumserverDaemon/", "raumserverDaemon/", true);        
-
-        sshClient.closeSFTP();
-        sshClient.closeSSH();
         
-        /*
-        // TODO : @@@
-        //rc = sftp_mkdir(sftp, "helloworld", S_IRWXU);
-        rc = sftp_mkdir(sftp, "helloworld", 0777);
-        if (rc != SSH_OK)
-        {
-            if (sftp_get_error(sftp) != SSH_FX_FILE_ALREADY_EXISTS)
-            {
-                fprintf(stderr, "Can't create directory: %s\n",
-                    ssh_get_error(my_ssh_session));
-                return;
-            }
-        }
-    
-       sftp_free(sftp);
 
+        // TODO: connect to signal
+        DeviceInformation      devInfo;
 
-        // ------------------------------------------------------- SFTP
+        devInfo.name = "Tetsdevice";
+        devInfo.ip = "10.0.0.1";
+        devInfo.sshAccess = SSHAccess::SSH_YES;
+        devInfo.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
-
-    
-        ssh_disconnect(my_ssh_session);
-        ssh_free(my_ssh_session);
-        */
+        startInstallToDevice(devInfo);
+     
+              
     }
 
 }

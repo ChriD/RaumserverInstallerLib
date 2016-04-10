@@ -34,8 +34,7 @@
 
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
-#include "sshClient/sshClient.h"
-
+#include "deviceInstaller/deviceInstaller_RF.h"
 
 namespace RaumserverInstaller
 {
@@ -102,18 +101,22 @@ namespace RaumserverInstaller
             /**
             * this signal will be fired once in a while when installing the component
             */
-            sigs::signal<void(/*InstallProgressInformation*/)> sigInstallProgressInformation;
+            sigs::signal<void(DeviceInstaller::DeviceInstallerProgressInfo)> sigInstallProgressInformation;
             /**
             * this signal will be fired when the installation is complete or there was an error
             */
-            sigs::signal<void(/*InstallProgressInformation, successful*/)> sigInstallCompleted;
+            sigs::signal<void(DeviceInstaller::DeviceInstallerProgressInfo)> sigInstallCompleted;
 
         protected:       
 
-            DeviceDiscovery::DeviceDiscovery_UPNP   deviceDiscoveryUPNP;                    
+            DeviceDiscovery::DeviceDiscovery_UPNP   deviceDiscoveryUPNP;       
+            DeviceInstaller::DeviceInstaller_RaumfeldDevice deviceInstaller;
 
             void onDeviceFound(DeviceInformation _deviceInformation);
             void onDeviceRemoved(DeviceInformation _deviceInformation);
+
+            void onInstallProgress(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo);
+            void onInstallDone(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo);
 
             void startSSHAccessCheckerThread(const std::string &_ip);
             void stopSSHAccessCheckerThreads();

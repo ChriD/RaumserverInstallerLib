@@ -34,22 +34,48 @@ namespace RaumserverInstaller
     namespace DeviceInstaller
     {
 
+        struct DeviceInstallerProgressInfo
+        {
+            DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error)
+            {
+                info = _info;
+                completionPercentage = _completionPercentage;
+                error = _error;
+            }
+
+            std::string info = "";
+            std::uint8_t completionPercentage = 0;
+            bool error = false;
+        };
+
+
         class DeviceInstaller : public RaumserverInstallerBase
         {
             public:
                 DeviceInstaller();
                 ~DeviceInstaller();    
 
-                /**
-                * 
-                */
-                sigs::signal<void(/*InstallProgressInfo*/)> sigInstallProgress;
-                /**
-                * 
-                */
-                sigs::signal<void(/*InstallProgressInfo, hasError*/)> sigInstallDone;
+                EXPORT virtual void startInstall();
+                EXPORT virtual void abortInstall();
+                EXPORT virtual void setDevice(const DeviceInformation &_deviceInfo);
 
-            private:
+                /**
+                * 
+                */
+                sigs::signal<void(DeviceInstallerProgressInfo)> sigInstallProgress;
+                /**
+                * 
+                */
+                sigs::signal<void(DeviceInstallerProgressInfo)> sigInstallDone;
+
+            protected:
+                DeviceInformation deviceInformation;
+                std::uint8_t progressPercentage;
+
+                EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location);
+                EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location);
+                EXPORT virtual void progressInfo(const std::string &_progressInfo, const std::string &_location);
+                EXPORT virtual void progressError(const std::string &_progressInfo, const std::string &_location);
 
         };
     }

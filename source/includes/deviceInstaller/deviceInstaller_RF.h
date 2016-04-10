@@ -27,7 +27,7 @@
 #define RAUMKSERVERINSTALLER_DEVICEINSTALLER_RF_H
 
 #include "deviceInstaller/deviceInstaller.h"
-
+#include "sshClient/sshClient.h";
 
 namespace RaumserverInstaller
 {
@@ -36,11 +36,20 @@ namespace RaumserverInstaller
 
         class DeviceInstaller_RaumfeldDevice : public DeviceInstaller
         {
-        public:
-            DeviceInstaller_RaumfeldDevice();
-            ~DeviceInstaller_RaumfeldDevice();
+            public:
+                DeviceInstaller_RaumfeldDevice();
+                ~DeviceInstaller_RaumfeldDevice();
 
-        private:
+                EXPORT virtual void startInstall() override;
+                EXPORT virtual void abortInstall() override;
+
+            protected:
+                SSHClient::SSHClient sshClient;
+
+                std::atomic_bool abortInstallThread;
+                std::thread installThreadObject;                
+
+                void installThread();
 
         };
     }

@@ -10,6 +10,10 @@ namespace RaumserverInstaller
         DeviceInstaller_RaumfeldDevice::DeviceInstaller_RaumfeldDevice() : DeviceInstaller()
         {
             abortInstallThread = false;
+            fileCopyPercentage = 0;
+
+            binaryDir = "binaries/raumserverDaemon/";
+            installDir = "raumserverDaemon/";
         }
 
 
@@ -22,13 +26,21 @@ namespace RaumserverInstaller
         void DeviceInstaller_RaumfeldDevice::startInstall()
         {
             DeviceInstaller::startInstall();
+
+            sshClient.setLogObject(getLogObject());
+            sshClient.sftp.setLogObject(getLogObject());
+
+            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
+            connections.connect(sshClient.sftp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
+            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
+
             installThreadObject = std::thread(&DeviceInstaller_RaumfeldDevice::installThread, this);
         }
 
 
         void DeviceInstaller_RaumfeldDevice::abortInstall()
         {
-            DeviceInstaller::abortInstall();
+            DeviceInstaller::abortInstall();            
 
             abortInstallThread = true;
             if (installThreadObject.joinable())
@@ -40,6 +52,23 @@ namespace RaumserverInstaller
         }
 
 
+        void DeviceInstaller_RaumfeldDevice::onFileCopying(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size)
+        {
+        }
+
+
+        void DeviceInstaller_RaumfeldDevice::onStartFileCopying(std::string _filename, std::uint64_t _size)
+        {            
+            progressInfo("Copying File " + _filename, CURRENT_POSITION);
+            progressPercentage += fileCopyPercentage;
+        }
+
+
+        void DeviceInstaller_RaumfeldDevice::onEndFileCopying(std::string _filename, std::uint64_t _size)
+        {           
+        }
+
+
         void DeviceInstaller_RaumfeldDevice::installThread()
         {
             // the device we do install the raumserver on with this installer object has to be a raumfeld device!
@@ -48,14 +77,6 @@ namespace RaumserverInstaller
                 progressError("Device '" + deviceInformation.name + "' not compatible with installer!", CURRENT_POSITION);
                 return;
             }
-
-            /*
-            if (deviceInformation.sshAccess != SSHAccess::SSH_NO)
-            {
-                progressError("Device '" + deviceInformation.name + "' has no SSH/SFTP-Access!", CURRENT_POSITION);
-                return;
-            }
-            */
 
             if (deviceInformation.ip.empty())
             {
@@ -73,39 +94,43 @@ namespace RaumserverInstaller
             if (!sshClient.connectSSH())
             {
                 progressError("Could not connect to Device! (SSH)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
                          
             if (!sshClient.connectSFTP())
             {
                 progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
-
-            // TODO: @@@
-
             progressInfo("Copying files to remote device...", CURRENT_POSITION);
 
-            // copy the files. Due the installation is in a thread we can do a 'sync' copy
-            sshClient.sftp.copyDir("binaries/raumserverDaemon/", "raumserverDaemon/", true);
+            // for a simple progress we do count the number of files and do divide them by the percentage value whcih is left (70 for now)
+            TinyDirCpp::TinyDirCpp  tinyDirCpp;    
+            auto filesToCopy = tinyDirCpp.getFiles(binaryDir);
+            fileCopyPercentage = (70 / filesToCopy.size());
 
-            // Wait till copy is finished in a loop se we may abort?!?!
-            //abortInstallThread
+            // copy the files. Due the installation is in a thread we can do a 'sync' copy 
+            // abporting may not be possible now because of 'sync' call but we may accept this for now
+            // (so 'abortInstallThread' has no funkcion right now)
+            sshClient.sftp.copyDir(binaryDir, installDir, true, true);
+       
+            
 
-            // TODO: the sshclient does have signals we have to connect for proress info
+            progressPercentage = 80;
 
             // TODO: copy init script
 
-            // TODO: maybe reboot and wait for connection again
+            progressPercentage = 85;
 
             // TODO: start raumserver (if no reboot)
 
             // TODO: Then check if port of Raumserver is open
+            // while loop always adding one percentage???
 
             progressPercentage = 100;
             progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);
@@ -113,7 +138,7 @@ namespace RaumserverInstaller
             sshClient.closeSSH();
 
             progressInfo("Installation done!", CURRENT_POSITION);
-            sigInstallDone.fire(DeviceInstallerProgressInfo("Installation done!", progressPercentage, false));
+            sigInstallDone.fire(DeviceInstallerProgressInfo("Installation done!", (std::uint8_t)progressPercentage, false));
         }
 
 

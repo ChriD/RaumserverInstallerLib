@@ -70,7 +70,7 @@ namespace RaumserverInstaller
 
             protected:
                 DeviceInformation deviceInformation;
-                std::uint8_t progressPercentage;
+                std::double_t progressPercentage;
 
                 EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location);
                 EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location);

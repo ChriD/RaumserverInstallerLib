@@ -7,7 +7,7 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
 
-        SFTPActions::SFTPActions()
+        SFTPActions::SFTPActions() : RaumserverInstallerBase()
         {  
             stopThreads = false;
         }
@@ -50,29 +50,27 @@ namespace RaumserverInstaller
         }
 
 
-        void SFTPActions::copyDir(std::string _clientDir, std::string _remoteDir, bool _sync)
+        void SFTPActions::copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive, bool _sync)
         {
             if (!sessionsExists())
                 return;
 
             // start a thread which will handle the copying of the directory to the remote computer
             // there are signals for file copying
-            copyDirThreadObject = std::thread(&SFTPActions::copyDirThread, this, _clientDir, _remoteDir);
+            copyDirThreadObject = std::thread(&SFTPActions::copyDirThread, this, _clientDir, _remoteDir, _recursive);
             if (_sync)
                 copyDirThreadObject.join();            
         }
 
 
-        void SFTPActions::copyDirThread(std::string _clientDir, std::string _remoteDir)
-        {
-            bool allFilesProcessed = false;
-            
-            // get all files we have to copy 
+        void SFTPActions::copyDirThread(std::string _clientDir, std::string _remoteDir, bool _recursive)
+        {                          
             TinyDirCpp::TinyDirCpp  tinyDirCpp;
 
-            // create remote directory
-            auto filesToCopy = tinyDirCpp.getFiles(_clientDir);
+            // Get all files we have to copy 
+            auto filesToCopy = tinyDirCpp.getFiles(_clientDir, "", 0, _recursive);
 
+            // now do copy of all files in a straight forward way
             for (auto file : filesToCopy)
             {                
                 copyFile(_clientDir + file, _remoteDir + file);
@@ -85,7 +83,7 @@ namespace RaumserverInstaller
             if (!sessionsExists())
                 return false;
 
-            // create folders if not exists
+            // create folders if not exists from '_remoteFile'
             auto parts = Raumkernel::Tools::StringUtil::explodeString(_remoteFile, "/");
             std::string folders = "";
             for (std::uint32_t i = 0; i < parts.size() - 1; i++)
@@ -97,6 +95,7 @@ namespace RaumserverInstaller
                     // TODO: error
                     return false;
                 }
+                // set the acces to the folder (chmod). For now we will set full access.
                 if (!setChmod(folders, S_IRWXU | S_IRWXG | S_IRWXO))
                 {
                     // TODO: error
@@ -115,7 +114,7 @@ namespace RaumserverInstaller
 
 
             std::int32_t nBytes;
-            char buffer[MAX_XFER_BUF_SIZE];
+            char buffer[MAX_XFER_BUF_SIZE];            
             
             std::ifstream clientFileStream(_clientFile, std::ios::binary);
 
@@ -127,6 +126,8 @@ namespace RaumserverInstaller
                 std::ios::pos_type bufferSize = sizeof(buffer);
                 clientFileStream.seekg(0); 
 
+                sigStartFileCopying.fire(_clientFile, fileSize);
+
                 while (clientFileStream)
                 {
                     bufferCount += bufferSize;
@@ -134,16 +135,21 @@ namespace RaumserverInstaller
                         bufferSize = (fileSize - (bufferCount - bufferSize));
                     clientFileStream.read(buffer, bufferSize);
                     sftp_write(sftpRemoteFile, buffer, bufferSize); // write to remote file
+
+                    sigFileCopying.fire(_clientFile, bufferCount, fileSize);
                 }
 
                 sftp_close(sftpRemoteFile);
 
                 setChmod(_remoteFile, S_IRWXU | S_IRWXG | S_IRWXO);
                
+                // signal file copied
+                sigEndFileCopying.fire(_clientFile, fileSize);
+
             }
                
 
-            return false;
+            return true;
         }
 
 

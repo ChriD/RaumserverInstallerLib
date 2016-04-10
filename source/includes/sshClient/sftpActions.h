@@ -68,7 +68,7 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
 
-        class SFTPActions
+        class SFTPActions : public RaumserverInstallerBase
         {
             public:
                 SFTPActions();
@@ -85,9 +85,16 @@ namespace RaumserverInstaller
                 // http://api.libssh.org/master/libssh_tutor_sftp.html
                 
                 EXPORT bool makeDir(std::string _clientDir);
-                EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _sync = false);
+                EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false);
                 EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile);
                 EXPORT bool setChmod(std::string _fileOrDir, std::uint16_t _chmod);
+
+                /**
+                *                
+                */
+                sigs::signal<void(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size)> sigFileCopying;
+                sigs::signal<void(std::string _filename, std::uint64_t _size)> sigEndFileCopying;
+                sigs::signal<void(std::string _filename, std::uint64_t _size)> sigStartFileCopying;
 
             protected:
                 ssh_session sshSession;
@@ -103,7 +110,7 @@ namespace RaumserverInstaller
 
                 std::atomic_bool stopThreads;
 
-                void copyDirThread(std::string _clientDir, std::string _remoteDir);
+                void copyDirThread(std::string _clientDir, std::string _remoteDir, bool _recursive = true);
 
                 bool sessionsExists();
 

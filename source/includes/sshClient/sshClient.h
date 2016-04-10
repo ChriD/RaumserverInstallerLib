@@ -41,7 +41,7 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
        
-        class SSHClient
+        class SSHClient : public RaumserverInstallerBase
         {
             public:
                 SSHClient();

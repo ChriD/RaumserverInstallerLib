@@ -46,10 +46,21 @@ namespace RaumserverInstaller
             protected:
                 SSHClient::SSHClient sshClient;
 
+                std::string binaryDir;                
+                std::string installDir;
+
                 std::atomic_bool abortInstallThread;
-                std::thread installThreadObject;                
+                std::thread installThreadObject;  
+
+                std::double_t fileCopyPercentage;
 
                 void installThread();
+
+                void onStartFileCopying(std::string _filename, std::uint64_t _size);
+                void onFileCopying(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size);
+                void onEndFileCopying(std::string _filename, std::uint64_t _size);
+             
+                signals::connections connections;
 
         };
     }

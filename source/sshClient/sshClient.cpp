@@ -7,7 +7,7 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
 
-        SSHClient::SSHClient()
+        SSHClient::SSHClient() : RaumserverInstallerBase()
         {
             sshSession = nullptr;
             sftpSession = nullptr;

@@ -208,7 +208,7 @@ namespace RaumserverInstaller
             }
             else
             {
-                logWarning("Device '" + friendlyName + "' not suitable for installation!", CURRENT_POSITION);
+                logDebug("Device '" + friendlyName + "' not suitable for installation!", CURRENT_POSITION);
                 return;
             } 
         }

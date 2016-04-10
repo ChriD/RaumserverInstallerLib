@@ -31,6 +31,7 @@
 #include <random>
 #include <locale>
 #include <math.h>
+#include "os/os.h"
 
 namespace Raumkernel
 {

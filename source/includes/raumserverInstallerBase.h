@@ -32,6 +32,7 @@ namespace RaumserverInstaller
 {
 
     enum DeviceType { DT_UNKNOWN = 0 , DT_UPNPDEVICE_RAUMFELD = 1};
+    enum SSHAccess { SSH_UNKNOWN = 0, SSH_YES = 1, SSH_NO = 2 };
   
     /**
     * Network adapter information
@@ -54,6 +55,7 @@ namespace RaumserverInstaller
         std::string ip = "";
         std::string UDN = "";
         DeviceType type = DeviceType::DT_UNKNOWN;
+        SSHAccess sshAccess = SSHAccess::SSH_UNKNOWN;
     };
 
 

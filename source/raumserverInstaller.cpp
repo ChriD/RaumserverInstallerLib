@@ -5,11 +5,13 @@ namespace RaumserverInstaller
     
     RaumserverInstaller::RaumserverInstaller()
     {
+        stopSSHAccessCheckThreads = false;
     }
 
 
     RaumserverInstaller::~RaumserverInstaller()
     {
+        stopSSHAccessCheckerThreads();
     }
 
 
@@ -62,7 +64,7 @@ namespace RaumserverInstaller
         // the object will create a device information where we do subscribe on add
         connections.connect(deviceDiscoveryUPNP.sigDeviceFound, this, &RaumserverInstaller::onDeviceFound);
         connections.connect(deviceDiscoveryUPNP.sigDeviceRemoved, this, &RaumserverInstaller::onDeviceRemoved);
-        deviceDiscoveryUPNP.startDiscover();        
+        deviceDiscoveryUPNP.startDiscover();         
     }
 
 
@@ -82,7 +84,6 @@ namespace RaumserverInstaller
             mutexDeviceInformationMap.lock();
             try
             {
-
                 deviceInformationMap.insert(std::make_pair(_deviceInformation.ip, _deviceInformation));
             }
             catch (...)
@@ -95,11 +96,11 @@ namespace RaumserverInstaller
         catch (...)
         {
             logError("Exception ocurred while locking device map!", CURRENT_POSITION);
-        }
-
-        // TODO: Start for check ssh access!
+        }        
     
-        sigDeviceFoundForInstall.fire(_deviceInformation);
+        sigDeviceFoundForInstall.fire(_deviceInformation);   
+
+        startSSHAccessCheckerThread(_deviceInformation.ip);
     }
 
 
@@ -125,6 +126,75 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::startInstallToDevice(DeviceInformation _deviceInformation)
     {
+        stopSSHAccessCheckerThreads();
+
+    }
+
+
+    void RaumserverInstaller::startSSHAccessCheckerThread(const std::string &_ip)
+    {              
+        sshAccessCheckThreads.push_back(std::move(std::thread(&RaumserverInstaller::sshAccessCheckThread, this, _ip)));
+    }
+
+    
+    void RaumserverInstaller::stopSSHAccessCheckerThreads()
+    {
+        stopSSHAccessCheckThreads = true;
+
+        for (auto &thread : sshAccessCheckThreads)
+        {
+            if (thread.joinable())
+                thread.join();
+        }
+
+        stopSSHAccessCheckThreads = false;
+    }
+
+
+    void RaumserverInstaller::sshAccessCheckThread(std::string _ip)
+    {
+        bool hasSFTPAccess = false;
+        DeviceInformation deviceInfo;
+
+        if (stopSSHAccessCheckThreads)
+            return;
+
+        SSHClient::SSHClient sshClient;
+        sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
+        sshClient.setAuth("root", "");
+        if (sshClient.connectSSH())
+        {
+            if (sshClient.connectSFTP())
+            {
+                hasSFTPAccess = true;
+            }
+        }        
+
+        mutexDeviceInformationMap.lock();
+
+        try
+        {
+
+            auto it = deviceInformationMap.find(_ip);
+            if (it != deviceInformationMap.end())
+            {
+                auto access = hasSFTPAccess ? "yes" : "no";
+                logInfo("SSH Access for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);               
+                it->second.sshAccess = hasSFTPAccess ? SSHAccess::SSH_YES : SSHAccess::SSH_NO;
+
+                // get a copy of the info struct
+                deviceInfo = it->second;
+               
+            }
+        }
+        catch (...)
+        {
+            // TODO: @@@
+        }
+
+        mutexDeviceInformationMap.unlock();
+        
+        sigDeviceInformationChanged.fire(deviceInfo);
 
     }
 

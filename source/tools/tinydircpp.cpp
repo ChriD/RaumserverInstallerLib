@@ -14,7 +14,7 @@ namespace TinyDirCpp
     }
 
 
-    std::vector<std::string> TinyDirCpp::getFiles(std::string _folder, bool _recursive)
+    std::vector<std::string> TinyDirCpp::getFiles(std::string _folder, std::string _folderRel, std::uint32_t _level, bool _recursive)
     {
         tinydir_dir dir;
         std::vector<std::string> files;
@@ -34,16 +34,18 @@ namespace TinyDirCpp
 
             std::string temp = std::string(file.name);
             if (temp != "." && temp != "..")
-            {
-                printf("%s", file.name);
+            {       
                 if (file.is_dir)
                 {
-                    auto filesSub = getFiles(_folder + file.name + "/");
-                    files.insert(files.end(), filesSub.begin(), filesSub.end());
+                    if (_recursive)
+                    {                                
+                        auto filesSub = getFiles(_folder + file.name + "/", _folderRel + file.name + "/", _level + 1, _recursive);
+                        files.insert(files.end(), filesSub.begin(), filesSub.end());
+                    }
                 }
                 else
                 {
-                    files.emplace_back(_folder + std::string(file.name));
+                    files.emplace_back(_folderRel + std::string(file.name));
                 }
             }
 

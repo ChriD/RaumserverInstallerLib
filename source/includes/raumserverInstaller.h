@@ -30,6 +30,8 @@
 #ifndef RAUMSERVERINSTALLER_H
 #define RAUMSERVERINSTALLER_H
 
+#include <atomic>
+
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
 #include "sshClient/sshClient.h"
@@ -94,6 +96,10 @@ namespace RaumserverInstaller
             */
             sigs::signal<void(DeviceInformation)> sigDeviceRemovedForInstall;
             /**
+            * will be fired if a device information was changed
+            */
+            sigs::signal<void(DeviceInformation)> sigDeviceInformationChanged;
+            /**
             * this signal will be fired once in a while when installing the component
             */
             sigs::signal<void(/*InstallProgressInformation*/)> sigInstallProgressInformation;
@@ -109,9 +115,17 @@ namespace RaumserverInstaller
             void onDeviceFound(DeviceInformation _deviceInformation);
             void onDeviceRemoved(DeviceInformation _deviceInformation);
 
+            void startSSHAccessCheckerThread(const std::string &_ip);
+            void stopSSHAccessCheckerThreads();
+            void sshAccessCheckThread(std::string _ip);
+
             // a mutex that will secure our device list 
             std::mutex mutexDeviceInformationMap;
             std::map<std::string, DeviceInformation> deviceInformationMap;
+
+            // this ones are for checking the ssh access 
+            std::vector<std::thread> sshAccessCheckThreads;
+            std::atomic_bool stopSSHAccessCheckThreads;
 
             sigs::connections connections;
     };

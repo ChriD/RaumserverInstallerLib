@@ -196,14 +196,13 @@ namespace RaumserverInstaller
     {
         bool hasSFTPAccess = false;
         DeviceInformation deviceInfo;
+        SSHClient::SSHClient sshClient;
 
         if (stopSSHAccessCheckThreads)
             return;
 
         try
-        {
-
-            SSHClient::SSHClient sshClient;
+        {            
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
             sshClient.setAuth("root", "");
             if (sshClient.connectSSH())
@@ -233,10 +232,13 @@ namespace RaumserverInstaller
 
                 it->second.sshAccess = hasSFTPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
 
-                // TODO: Check if install directory existst
+                // TODO: Check if installed (check if there is a specific file)
                 if (hasSFTPAccess)
                 {
-                    //it->second.raumserverInstalled =                   
+                    if (sshClient.sftp.existsFile("TODO: @@@")) // TODO: @@@
+                        it->second.raumserverInstalled = UnknownYesNo::YES;
+                    else
+                        it->second.raumserverInstalled = UnknownYesNo::NO;
                 }
 
                 // get a copy of the info struct
@@ -263,6 +265,9 @@ namespace RaumserverInstaller
 
         if (stopIsRunningCheckThreads)
             return;     
+
+
+        //TODO: @@@ check raumserver JSON webservice (version) 
 
         mutexDeviceInformationMap.lock();
 

@@ -105,11 +105,13 @@ namespace RaumserverInstaller
   
 
             // create file in trunc mode
-            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), /*O_RDWR*/ 0777, O_TRUNC);
+            // TODO: qhy the hell doesnt this wok with the bit identifiers?
+            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_RDWR | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+            //auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), 0777, O_TRUNC);
             if (sftpRemoteFile == NULL)
             {
-                fprintf(stderr, "Can't open file for writing: %s\n", ssh_get_error(sshSession));
-                return SSH_ERROR;
+                fprintf(stderr, "Can't open file for writing: %s\n", ssh_get_error(sshSession)); // TODO: @@@
+                return false;
             }
 
 
@@ -141,7 +143,8 @@ namespace RaumserverInstaller
 
                 sftp_close(sftpRemoteFile);
 
-                setChmod(_remoteFile, S_IRWXU | S_IRWXG | S_IRWXO);
+                // TODO: why this si need,? it cant be done ehrn creating file correctly?!
+                setChmod(_remoteFile, S_IRWXU | S_IRWXG | S_IRWXO); //TODO: @@@
                
                 // signal file copied
                 sigEndFileCopying.fire(_clientFile, fileSize);
@@ -162,47 +165,21 @@ namespace RaumserverInstaller
 
             returnCode = sftp_chmod(sftpSession, _fileOrDir.c_str(), _chmod);
             if (returnCode != SSH_OK)
-            {
-                // TODO: @@@
+            {                // TODO: @@@
                 std::string errorS = ssh_get_error(sshSession);
                 std::int32_t error = sftp_get_error(sftpSession);
             }
-
-            /*
-
-            sftp_attributes attributes;
-
-            // TODO: @@@
-
-            auto sftpRemoteFile = sftp_open(sftpSession, _fileOrDir.c_str(), 0777, O_RDONLY); // TODO: @@@
-
-            // TODO: @@@@ chekc remote file
-
-            attributes = sftp_fstat(sftpRemoteFile);
-            attributes->permissions = _chmod;
-
-            returnCode = sftp_setstat(sftpSession, _fileOrDir.c_str(), attributes);
-            if (returnCode != SSH_OK)
-            {
-                // TODO: @@@
-                std::string errorS = ssh_get_error(sshSession);
-                std::int32_t error = sftp_get_error(sftpSession);
-            }
-
-            */
-            // TODO: set chmod!
-            // http://api.libssh.org/master/libssh_tutor_sftp.html
-
-            /*
+            return true;
+        }
 
 
-
-            int sftp_setstat(sftp_session  	sftp,
-            const char *  	file,
-            sftp_attributes  	attr
-            )
-            */
-
+        bool SFTPActions::existsFile(std::string _file)
+        {
+            // create file in trunc mode
+            auto sftpRemoteFile = sftp_open(sftpSession, _file.c_str(), O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO); // TODO: @@@
+            if (sftpRemoteFile == NULL)                            
+                return false;            
+            sftp_close(sftpRemoteFile);
             return true;
         }
 

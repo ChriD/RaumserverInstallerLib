@@ -6,12 +6,14 @@ namespace RaumserverInstaller
     RaumserverInstaller::RaumserverInstaller()
     {
         stopSSHAccessCheckThreads = false;
+        stopIsRunningCheckThreads = false;
     }
 
 
     RaumserverInstaller::~RaumserverInstaller()
     {
         stopSSHAccessCheckerThreads();
+        stopIsRunningCheckerThreads();
     }
 
 
@@ -102,6 +104,7 @@ namespace RaumserverInstaller
         sigDeviceFoundForInstall.fire(_deviceInformation);   
 
         startSSHAccessCheckerThread(_deviceInformation.ip);
+        startIsRunningCheckerThread(_deviceInformation.ip);
     }
 
 
@@ -154,6 +157,12 @@ namespace RaumserverInstaller
         sshAccessCheckThreads.push_back(std::move(std::thread(&RaumserverInstaller::sshAccessCheckThread, this, _ip)));
     }
 
+
+    void RaumserverInstaller::startIsRunningCheckerThread(const std::string &_ip)
+    {
+        isRunningCheckThreads.push_back(std::move(std::thread(&RaumserverInstaller::isRunningCheckThread, this, _ip)));
+    }
+
     
     void RaumserverInstaller::stopSSHAccessCheckerThreads()
     {
@@ -169,6 +178,20 @@ namespace RaumserverInstaller
     }
 
 
+    void RaumserverInstaller::stopIsRunningCheckerThreads()
+    {
+        stopIsRunningCheckThreads = true;
+
+        for (auto &thread : isRunningCheckThreads)
+        {
+            if (thread.joinable())
+                thread.join();
+        }
+
+        stopIsRunningCheckThreads = false;
+    }
+
+
     void RaumserverInstaller::sshAccessCheckThread(std::string _ip)
     {
         bool hasSFTPAccess = false;
@@ -177,16 +200,25 @@ namespace RaumserverInstaller
         if (stopSSHAccessCheckThreads)
             return;
 
-        SSHClient::SSHClient sshClient;
-        sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
-        sshClient.setAuth("root", "");
-        if (sshClient.connectSSH())
+        try
         {
-            if (sshClient.connectSFTP())
+
+            SSHClient::SSHClient sshClient;
+            sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
+            sshClient.setAuth("root", "");
+            if (sshClient.connectSSH())
             {
-                hasSFTPAccess = true;
+                if (sshClient.connectSFTP())
+                {
+                    hasSFTPAccess = true;
+                }
             }
-        }        
+        }
+        catch (...)
+        {
+            // TODO: @@@
+            hasSFTPAccess = false;
+        }
 
         mutexDeviceInformationMap.lock();
 
@@ -198,7 +230,14 @@ namespace RaumserverInstaller
             {
                 auto access = hasSFTPAccess ? "yes" : "no";
                 logInfo("SSH Access for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);               
-                it->second.sshAccess = hasSFTPAccess ? SSHAccess::SSH_YES : SSHAccess::SSH_NO;
+
+                it->second.sshAccess = hasSFTPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
+
+                // TODO: Check if install directory existst
+                if (hasSFTPAccess)
+                {
+                    //it->second.raumserverInstalled =                   
+                }
 
                 // get a copy of the info struct
                 deviceInfo = it->second;
@@ -208,10 +247,57 @@ namespace RaumserverInstaller
         catch (...)
         {
             // TODO: @@@
-        }
+        }        
 
         mutexDeviceInformationMap.unlock();
         
+        sigDeviceInformationChanged.fire(deviceInfo);
+
+    }
+
+
+    void RaumserverInstaller::isRunningCheckThread(std::string _ip)
+    {
+        bool hasSFTPAccess = false;
+        DeviceInformation deviceInfo;
+
+        if (stopIsRunningCheckThreads)
+            return;     
+
+        mutexDeviceInformationMap.lock();
+
+        try
+        {
+
+            auto it = deviceInformationMap.find(_ip);
+            if (it != deviceInformationMap.end())
+            {
+                //TODO: @@@ check raumserver JSON webservice (version)
+                /*
+                auto access = hasSFTPAccess ? "yes" : "no";
+                logInfo("SSH Access for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);
+
+                it->second.sshAccess = hasSFTPAccess ? SSHAccess::SSH_YES : SSHAccess::SSH_NO;
+
+                // TODO: Check if install directory existst
+                if (hasSFTPAccess)
+                {
+                    //it->second.raumserverInstalled =                   
+                }
+                */
+
+                // get a copy of the info struct
+                deviceInfo = it->second;
+
+            }
+        }
+        catch (...)
+        {
+            // TODO: @@@
+        }
+
+        mutexDeviceInformationMap.unlock();
+
         sigDeviceInformationChanged.fire(deviceInfo);
 
     }
@@ -226,7 +312,7 @@ namespace RaumserverInstaller
 
         devInfo.name = "Tetsdevice";
         devInfo.ip = "10.0.0.1";
-        devInfo.sshAccess = SSHAccess::SSH_YES;
+        devInfo.sshAccess = UnknownYesNo::YES;
         devInfo.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
         startInstallToDevice(devInfo);

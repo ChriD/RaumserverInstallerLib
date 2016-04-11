@@ -122,6 +122,10 @@ namespace RaumserverInstaller
             void stopSSHAccessCheckerThreads();
             void sshAccessCheckThread(std::string _ip);
 
+            void startIsRunningCheckerThread(const std::string &_ip);
+            void stopIsRunningCheckerThreads();
+            void isRunningCheckThread(std::string _ip);
+
             // a mutex that will secure our device list 
             std::mutex mutexDeviceInformationMap;
             std::map<std::string, DeviceInformation> deviceInformationMap;
@@ -129,6 +133,10 @@ namespace RaumserverInstaller
             // this ones are for checking the ssh access 
             std::vector<std::thread> sshAccessCheckThreads;
             std::atomic_bool stopSSHAccessCheckThreads;
+
+            // this ones are for checking if server runs on a device
+            std::vector<std::thread> isRunningCheckThreads;
+            std::atomic_bool stopIsRunningCheckThreads;
 
             sigs::connections connections;
     };

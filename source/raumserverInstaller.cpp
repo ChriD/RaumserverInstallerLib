@@ -262,7 +262,6 @@ namespace RaumserverInstaller
                
                 // get a copy of the info struct
                 deviceInfo = it->second;
-
             }
             
         }

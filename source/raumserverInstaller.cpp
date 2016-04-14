@@ -5,15 +5,14 @@ namespace RaumserverInstaller
     
     RaumserverInstaller::RaumserverInstaller()
     {
-        stopSSHAccessCheckThreads = false;
-        stopIsRunningCheckThreads = false;
+        stopSSHAccessCheckThreads = false;        
     }
 
 
     RaumserverInstaller::~RaumserverInstaller()
     {
-        stopSSHAccessCheckerThreads();
-        stopIsRunningCheckerThreads();
+        stopSSHAccessCheckerThreads();        
+        httpClient.abortAllRequests();
     }
 
 
@@ -24,6 +23,8 @@ namespace RaumserverInstaller
 
         connections.connect(deviceInstaller.sigInstallProgress, this, &RaumserverInstaller::onInstallProgress);
         connections.connect(deviceInstaller.sigInstallDone, this, &RaumserverInstaller::onInstallDone);
+
+        httpClient.init();
     }
 
     void RaumserverInstaller::initLogObject(Raumkernel::Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList)
@@ -104,7 +105,9 @@ namespace RaumserverInstaller
         sigDeviceFoundForInstall.fire(_deviceInformation);   
 
         startSSHAccessCheckerThread(_deviceInformation.ip);
-        startIsRunningCheckerThread(_deviceInformation.ip);
+
+        // we do use the standard port of the raumserver (8080)
+        httpClient.request("http://" + _deviceInformation.ip + ":8080/raumserver/data/getVersion", nullptr, nullptr, this, std::bind(&RaumserverInstaller::onRequestResult, this, std::placeholders::_1));
     }
 
 
@@ -156,13 +159,7 @@ namespace RaumserverInstaller
     {              
         sshAccessCheckThreads.push_back(std::move(std::thread(&RaumserverInstaller::sshAccessCheckThread, this, _ip)));
     }
-
-
-    void RaumserverInstaller::startIsRunningCheckerThread(const std::string &_ip)
-    {
-        isRunningCheckThreads.push_back(std::move(std::thread(&RaumserverInstaller::isRunningCheckThread, this, _ip)));
-    }
-
+   
     
     void RaumserverInstaller::stopSSHAccessCheckerThreads()
     {
@@ -175,20 +172,6 @@ namespace RaumserverInstaller
         }
 
         stopSSHAccessCheckThreads = false;
-    }
-
-
-    void RaumserverInstaller::stopIsRunningCheckerThreads()
-    {
-        stopIsRunningCheckThreads = true;
-
-        for (auto &thread : isRunningCheckThreads)
-        {
-            if (thread.joinable())
-                thread.join();
-        }
-
-        stopIsRunningCheckThreads = false;
     }
 
 
@@ -254,47 +237,34 @@ namespace RaumserverInstaller
         mutexDeviceInformationMap.unlock();
         
         sigDeviceInformationChanged.fire(deviceInfo);
+    }   
 
-    }
 
-
-    void RaumserverInstaller::isRunningCheckThread(std::string _ip)
+    void RaumserverInstaller::onRequestResult(HttpClient::HttpRequest *_request)
     {
-        bool hasSFTPAccess = false;
         DeviceInformation deviceInfo;
-
-        if (stopIsRunningCheckThreads)
-            return;     
-
-
-        //TODO: @@@ check raumserver JSON webservice (version) 
-
+        
         mutexDeviceInformationMap.lock();
 
         try
         {
+            
+            LUrlParser::clParseURL url = LUrlParser::clParseURL::ParseURL(_request->getRequestUrl());
+            std::string ip = url.m_Host;
 
-            auto it = deviceInformationMap.find(_ip);
+            auto it = deviceInformationMap.find(ip);
             if (it != deviceInformationMap.end())
-            {
-                //TODO: @@@ check raumserver JSON webservice (version)
-                /*
-                auto access = hasSFTPAccess ? "yes" : "no";
-                logInfo("SSH Access for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);
+            {                
+                auto access = !_request->getResponse()->getErrorCode() ? "yes" : "no";
+                logInfo("Is Raumserver running for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);
 
-                it->second.sshAccess = hasSFTPAccess ? SSHAccess::SSH_YES : SSHAccess::SSH_NO;
-
-                // TODO: Check if install directory existst
-                if (hasSFTPAccess)
-                {
-                    //it->second.raumserverInstalled =                   
-                }
-                */
-
+                it->second.raumserverRuns = !_request->getResponse()->getErrorCode() ? UnknownYesNo::YES : UnknownYesNo::NO;
+               
                 // get a copy of the info struct
                 deviceInfo = it->second;
 
             }
+            
         }
         catch (...)
         {
@@ -305,11 +275,14 @@ namespace RaumserverInstaller
 
         sigDeviceInformationChanged.fire(deviceInfo);
 
+
     }
 
 
     void RaumserverInstaller::test()
-    {
+    {        
+        //httpClient.request("http://10.0.0.9:8080/raumserver/data/getVersion", nullptr, nullptr, this, std::bind(&RaumserverInstaller::onRequestResult, this, std::placeholders::_1));
+
         
 
         // TODO: connect to signal
@@ -321,6 +294,8 @@ namespace RaumserverInstaller
         devInfo.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
         startInstallToDevice(devInfo);
+        
+        
      
               
     }

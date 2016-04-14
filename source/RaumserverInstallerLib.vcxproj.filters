@@ -55,6 +55,12 @@
     <Filter Include="deviceInstaller">
       <UniqueIdentifier>{3e6f3bfe-8da0-41c8-923f-1960d78f2d08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\httpClient">
+      <UniqueIdentifier>{fe9016ae-1463-4498-baf5-daf7166d941f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="httpClient">
+      <UniqueIdentifier>{0a93fa9a-2aa7-4e27-9927-ec066466924f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -91,6 +97,18 @@
     </ClCompile>
     <ClCompile Include="deviceInstaller\deviceInstaller_RF.cpp">
       <Filter>deviceInstaller</Filter>
+    </ClCompile>
+    <ClCompile Include="httpclient\happyhttp.cpp">
+      <Filter>httpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="httpclient\httpClient.cpp">
+      <Filter>httpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="httpclient\httpRequest.cpp">
+      <Filter>httpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="httpclient\httpResponse.cpp">
+      <Filter>httpClient</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +198,18 @@
     </ClInclude>
     <ClInclude Include="includes\deviceInstaller\deviceInstaller_RF.h">
       <Filter>includes\deviceInstaller</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\httpclient\happyhttp.h">
+      <Filter>includes\httpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\httpclient\httpClient.h">
+      <Filter>includes\httpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\httpclient\httpRequest.h">
+      <Filter>includes\httpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\httpclient\httpResponse.h">
+      <Filter>includes\httpClient</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

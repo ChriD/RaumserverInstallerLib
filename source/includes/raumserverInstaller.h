@@ -35,6 +35,7 @@
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
 #include "deviceInstaller/deviceInstaller_RF.h"
+#include "httpclient/httpClient.h"
 
 namespace RaumserverInstaller
 {
@@ -118,13 +119,11 @@ namespace RaumserverInstaller
             void onInstallProgress(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo);
             void onInstallDone(DeviceInstaller::DeviceInstallerProgressInfo _progressInfo);
 
+            void onRequestResult(HttpClient::HttpRequest *_request);
+
             void startSSHAccessCheckerThread(const std::string &_ip);
             void stopSSHAccessCheckerThreads();
             void sshAccessCheckThread(std::string _ip);
-
-            void startIsRunningCheckerThread(const std::string &_ip);
-            void stopIsRunningCheckerThreads();
-            void isRunningCheckThread(std::string _ip);
 
             // a mutex that will secure our device list 
             std::mutex mutexDeviceInformationMap;
@@ -134,9 +133,8 @@ namespace RaumserverInstaller
             std::vector<std::thread> sshAccessCheckThreads;
             std::atomic_bool stopSSHAccessCheckThreads;
 
-            // this ones are for checking if server runs on a device
-            std::vector<std::thread> isRunningCheckThreads;
-            std::atomic_bool stopIsRunningCheckThreads;
+            // client for cheking if server is running
+            HttpClient::HttpClient httpClient;            
 
             sigs::connections connections;
     };

@@ -85,13 +85,6 @@ namespace RaumserverInstaller
 
                 EXPORT void setSessions(ssh_session _sshSession, sftp_session _sftpSession);
                 EXPORT void cancelActions();
-
-                //EXPORT void copyFiles(std::vector<std::string>)
-
-                //EXPORT bool createDir(std::string _dir)
-                //EXPORT bool moveToDir(std::string _dir)
-
-                // http://api.libssh.org/master/libssh_tutor_sftp.html
                 
                 EXPORT bool makeDir(std::string _clientDir);
                 EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false);
@@ -109,13 +102,7 @@ namespace RaumserverInstaller
             protected:
                 ssh_session sshSession;
                 sftp_session sftpSession;
-
-                // threads vector for copying files (each thread will handle one file)
-                //std::vector<std::thread*> copyFilesThreadList;
-
-                // Threads for copying multiple files. 
-                // There is only one thread fo rthos so only one "copyFiles" action is allowed at a time
-                //void copyFilesThread();
+     
                 std::thread copyDirThreadObject;
 
                 std::atomic_bool stopThreads;

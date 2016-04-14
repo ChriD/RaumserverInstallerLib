@@ -82,6 +82,10 @@
     <ClCompile Include="deviceDiscovery\deviceDiscovery_UPNP.cpp" />
     <ClCompile Include="deviceInstaller\deviceInstaller.cpp" />
     <ClCompile Include="deviceInstaller\deviceInstaller_RF.cpp" />
+    <ClCompile Include="httpclient\happyhttp.cpp" />
+    <ClCompile Include="httpclient\httpClient.cpp" />
+    <ClCompile Include="httpclient\httpRequest.cpp" />
+    <ClCompile Include="httpclient\httpResponse.cpp" />
     <ClCompile Include="logger\logger.cpp" />
     <ClCompile Include="logger\loggerAdapter.cpp" />
     <ClCompile Include="raumserverInstaller.cpp" />
@@ -98,6 +102,10 @@
     <ClInclude Include="includes\deviceInstaller\deviceInstaller.h" />
     <ClInclude Include="includes\deviceInstaller\deviceInstaller_RF.h" />
     <ClInclude Include="includes\exception\exception.h" />
+    <ClInclude Include="includes\httpclient\happyhttp.h" />
+    <ClInclude Include="includes\httpclient\httpClient.h" />
+    <ClInclude Include="includes\httpclient\httpRequest.h" />
+    <ClInclude Include="includes\httpclient\httpResponse.h" />
     <ClInclude Include="includes\logger\logger.h" />
     <ClInclude Include="includes\logger\loggerAdapter.h" />
     <ClInclude Include="includes\logger\loggerBase.h" />

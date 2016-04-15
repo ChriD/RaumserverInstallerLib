@@ -32,7 +32,7 @@ namespace RaumserverInstaller
 {
 
     enum DeviceType { DT_UNKNOWN = 0 , DT_UPNPDEVICE_RAUMFELD = 1};
-    enum UnknownYesNo  { UNKNOWN = 0, YES = 1, NO = 2 };    
+    enum UnknownYesNo  { UNKNOWN = -1, YES = 1, NO = 0 };    
   
     /**
     * Network adapter information

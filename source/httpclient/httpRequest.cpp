@@ -277,29 +277,20 @@ namespace RaumserverInstaller
             }
             catch (happyhttp::Wobbly _ex)
             {
-                // TODO: DONT FORGETT RAUMKERNEL!!!!
-                //Something went wrong. (e.g a connection refuse..)
-
-                // TODO: @@@
+                // something went wrong (maybe a access denied or something like that)
+                // due we will get not callbacls now we have to finish the request and set an error              
                 httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());
                 httpResponse->setData(_ex.what());                
                 httpResponse->setErrorCode(999);
-                //httpResponse->setHeaders(header);
-       
                 setResponse(httpResponse);                
-
                 finished = true;
             }
             catch ( ... )
-            {
-                // TODO: @@@ // TODO: @@@
+            { 
                 httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());
                 httpResponse->setData("unknown Error");
-                httpResponse->setErrorCode(999);
-                //httpResponse->setHeaders(header);
-
+                httpResponse->setErrorCode(998);
                 setResponse(httpResponse);
-
                 finished = true;
             }
 
@@ -368,7 +359,6 @@ namespace RaumserverInstaller
         {
             finished = true;
         }
-
 
 
         void HttpRequest::onBeginCallback(const happyhttp::Response* _r, void* _userdata)

@@ -70,6 +70,10 @@ namespace RaumserverInstaller
             */
             EXPORT std::vector<NetworkAdaperInformation> getNetworkAdapterList();
             /**
+            * Returns the Network Adapter Information by Id
+            */
+            EXPORT NetworkAdaperInformation getNetworkAdapterInformation(std::uint16_t _id);
+            /**
             * sets the network adapter we are searching for devices  to install the component
             */
             EXPORT void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation);

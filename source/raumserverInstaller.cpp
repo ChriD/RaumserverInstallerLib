@@ -27,6 +27,7 @@ namespace RaumserverInstaller
         httpClient.init();
     }
 
+
     void RaumserverInstaller::initLogObject(Raumkernel::Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList)
     {
         // create the log object (if not already provided) which will be used throughout the whole kernel and his modules                
@@ -137,6 +138,20 @@ namespace RaumserverInstaller
     }
 
 
+    NetworkAdaperInformation RaumserverInstaller::getNetworkAdapterInformation(std::uint16_t _id)
+    {
+        NetworkAdaperInformation empty;
+
+        auto adapterInfoList = deviceDiscoveryUPNP.getNetworkAdaptersInformation();
+        for (auto adpterInfo : adapterInfoList)
+        {
+            if (adpterInfo.id == _id)
+                return adpterInfo;
+        }
+        return  empty;
+    }
+
+
     void RaumserverInstaller::setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation)
     {
         deviceDiscoveryUPNP.setNetworkAdapter(_networkAdapterInformation);
@@ -151,7 +166,6 @@ namespace RaumserverInstaller
         deviceInstaller.setLogObject(getLogObject());
         deviceInstaller.setDevice(_deviceInformation);
         deviceInstaller.startInstall();
-
     }
 
 

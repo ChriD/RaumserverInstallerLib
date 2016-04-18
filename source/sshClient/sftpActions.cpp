@@ -19,6 +19,13 @@ namespace RaumserverInstaller
         }
 
 
+        void SFTPActions::setError(const std::string &_error ,const std::int16_t &_errorCode)
+        {
+            error = _error;
+            errorCode = _errorCode;
+        }
+
+
         void SFTPActions::cancelActions()
         {
             stopThreads = true;
@@ -36,13 +43,12 @@ namespace RaumserverInstaller
                 return false;
 
             std::int32_t returnCode;
-            returnCode = sftp_mkdir(sftpSession, _dir.c_str(), /*0000777*/ S_IRWXU | S_IRWXG | S_IRWXO); /// (777 for all)
+            returnCode = sftp_mkdir(sftpSession, _dir.c_str(), S_IRWXU | S_IRWXG | S_IRWXO); /// (777 for all)
             if (returnCode != SSH_OK)
             {
                 if (sftp_get_error(sftpSession) != SSH_FX_FILE_ALREADY_EXISTS)
                 {
-                    // TODO: @@@
-                    //fprintf(stderr, "Can't create directory: %s\n", ssh_get_error(my_ssh_session));
+                    setError("Can't create Directory: " + std::string(ssh_get_error(sshSession)));                   
                     return false;
                 }
             }
@@ -56,7 +62,7 @@ namespace RaumserverInstaller
                 return;
 
             // start a thread which will handle the copying of the directory to the remote computer
-            // there are signals for file copying
+            // there are signals for file copying when buffer copy is done aso...
             copyDirThreadObject = std::thread(&SFTPActions::copyDirThread, this, _clientDir, _remoteDir, _recursive);
             if (_sync)
                 copyDirThreadObject.join();            
@@ -90,34 +96,26 @@ namespace RaumserverInstaller
             {
                 folders += folders.empty() ? "" : "/";
                 folders += parts[i];
-                if (!makeDir(folders))
-                {
-                    // TODO: error
+                if (!makeDir(folders))                                 
                     return false;
-                }
+                
                 // set the acces to the folder (chmod). For now we will set full access.
-                if (!setChmod(folders, S_IRWXU | S_IRWXG | S_IRWXO))
-                {
-                    // TODO: error
-                    return false;
-                }
+                if (!setChmod(folders, S_IRWXU | S_IRWXG | S_IRWXO))                                    
+                    return false;                
             }
   
 
-            // create file in trunc mode
-            // TODO: qhy the hell doesnt this wok with the bit identifiers?
-            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_RDWR | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-            //auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), 0777, O_TRUNC);
+            // Create file in trunc mode
+            // INFO: Bit identifiers for access (chmod) doesn't work proper. Maybe i am doeing it wrong but i've created a workaround
+            // by setting the chmod value later in the methos
+            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_RDWR | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);            
             if (sftpRemoteFile == NULL)
             {
-                fprintf(stderr, "Can't open file for writing: %s\n", ssh_get_error(sshSession)); // TODO: @@@
+                setError("Can't open file for writing: " + std::string(ssh_get_error(sshSession)));                
                 return false;
             }
-
-
-            std::int32_t nBytes;
-            char buffer[MAX_XFER_BUF_SIZE];            
             
+            char buffer[MAX_XFER_BUF_SIZE];                        
             std::ifstream clientFileStream(_clientFile, std::ios::binary);
 
             if (clientFileStream)
@@ -130,21 +128,24 @@ namespace RaumserverInstaller
 
                 sigStartFileCopying.fire(_clientFile, fileSize);
 
+                // write to remote file with buffering
                 while (clientFileStream)
                 {
                     bufferCount += bufferSize;
                     if (bufferCount > fileSize)
                         bufferSize = (fileSize - (bufferCount - bufferSize));
                     clientFileStream.read(buffer, bufferSize);
-                    sftp_write(sftpRemoteFile, buffer, bufferSize); // write to remote file
+                    sftp_write(sftpRemoteFile, buffer, (size_t)bufferSize); 
 
                     sigFileCopying.fire(_clientFile, bufferCount, fileSize);
                 }
 
                 sftp_close(sftpRemoteFile);
-
-                // TODO: why this si need,? it cant be done ehrn creating file correctly?!
-                setChmod(_remoteFile, S_IRWXU | S_IRWXG | S_IRWXO); //TODO: @@@
+                
+                // INFO: creating the files with the bitIdentifiers for 777 for access doesnt work proper.
+                // I dont't know why so we have to call an 'extra' setChmod for the created files
+                if (!setChmod(_remoteFile, S_IRWXU | S_IRWXG | S_IRWXO))
+                    return false;
                
                 // signal file copied
                 sigEndFileCopying.fire(_clientFile, fileSize);
@@ -165,9 +166,9 @@ namespace RaumserverInstaller
 
             returnCode = sftp_chmod(sftpSession, _fileOrDir.c_str(), _chmod);
             if (returnCode != SSH_OK)
-            {                // TODO: @@@
-                std::string errorS = ssh_get_error(sshSession);
-                std::int32_t error = sftp_get_error(sftpSession);
+            {                
+                setError("Error chmod file " + _fileOrDir  + " : " + std::string(ssh_get_error(sshSession)), sftp_get_error(sftpSession));
+                return false;
             }
             return true;
         }
@@ -176,7 +177,7 @@ namespace RaumserverInstaller
         bool SFTPActions::existsFile(std::string _file)
         {
             // create file in trunc mode
-            auto sftpRemoteFile = sftp_open(sftpSession, _file.c_str(), O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO); // TODO: @@@
+            auto sftpRemoteFile = sftp_open(sftpSession, _file.c_str(), O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO);
             if (sftpRemoteFile == NULL)                            
                 return false;            
             sftp_close(sftpRemoteFile);

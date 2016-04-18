@@ -26,7 +26,12 @@ int main()
 
     rlutil::getkey();
 
-    raumServerInstaller.test();
+    RaumserverInstaller::DeviceInformation deviceInfo;
+
+    deviceInfo.name = "Dummmy";
+    deviceInfo.ip = "10.0.0.5";
+
+    raumServerInstaller.startInstallToDevice(deviceInfo);
 
     rlutil::getkey();
 

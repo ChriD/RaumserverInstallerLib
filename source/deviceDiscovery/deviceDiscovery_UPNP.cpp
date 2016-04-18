@@ -120,16 +120,31 @@ namespace RaumserverInstaller
         
         void DeviceDiscovery_UPNP::onDeviceLost(OpenHome::Net::CpDeviceCpp& _device)
         {
-            std::string deviceFriendlyName, location;
+            std::string deviceFriendlyName, location, deviceXml;
+            
             _device.GetAttribute("Upnp.FriendlyName", deviceFriendlyName);
             _device.GetAttribute("Upnp.Location", location);
+            _device.GetAttribute("Upnp.DeviceXml", deviceXml);
 
             logDebug("UPNP Device lost: " + deviceFriendlyName + "(" + _device.Udn() + ")", CURRENT_POSITION);
-            // TODO: @@@
+
+            removeInstallableDevice(location, deviceXml);            
+        }
+
+
+        void DeviceDiscovery_UPNP::removeInstallableDevice(const std::string &_location, const std::string &_deviceXML)
+        {
+            addRemoveInstallableDevice(_location, _deviceXML, true);
         }
 
 
         void DeviceDiscovery_UPNP::addInstallableDevice(const std::string &_location, const std::string &_deviceXML)
+        {
+            addRemoveInstallableDevice(_location, _deviceXML, false);
+        }
+
+
+        void DeviceDiscovery_UPNP::addRemoveInstallableDevice(const std::string &_location, const std::string &_deviceXML, bool _add)
         {
             pugi::xml_document doc;
             pugi::xml_node deviceNode, rootNode, valueNode;
@@ -201,9 +216,16 @@ namespace RaumserverInstaller
                 deviceInformation.UDN = udn;
                 deviceInformation.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;                           
                 
-                logInfo("Device (" + deviceInformation.ip + ") '" + deviceInformation.name + "' found for installation!", CURRENT_POSITION);
-
-                sigDeviceFound.fire(deviceInformation);
+                if (_add)
+                {
+                    logInfo("Device (" + deviceInformation.ip + ") '" + deviceInformation.name + "' found for installation!", CURRENT_POSITION);
+                    sigDeviceFound.fire(deviceInformation);
+                }
+                else
+                {
+                    logInfo("Device (" + deviceInformation.ip + ") '" + deviceInformation.name + "' removed for installation!", CURRENT_POSITION);
+                    sigDeviceRemoved.fire(deviceInformation);
+                }
 
             }
             else

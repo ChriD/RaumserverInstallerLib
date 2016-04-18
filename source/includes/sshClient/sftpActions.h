@@ -43,8 +43,6 @@
 #define O_APPEND	0x1000
 #define O_NONBLOCK	0x2000
 
-
-
 #define	S_IRWXU	0000700			/* RWX mask for owner */
 #define	S_IRUSR	0000400			/* R for owner */
 #define	S_IWUSR	0000200			/* W for owner */
@@ -91,10 +89,7 @@ namespace RaumserverInstaller
                 EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile);
                 EXPORT bool setChmod(std::string _fileOrDir, std::uint16_t _chmod);
                 EXPORT bool existsFile(std::string _file);
-
-                /**
-                *                
-                */
+                
                 sigs::signal<void(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size)> sigFileCopying;
                 sigs::signal<void(std::string _filename, std::uint64_t _size)> sigEndFileCopying;
                 sigs::signal<void(std::string _filename, std::uint64_t _size)> sigStartFileCopying;
@@ -102,13 +97,17 @@ namespace RaumserverInstaller
             protected:
                 ssh_session sshSession;
                 sftp_session sftpSession;
+
+                std::string error;
+                std::int16_t errorCode;
      
                 std::thread copyDirThreadObject;
 
                 std::atomic_bool stopThreads;
 
                 void copyDirThread(std::string _clientDir, std::string _remoteDir, bool _recursive = true);
-
+                
+                void setError(const std::string &_error = "", const std::int16_t &_errorCode = 999);
                 bool sessionsExists();
 
         };

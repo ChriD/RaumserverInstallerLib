@@ -64,7 +64,9 @@ namespace RaumserverInstaller
 
                 void initAdapter();
                 void discover();
+                void addRemoveInstallableDevice(const std::string &_location, const std::string &_deviceXML, bool _add = true);
                 void addInstallableDevice(const std::string &_location, const std::string &_deviceXML);
+                void removeInstallableDevice(const std::string &_location, const std::string &_deviceXML);
 
                 void onDeviceFound(OpenHome::Net::CpDeviceCpp& _device);
                 void onDeviceLost(OpenHome::Net::CpDeviceCpp& _device);

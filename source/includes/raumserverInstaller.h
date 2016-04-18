@@ -21,10 +21,6 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-// libssh http://stackoverflow.com/questions/8204259/how-to-use-libssh-in-vs10
-
-// http://stackoverflow.com/questions/13691520/how-to-copy-a-file-in-c-c-with-libssh-and-sftp
-
 
 #pragma once
 #ifndef RAUMSERVERINSTALLER_H
@@ -84,12 +80,7 @@ namespace RaumserverInstaller
             /**
             * returns a copy of the device map
             */
-            EXPORT void initDiscover();
-
-            /**
-            * only for testp
-            */
-            EXPORT void test();
+            EXPORT void initDiscover();;
 
             /**
             * will be fired if a device was found where we can install the component on

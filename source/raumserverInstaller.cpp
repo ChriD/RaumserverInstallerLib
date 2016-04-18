@@ -114,7 +114,30 @@ namespace RaumserverInstaller
 
     void RaumserverInstaller::onDeviceRemoved(DeviceInformation _deviceInformation)
     {
-        // TODO: @@@
+        try
+        {
+            // lock map when inserting a value 
+            mutexDeviceInformationMap.lock();
+            try
+            {
+                auto it = deviceInformationMap.find(_deviceInformation.ip);
+                if (it != deviceInformationMap.end())
+                {
+                    deviceInformationMap.erase(_deviceInformation.ip);
+                }
+            }
+            catch (...)
+            {
+                logError("Exception ocurred while deleting device to map!", CURRENT_POSITION);
+            }
+            mutexDeviceInformationMap.unlock();
+        }
+        // be sure we will find recursive locks (deadlocks) created by the application!
+        catch (...)
+        {
+            logError("Exception ocurred while locking device map!", CURRENT_POSITION);
+        }
+
         sigDeviceRemovedForInstall.fire(_deviceInformation);
     }
 
@@ -159,10 +182,7 @@ namespace RaumserverInstaller
    
 
     void RaumserverInstaller::startInstallToDevice(DeviceInformation _deviceInformation)
-    {
-        // commented because it makes some problems i have to investigate further
-        //stopSSHAccessCheckerThreads();
-        
+    {       
         deviceInstaller.setLogObject(getLogObject());
         deviceInstaller.setDevice(_deviceInformation);
         deviceInstaller.startInstall();
@@ -210,10 +230,19 @@ namespace RaumserverInstaller
                 }
             }
         }
+        catch (std::exception &e)
+        {
+            logError("Exception when checking SSHAccess for: " + _ip, CURRENT_POSITION);
+            logError(e.what(), CURRENT_POSITION);            
+        }
+        catch (std::string &e)
+        {
+            logError("Exception when checking SSHAccess for: " + _ip, CURRENT_POSITION);
+            logError(e, CURRENT_POSITION);            
+        }
         catch (...)
         {
-            // TODO: @@@
-            hasSFTPAccess = false;
+            logError("Unknown exception when checking SSHAccess for: " + _ip, CURRENT_POSITION);            
         }
 
         mutexDeviceInformationMap.lock();
@@ -230,6 +259,7 @@ namespace RaumserverInstaller
                 it->second.sshAccess = hasSFTPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
 
                 // TODO: Check if installed (check if there is a specific file)
+                // we have to check ehich folder stays online wehn updateing the firmware
                 if (hasSFTPAccess)
                 {
                     if (sshClient.sftp.existsFile("TODO: @@@")) // TODO: @@@
@@ -243,10 +273,20 @@ namespace RaumserverInstaller
                
             }
         }
+        catch (std::exception &e)
+        {
+            logError("Exception when updateing raumserverInstalled info for: " + _ip, CURRENT_POSITION);
+            logError(e.what(), CURRENT_POSITION);
+        }
+        catch (std::string &e)
+        {
+            logError("Exception when updateing raumserverInstalled info for: " + _ip, CURRENT_POSITION);
+            logError(e, CURRENT_POSITION);
+        }
         catch (...)
         {
-            // TODO: @@@
-        }        
+            logError("Unknown exception when when updateing raumserverInstalled info for: " + _ip, CURRENT_POSITION);
+        }
 
         mutexDeviceInformationMap.unlock();
         
@@ -257,6 +297,7 @@ namespace RaumserverInstaller
     void RaumserverInstaller::onRequestResult(HttpClient::HttpRequest *_request)
     {
         DeviceInformation deviceInfo;
+        std::string ip;
         
         mutexDeviceInformationMap.lock();
 
@@ -264,7 +305,7 @@ namespace RaumserverInstaller
         {
             
             LUrlParser::clParseURL url = LUrlParser::clParseURL::ParseURL(_request->getRequestUrl());
-            std::string ip = url.m_Host;
+            ip = url.m_Host;
 
             auto it = deviceInformationMap.find(ip);
             if (it != deviceInformationMap.end())
@@ -279,9 +320,19 @@ namespace RaumserverInstaller
             }
             
         }
+        catch (std::exception &e)
+        {
+            logError("Exception when updateing IsRunning info for: " + ip, CURRENT_POSITION);
+            logError(e.what(), CURRENT_POSITION);
+        }
+        catch (std::string &e)
+        {
+            logError("Exception when updateing IsRunning info for: " + ip, CURRENT_POSITION);
+            logError(e, CURRENT_POSITION);
+        }
         catch (...)
         {
-            // TODO: @@@
+            logError("Unknown Exception when updateing IsRunning info for: " + ip, CURRENT_POSITION);
         }
 
         mutexDeviceInformationMap.unlock();
@@ -291,27 +342,6 @@ namespace RaumserverInstaller
 
     }
 
-
-    void RaumserverInstaller::test()
-    {        
-        //httpClient.request("http://10.0.0.9:8080/raumserver/data/getVersion", nullptr, nullptr, this, std::bind(&RaumserverInstaller::onRequestResult, this, std::placeholders::_1));
-
-        
-
-        // TODO: connect to signal
-        DeviceInformation      devInfo;
-
-        devInfo.name = "Tetsdevice";
-        devInfo.ip = "10.0.0.1";
-        devInfo.sshAccess = UnknownYesNo::YES;
-        devInfo.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;
-
-        startInstallToDevice(devInfo);
-        
-        
-     
-              
-    }
 
 }
 

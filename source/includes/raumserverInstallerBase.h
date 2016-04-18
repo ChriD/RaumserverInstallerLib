@@ -69,7 +69,7 @@ namespace RaumserverInstaller
             RaumserverInstallerBase();
             ~RaumserverInstallerBase();
 
-            EXPORT void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _log);
+            EXPORT virtual void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _log);
             EXPORT std::shared_ptr<Raumkernel::Log::Log> getLogObject();
 
         protected:

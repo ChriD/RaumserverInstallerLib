@@ -54,6 +54,8 @@ namespace RaumserverInstaller
 
                 EXPORT void setOption(const ssh_options_e &_option, const std::string &_value);
                 EXPORT void setAuth(const std::string &_user, const std::string &_password);
+                
+                EXPORT void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _logger) override;
 
                 SFTPActions sftp;
 

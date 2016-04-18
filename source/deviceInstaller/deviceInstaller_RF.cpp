@@ -105,6 +105,8 @@ namespace RaumserverInstaller
                 return;
             }
 
+            // TODO: stop raumserver deamon if is running
+
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
             progressInfo("Copying files to remote device...", CURRENT_POSITION);

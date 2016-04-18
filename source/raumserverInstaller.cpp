@@ -55,6 +55,8 @@ namespace RaumserverInstaller
         }
 
         logObject->setLogLevel(_defaultLogLevel);
+        
+        httpClient.setLogObject(logObject);
     }
 
 
@@ -217,6 +219,8 @@ namespace RaumserverInstaller
 
         if (stopSSHAccessCheckThreads)
             return;
+
+        sshClient.setLogObject(getLogObject());
 
         try
         {            

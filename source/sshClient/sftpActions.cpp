@@ -21,6 +21,7 @@ namespace RaumserverInstaller
 
         void SFTPActions::setError(const std::string &_error ,const std::int16_t &_errorCode)
         {
+            logError(_error + std::to_string(_errorCode), CURRENT_POSITION);
             error = _error;
             errorCode = _errorCode;
         }

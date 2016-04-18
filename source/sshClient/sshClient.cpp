@@ -21,6 +21,7 @@ namespace RaumserverInstaller
 
         bool SSHClient::failed(std::string _error, std::string _libError, std::int32_t _errorCode)
         {
+            logError(_error + "" + _libError, CURRENT_POSITION);
             return false;
         }
 
@@ -150,6 +151,13 @@ namespace RaumserverInstaller
             sftp.setSessions(sshSession, nullptr);
 
             return true;
+        }
+
+
+        void SSHClient::setLogObject(std::shared_ptr<Raumkernel::Log::Log> _logger)
+        {
+            RaumserverInstaller::RaumserverInstallerBase::setLogObject(_logger);
+            sftp.setLogObject(_logger);
         }
 
     }

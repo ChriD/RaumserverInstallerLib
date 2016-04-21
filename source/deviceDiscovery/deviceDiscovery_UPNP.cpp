@@ -134,13 +134,13 @@ namespace RaumserverInstaller
 
         void DeviceDiscovery_UPNP::removeInstallableDevice(const std::string &_location, const std::string &_deviceXML)
         {
-            addRemoveInstallableDevice(_location, _deviceXML, true);
+            addRemoveInstallableDevice(_location, _deviceXML, false);
         }
 
 
         void DeviceDiscovery_UPNP::addInstallableDevice(const std::string &_location, const std::string &_deviceXML)
         {
-            addRemoveInstallableDevice(_location, _deviceXML, false);
+            addRemoveInstallableDevice(_location, _deviceXML, true);
         }
 
 

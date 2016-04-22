@@ -47,7 +47,7 @@ namespace RaumserverInstaller
             abortInstallThread = true;
             if (installThreadObject.joinable())
             {
-                progressInfo("Waiting for install thread to abort!", CURRENT_POSITION);
+                logDebug("Waiting for install thread to abort!", CURRENT_POSITION);
                 installThreadObject.join();
             }
             abortInstallThread = false;

@@ -14,6 +14,10 @@ namespace RaumserverInstaller
 
             binaryDir = "binaries/raumserverDaemon/";
             installDir = "raumserverDaemon/";
+
+            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
+            connections.connect(sshClient.sftp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
+            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
         }
 
 
@@ -28,11 +32,9 @@ namespace RaumserverInstaller
             DeviceInstaller::startInstall();
 
             sshClient.setLogObject(getLogObject());
-            sshClient.sftp.setLogObject(getLogObject());
+            sshClient.sftp.setLogObject(getLogObject());           
 
-            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
-            connections.connect(sshClient.sftp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
-            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
+            abortInstall();
 
             installThreadObject = std::thread(&DeviceInstaller_RaumfeldDevice::installThread, this);
         }
@@ -114,6 +116,13 @@ namespace RaumserverInstaller
             // for a simple progress we do count the number of files and do divide them by the percentage value whcih is left (70 for now)
             TinyDirCpp::TinyDirCpp  tinyDirCpp;    
             auto filesToCopy = tinyDirCpp.getFiles(binaryDir);
+            if (filesToCopy.size() == 0)
+            {
+                progressError("Could not find Raumserver binaries for installing!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not find Raumserver binaries for installing!", (std::uint8_t)progressPercentage, true));
+                return;
+            }
+
             fileCopyPercentage = (70 / filesToCopy.size());
 
             // copy the files. Due the installation is in a thread we can do a 'sync' copy 

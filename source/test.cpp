@@ -36,6 +36,10 @@ int main()
 
     rlutil::getkey();
 
+    raumServerInstaller.startInstallToDevice(deviceInfo);
+
+    rlutil::getkey();
+
     return 0;
 }
 

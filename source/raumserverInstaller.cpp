@@ -83,6 +83,17 @@ namespace RaumserverInstaller
     }
 
 
+    DeviceInformation RaumserverInstaller::getDeviceInformation(std::string _ip)
+    {
+        DeviceInformation deviceInfo;
+        std::unique_lock<std::mutex> lock(mutexDeviceInformationMap);
+        auto it = deviceInformationMap.find(_ip);
+        if (it != deviceInformationMap.end())
+            deviceInfo = it->second;
+        return deviceInfo;
+    }
+
+
     void RaumserverInstaller::onDeviceFound(DeviceInformation _deviceInformation)
     { 
         try
@@ -266,7 +277,7 @@ namespace RaumserverInstaller
                 // we have to check ehich folder stays online wehn updateing the firmware
                 if (hasSFTPAccess)
                 {
-                    if (sshClient.sftp.existsFile("TODO: @@@")) // TODO: @@@
+                    if (sshClient.sftp.existsFile("raumserverDaemon/raumserver")) // TODO: @@@
                         it->second.raumserverInstalled = UnknownYesNo::YES;
                     else
                         it->second.raumserverInstalled = UnknownYesNo::NO;

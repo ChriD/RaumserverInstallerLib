@@ -78,6 +78,10 @@ namespace RaumserverInstaller
             */
             EXPORT std::map<std::string, DeviceInformation> getDeviceMap();
             /**
+            * Returns the Device Information by ip
+            */
+            EXPORT DeviceInformation getDeviceInformation(std::string _ip);
+            /**
             * returns a copy of the device map
             */
             EXPORT void initDiscover();;

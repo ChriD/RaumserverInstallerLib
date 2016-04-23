@@ -95,7 +95,7 @@ namespace RaumserverInstaller
             std::string folders = "";
             for (std::uint32_t i = 0; i < parts.size() - 1; i++)
             {
-                folders += folders.empty() ? "" : "/";
+                folders += folders.empty() ? "" : "\\"; // TODO: @@@
                 folders += parts[i];
                 if (!makeDir(folders))                                 
                     return false;

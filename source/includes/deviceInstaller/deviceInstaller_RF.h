@@ -27,7 +27,7 @@
 #define RAUMKSERVERINSTALLER_DEVICEINSTALLER_RF_H
 
 #include "deviceInstaller/deviceInstaller.h"
-#include "sshClient/sshClient.h";
+#include "sshClient/sshClient.h"
 
 namespace RaumserverInstaller
 {

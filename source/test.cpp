@@ -21,7 +21,7 @@ int main()
     } 
     */
 
-    raumServerInstaller.setNetworkAdapter(adapterList[3]);
+    raumServerInstaller.setNetworkAdapter(adapterList[0]);
     raumServerInstaller.startDiscoverDevicesForInstall();    
 
     rlutil::getkey();

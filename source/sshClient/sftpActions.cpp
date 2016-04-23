@@ -105,15 +105,6 @@ namespace RaumserverInstaller
                     return false;                
             }
 
-            // for linux we have to convert the last "/" to "\"      
-            
-            //#ifndef _WIN32                 
-            //auto it = _remoteFile.find_last_of("/");
-            //if (it)
-            //    _remoteFile[it] = '\\';            
-            //#endif
-            
-  
             // Create file in trunc mode
             // INFO: Bit identifiers for access (chmod) doesn't work proper. Maybe i am doeing it wrong but i've created a workaround
             // by setting the chmod value later in the methos

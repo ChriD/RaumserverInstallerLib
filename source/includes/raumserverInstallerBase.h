@@ -53,7 +53,7 @@ namespace RaumserverInstaller
     struct DeviceInformation
     {
 
-        EXPORT Json::Value DeviceInformation::getJsonValue();      
+        EXPORT Json::Value getJsonValue();      
 
         std::string name = "";
         std::string ip = "";

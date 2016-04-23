@@ -36,7 +36,7 @@ namespace RaumserverInstaller
         struct DeviceInstallerProgressInfo
         {
             DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error);
-            EXPORT Json::Value DeviceInstallerProgressInfo::getJsonValue();
+            EXPORT Json::Value getJsonValue();
 
             std::string info = "";
             std::uint8_t completionPercentage = 0;

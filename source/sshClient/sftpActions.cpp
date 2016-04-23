@@ -107,11 +107,11 @@ namespace RaumserverInstaller
 
             // for linux we have to convert the last "/" to "\"      
             
-            #ifndef _WIN32                 
-            auto it = _remoteFile.find_last_of("/");
-            if (it)
-                _remoteFile[it] = '\\';            
-            #endif
+            //#ifndef _WIN32                 
+            //auto it = _remoteFile.find_last_of("/");
+            //if (it)
+            //    _remoteFile[it] = '\\';            
+            //#endif
             
   
             // Create file in trunc mode

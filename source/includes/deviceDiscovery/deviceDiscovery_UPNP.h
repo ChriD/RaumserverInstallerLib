@@ -50,7 +50,7 @@ namespace RaumserverInstaller
 
                 virtual void init() override;
                 virtual void startDiscover();
-                virtual void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapter);
+                virtual void setNetworkAdapter(NetworkAdaperInformation _networkAdapter);
                 virtual void loadNetworkAdaptersInformation();
                
                 virtual std::vector<NetworkAdaperInformation> getNetworkAdaptersInformation();                

@@ -72,7 +72,7 @@ namespace RaumserverInstaller
             /**
             * sets the network adapter we are searching for devices  to install the component
             */
-            EXPORT void setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation);
+            EXPORT void setNetworkAdapter(NetworkAdaperInformation _networkAdapterInformation);
             /**
             * returns a copy of the device map
             */

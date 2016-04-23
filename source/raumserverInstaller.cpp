@@ -188,7 +188,7 @@ namespace RaumserverInstaller
     }
 
 
-    void RaumserverInstaller::setNetworkAdapter(const NetworkAdaperInformation &_networkAdapterInformation)
+    void RaumserverInstaller::setNetworkAdapter(NetworkAdaperInformation _networkAdapterInformation)
     {
         deviceDiscoveryUPNP.setNetworkAdapter(_networkAdapterInformation);
     }

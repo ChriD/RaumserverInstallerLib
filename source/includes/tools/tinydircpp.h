@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <string>
 #include "tools/tinydir.h"
 
 namespace TinyDirCpp

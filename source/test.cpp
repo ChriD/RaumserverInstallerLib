@@ -21,7 +21,11 @@ int main()
     } 
     */
 
-    raumServerInstaller.setNetworkAdapter(adapterList[0]);
+    std::int16_t    idx;
+    std::cout << "Adapter IDX: ";
+    std::cin >> idx;
+
+    raumServerInstaller.setNetworkAdapter(adapterList[idx]);
     raumServerInstaller.startDiscoverDevicesForInstall();    
 
     rlutil::getkey();

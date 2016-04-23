@@ -8,7 +8,7 @@ CFLAGS = -std=c++11 -fPIC -Wall -Wextra -O2 -c -pthread $(INCPATH)
 CXXFLAGS = -std=c++11 -fPIC -Wall -Wextra -O2 -c -pthread $(INCPATH)
 LDFLAGS = -pthread -static-libgcc -static-libstdc++
 
-LIBSDEF = libs/linux_x86/raumserverInstaller.so
+LIBSDEF = libs/linux_x86/raumserverInstaller.so libs/linux_x86/libssh.so libs/linux_x86/libssh_threads.so
 
 RM = rm -f 
 TARGET_EXEC = test

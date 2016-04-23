@@ -16,6 +16,8 @@ namespace RaumserverInstaller
 
         SSHClient::~SSHClient()
         {
+            closeSFTP();
+            closeSSH();
         }
 
 

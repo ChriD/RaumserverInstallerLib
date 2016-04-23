@@ -70,6 +70,8 @@ namespace RaumserverInstaller
 
                 void onDeviceFound(OpenHome::Net::CpDeviceCpp& _device);
                 void onDeviceLost(OpenHome::Net::CpDeviceCpp& _device);
+
+                OpenHome::Net::InitialisationParams* initParams;
                
         };
 

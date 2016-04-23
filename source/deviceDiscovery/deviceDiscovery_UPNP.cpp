@@ -17,8 +17,10 @@ namespace RaumserverInstaller
 
         DeviceDiscovery_UPNP::~DeviceDiscovery_UPNP()
         {
-            logDebug("Closing OpenHome UPNP Control Stack", CURRENT_POSITION);
-            //OpenHome::Net::UpnpLibrary::Close(); // will fail!
+            logDebug("Closing OpenHome UPNP Control Stack", CURRENT_POSITION);  
+            delete upupDeviceListAll;
+            delete initParams;
+            //OpenHome::Net::UpnpLibrary::Close(); // TODO: will fail! No idea why. Have to investigate
         }
 
 
@@ -26,11 +28,10 @@ namespace RaumserverInstaller
         {
             DeviceDiscovery::init();
             
-            OpenHome::Net::InitialisationParams*		initParams;                             
+                                       
 
             try
-            {
-                          
+            {                          
                 logDebug("Init OpenHome UPNP Control Stack", CURRENT_POSITION);
 
                 initParams = OpenHome::Net::InitialisationParams::Create();
@@ -38,7 +39,6 @@ namespace RaumserverInstaller
 
                 // after initialisation get the available network adapters
                 loadNetworkAdaptersInformation();
-
             }
             catch (Raumkernel::Exception::RaumkernelException &e)
             {
@@ -83,7 +83,7 @@ namespace RaumserverInstaller
                 return;
 
             logInfo("Starting OpenHome UPNP Control Stack with network adapter: " + selectedNetworkAdapter.name, CURRENT_POSITION);
-            OpenHome::Net::UpnpLibrary::StartCp(selectedNetworkAdapter.address);
+            OpenHome::Net::UpnpLibrary::StartCp(selectedNetworkAdapter.address);            
             
             upnpStarted = true;
 
@@ -262,10 +262,14 @@ namespace RaumserverInstaller
 
                     NetworkAdaperInformation adapterInfo;
                     adapterInfo.id = i+1;
-                    adapterInfo.name = (*networkAdapterList)[i]->Name();
-                    adapterInfo.fullName = (*networkAdapterList)[i]->FullName();
+                    adapterInfo.name = std::string((*networkAdapterList)[i]->Name());
+                    adapterInfo.fullName = std::string((*networkAdapterList)[i]->FullName());
                     adapterInfo.address = (*networkAdapterList)[i]->Subnet();
                     networkAdapterInfomationList.push_back(adapterInfo);
+
+                    // we have to delete the char* from the OhNetstack after we hve copied it to the std::string
+                    // lokk at the description of 'FullName'
+                    delete (*networkAdapterList)[i]->FullName();
                 }
 
                 // clean up the subnet list, we do not need it anymore...

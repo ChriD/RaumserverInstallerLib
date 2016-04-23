@@ -111,7 +111,7 @@ namespace RaumserverInstaller
             auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_WRONLY | O_CREAT | O_TRUNC, /*S_IRWXU | S_IRWXG | S_IRWXO*/ 1);
             if (sftpRemoteFile == NULL)
             {
-                setError("Can't open file '" + _remoteFile  + "' for writing: " + std::string(ssh_get_error(sshSession)));
+                setError("Can't open file '" + _remoteFile  + "' for writing: " + std::string(ssh_get_error(sshSession)), sftp_get_error(sftpSession));
                 return false;
             }
             

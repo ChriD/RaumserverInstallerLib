@@ -28,6 +28,8 @@ namespace RaumserverInstaller
 
         void SSHClient::setOption(const ssh_options_e &_option, const std::string &_value)
         {
+            if (sshOptions.find(_option) != sshOptions.end())
+                sshOptions.erase(_option);
             sshOptions.insert(std::make_pair(_option, _value));
         }
 

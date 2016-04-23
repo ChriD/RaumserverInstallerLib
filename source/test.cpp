@@ -29,13 +29,14 @@ int main()
     RaumserverInstaller::DeviceInformation deviceInfo;
 
     deviceInfo.name = "Dummmy";
-    deviceInfo.ip = "10.0.0.1";
+    deviceInfo.ip = "10.0.0.4";
     deviceInfo.type = RaumserverInstaller::DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
     raumServerInstaller.startInstallToDevice(deviceInfo);
 
     rlutil::getkey();
 
+    deviceInfo.ip = "10.0.0.9";
     raumServerInstaller.startInstallToDevice(deviceInfo);
 
     rlutil::getkey();

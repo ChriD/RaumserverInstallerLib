@@ -28,7 +28,6 @@
 
 #include "raumserverInstallerBase.h"
 
-
 namespace RaumserverInstaller
 {
     namespace DeviceInstaller
@@ -41,6 +40,15 @@ namespace RaumserverInstaller
                 info = _info;
                 completionPercentage = _completionPercentage;
                 error = _error;
+            }
+
+            EXPORT Json::Value DeviceInstallerProgressInfo::getJsonValue()
+            {
+                Json::Value progressInfo;
+                progressInfo["progressInfo"]["info"] = info;
+                progressInfo["progressInfo"]["name"] = completionPercentage;
+                progressInfo["progressInfo"]["error"] = error;
+                return progressInfo;
             }
 
             std::string info = "";

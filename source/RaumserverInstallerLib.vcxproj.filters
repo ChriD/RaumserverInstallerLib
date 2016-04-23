@@ -61,6 +61,12 @@
     <Filter Include="httpClient">
       <UniqueIdentifier>{0a93fa9a-2aa7-4e27-9927-ec066466924f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{53ce8e37-4e6b-41c5-a7bb-d288f1c2d72d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\json">
+      <UniqueIdentifier>{a5ac673f-ba49-4436-a5bf-d6597a479df2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -109,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="httpclient\httpResponse.cpp">
       <Filter>httpClient</Filter>
+    </ClCompile>
+    <ClCompile Include="json\jsoncpp.cpp">
+      <Filter>json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +219,12 @@
     </ClInclude>
     <ClInclude Include="includes\httpclient\httpResponse.h">
       <Filter>includes\httpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\json\json.h">
+      <Filter>includes\json</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\json\json-forwards.h">
+      <Filter>includes\json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ namespace RaumserverInstaller
 
         bool SSHClient::failed(std::string _error, std::string _libError, std::int32_t _errorCode)
         {
-            logError(_error + "" + _libError, CURRENT_POSITION);
+            logError(_error + " / " + _libError, CURRENT_POSITION);
             return false;
         }
 
@@ -127,7 +127,7 @@ namespace RaumserverInstaller
         bool SSHClient::closeSSH()
         {
             if (sshSession == nullptr)
-                return failed("No SSH session to close!");
+                return false;// failed("No SSH session to close!");
 
             // if there is a sftp session too we have to close it before we close the ssh session
             if (sftpSession != nullptr)                            
@@ -146,7 +146,7 @@ namespace RaumserverInstaller
         bool SSHClient::closeSFTP()
         {
             if (sftpSession == nullptr)
-                return failed("No SFTP session to close!");
+                return false; //failed("No SFTP session to close!");
             
             sftp.cancelActions();
             sftp_free(sftpSession);

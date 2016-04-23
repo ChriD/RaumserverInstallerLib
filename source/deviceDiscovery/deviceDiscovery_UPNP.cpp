@@ -28,8 +28,6 @@ namespace RaumserverInstaller
         {
             DeviceDiscovery::init();
             
-                                       
-
             try
             {                          
                 logDebug("Init OpenHome UPNP Control Stack", CURRENT_POSITION);

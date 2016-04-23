@@ -36,9 +36,9 @@ int main()
     deviceInfo.ip = "10.0.0.4";
     deviceInfo.type = RaumserverInstaller::DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
-    raumServerInstaller.startInstallToDevice(deviceInfo);
+    //raumServerInstaller.startInstallToDevice(deviceInfo);
 
-    rlutil::getkey();
+    //rlutil::getkey();
 
     deviceInfo.ip = "10.0.0.9";
     raumServerInstaller.startInstallToDevice(deviceInfo);

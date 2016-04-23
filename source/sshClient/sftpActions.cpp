@@ -105,11 +105,10 @@ namespace RaumserverInstaller
                     return false;                
             }
   
-
             // Create file in trunc mode
             // INFO: Bit identifiers for access (chmod) doesn't work proper. Maybe i am doeing it wrong but i've created a workaround
             // by setting the chmod value later in the methos
-            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+            auto sftpRemoteFile = sftp_open(sftpSession, _remoteFile.c_str(), O_WRONLY | O_CREAT | O_TRUNC, /*S_IRWXU | S_IRWXG | S_IRWXO*/ 1);
             if (sftpRemoteFile == NULL)
             {
                 setError("Can't open file '" + _remoteFile  + "' for writing: " + std::string(ssh_get_error(sshSession)));

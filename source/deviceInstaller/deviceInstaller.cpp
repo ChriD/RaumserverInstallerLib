@@ -62,5 +62,23 @@ namespace RaumserverInstaller
         }
  
 
+
+
+        DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error)
+        {
+            info = _info;
+            completionPercentage = _completionPercentage;
+            error = _error;
+        }
+
+        EXPORT Json::Value DeviceInstallerProgressInfo::getJsonValue()
+        {
+            Json::Value progressInfo;
+            progressInfo["progressInfo"]["info"] = info;
+            progressInfo["progressInfo"]["percentage"] = completionPercentage;
+            progressInfo["progressInfo"]["error"] = error;
+            return progressInfo;
+        }
+
     }
 }

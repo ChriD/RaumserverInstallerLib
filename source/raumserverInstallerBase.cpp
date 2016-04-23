@@ -66,5 +66,21 @@ namespace RaumserverInstaller
         logObject->critical(_log, _location);
     }
 
+
+
+    Json::Value DeviceInformation::getJsonValue()
+    {
+        Json::Value deviceInfo;
+        deviceInfo["deviceInfo"]["ip"] = ip;
+        deviceInfo["deviceInfo"]["name"] = name;
+        deviceInfo["deviceInfo"]["udn"] = UDN;
+        deviceInfo["deviceInfo"]["sshAccess"] = sshAccess;
+        deviceInfo["deviceInfo"]["raumserverInstalled"] = raumserverInstalled;
+        deviceInfo["deviceInfo"]["raumserverRuns"] = raumserverRuns;
+        deviceInfo["deviceInfo"]["raumserverVersion"] = raumserverVersion;
+        deviceInfo["deviceInfo"]["type"] = type;
+        return deviceInfo;
+    }
+
 }
 

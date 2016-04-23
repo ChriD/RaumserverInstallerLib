@@ -53,19 +53,7 @@ namespace RaumserverInstaller
     struct DeviceInformation
     {
 
-        EXPORT Json::Value DeviceInformation::getJsonValue()
-        {
-            Json::Value deviceInfo;
-            deviceInfo["deviceInfo"]["ip"] = ip;
-            deviceInfo["deviceInfo"]["name"] = name;
-            deviceInfo["deviceInfo"]["udn"] = UDN;
-            deviceInfo["deviceInfo"]["sshAccess"] = sshAccess;
-            deviceInfo["deviceInfo"]["raumserverInstalled"] = raumserverInstalled;
-            deviceInfo["deviceInfo"]["raumserverRuns"] = raumserverRuns;
-            deviceInfo["deviceInfo"]["raumserverVersion"] = raumserverVersion;
-            deviceInfo["deviceInfo"]["type"] = type;
-            return deviceInfo;
-        }
+        EXPORT Json::Value DeviceInformation::getJsonValue();      
 
         std::string name = "";
         std::string ip = "";

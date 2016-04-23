@@ -8,7 +8,7 @@ CFLAGS = -std=c++11 -fPIC -Wall -Wno-unknown-pragmas -Wno-unused-parameter -Wext
 CXXFLAGS = -std=c++11 -fPIC -Wall -Wno-unknown-pragmas -Wno-unused-parameter -Wextra -O2 -c -pthread $(INCPATH)
 LDFLAGS = -shared -pthread -static-libgcc -static-libstdc++
 
-LIBSDEF =  libs/linux_x86/libohNetCore.a libs/linux_x86/libohNetDevices.a libs/linux_x86/libohNetProxies.a
+LIBSDEF =  libs/linux_x86/libohNetCore.a libs/linux_x86/libohNetDevices.a libs/linux_x86/libohNetProxies.a libs/linux_x86/libssh.a
 
 RM = rm -f 
 TARGET_LIB = libs/linux_x86/raumserverInstaller.so

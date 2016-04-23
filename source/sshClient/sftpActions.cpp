@@ -95,7 +95,7 @@ namespace RaumserverInstaller
             std::string folders = "";
             for (std::uint32_t i = 0; i < parts.size() - 1; i++)
             {
-                folders += folders.empty() ? "" : "\\"; // TODO: @@@
+                folders += folders.empty() ? "" : "/";
                 folders += parts[i];
                 if (!makeDir(folders))                                 
                     return false;
@@ -104,6 +104,11 @@ namespace RaumserverInstaller
                 if (!setChmod(folders, S_IRWXU | S_IRWXG | S_IRWXO))                                    
                     return false;                
             }
+
+            // for linux we have to vonvert "/" to "\"            
+            #ifndef _WIN32          
+                std::replace( _remoteFile.begin(), _remoteFile.end(), '/', '\\');            
+            #endif
   
             // Create file in trunc mode
             // INFO: Bit identifiers for access (chmod) doesn't work proper. Maybe i am doeing it wrong but i've created a workaround

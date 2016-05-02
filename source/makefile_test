@@ -5,7 +5,6 @@ ifeq ($(arch),X64)
   CC = g++-4.9
   CXX = g++-4.9
   LIBSPATH = libs/linux_x64/
-  LIBSDEF =  libs/linux_x64/raumserver.so libs/linux_x64/raumkernel.so
   TARGET = testX64
 endif
 	
@@ -14,7 +13,6 @@ ifeq ($(arch),X86)
   CC = g++-4.9
   CXX = g++-4.9
   LIBSPATH = libs/linux_x86/
-  LIBSDEF =  libs/linux_x86/raumserver.so libs/linux_x86/raumkernel.so
   TARGET = testX86
 endif
 
@@ -23,7 +21,6 @@ ifeq ($(arch),ARMA53)
   CC = arm-linux-gnueabihf-g++-4.9 
   CXX = arm-linux-gnueabihf-g++-4.9
   LIBSPATH = libs/linux_ARMA53/
-  LIBSDEF = libs/linux_ARMA53/raumserver.so libs/linux_ARMA53/raumkernel.so
   TARGET = testARMA53
 endif
 
@@ -32,7 +29,6 @@ ifeq ($(arch),ARMV7HF)
   CC = arm-linux-gnueabihf-g++-4.9 
   CXX = arm-linux-gnueabihf-g++-4.9
   LIBSPATH = libs/linux_ARMV7/
-  LIBSDEF = libs/linux_ARMV7/raumserver.so libs/linux_ARMV7/raumkernel.so
   TARGET = testARMV7HF
 endif
 
@@ -41,7 +37,6 @@ ifeq ($(arch),ARMV6)
   CC = arm-linux-gnueabi-g++-4.9 
   CXX = arm-linux-gnueabi-g++-4.9
   LIBSPATH = libs/linux_ARMV6/
-  LIBSDEF = ibs/linux_ARMV6/raumserver.so libs/linux_ARMV6/raumkernel.so
   TARGET = testARMV6
 endif
 

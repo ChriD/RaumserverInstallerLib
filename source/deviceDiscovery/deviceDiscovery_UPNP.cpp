@@ -238,7 +238,7 @@ namespace RaumserverInstaller
         {
             std::unique_lock<std::mutex> lock(adapterListMutex);
 
-            std::vector<OpenHome::NetworkAdapter*>		*networkAdapterList;                   
+            std::vector<OpenHome::NetworkAdapter*> *networkAdapterList;                   
 
             try
             {
@@ -269,11 +269,11 @@ namespace RaumserverInstaller
 
                     // we have to delete the char* from the OhNetstack after we have copied it to the std::string
                     // look at the description of 'FullName'
-                    //delete (*networkAdapterList)[i]->FullName();
+                    delete (*networkAdapterList)[i]->FullName();
                 }
 
                 // clean up the subnet list, we do not need it anymore...
-                //OpenHome::Net::UpnpLibrary::DestroySubnetList(networkAdapterList);
+                OpenHome::Net::UpnpLibrary::DestroySubnetList(networkAdapterList);
 
             }
             catch (Raumkernel::Exception::RaumkernelException &e)

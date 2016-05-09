@@ -170,7 +170,8 @@ namespace RaumserverInstaller
     std::vector<NetworkAdaperInformation> RaumserverInstaller::getNetworkAdapterList()
     {
         // use the list directly from the UPNP stack who is so gentle to give us this informations
-        return deviceDiscoveryUPNP.getNetworkAdaptersInformation();
+        auto networkAdapterList = deviceDiscoveryUPNP.getNetworkAdaptersInformation();
+        return networkAdapterList;
     }
 
 

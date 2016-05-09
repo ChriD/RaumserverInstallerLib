@@ -185,7 +185,7 @@ namespace RaumserverInstaller
             if (adpterInfo.id == _id)
                 return adpterInfo;
         }
-        return  empty;
+        return empty;
     }
 
 

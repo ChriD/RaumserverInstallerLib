@@ -40,10 +40,18 @@ namespace RaumserverInstaller
     */
     struct NetworkAdaperInformation
     {
-        std::string name = "";
-        std::string fullName = "";
-        std::uint32_t address = 0;
-        std::uint16_t id = 0;
+        std::string name;
+        std::string fullName;
+        std::uint32_t address;
+        std::uint16_t id;
+
+        NetworkAdaperInformation()
+        {
+            name = "";
+            fullName = "";
+            address = 0;
+            id = 0;
+        }
     };
 
 
@@ -84,7 +92,6 @@ namespace RaumserverInstaller
             EXPORT virtual void logInfo(const std::string &_log, const std::string &_location);
             EXPORT virtual void logError(const std::string &_log, const std::string &_location);
             EXPORT virtual void logCritical(const std::string &_log, const std::string &_location);
-
     };
 
 }

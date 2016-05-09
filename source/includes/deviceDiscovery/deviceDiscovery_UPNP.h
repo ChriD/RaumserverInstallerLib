@@ -61,6 +61,8 @@ namespace RaumserverInstaller
                 std::vector<NetworkAdaperInformation> networkAdapterInfomationList;
                 NetworkAdaperInformation selectedNetworkAdapter;
                 bool upnpStarted;
+                
+                std::mutex adapterListMutex;
 
                 void initAdapter();
                 void discover();

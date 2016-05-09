@@ -236,6 +236,8 @@ namespace RaumserverInstaller
 
         void DeviceDiscovery_UPNP::loadNetworkAdaptersInformation()
         {
+            std::unique_lock<std::mutex> lock(adapterListMutex);
+
             std::vector<OpenHome::NetworkAdapter*>		*networkAdapterList;                   
 
             try
@@ -265,8 +267,8 @@ namespace RaumserverInstaller
                     adapterInfo.address = (*networkAdapterList)[i]->Subnet();
                     networkAdapterInfomationList.push_back(adapterInfo);
 
-                    // we have to delete the char* from the OhNetstack after we hve copied it to the std::string
-                    // lokk at the description of 'FullName'
+                    // we have to delete the char* from the OhNetstack after we have copied it to the std::string
+                    // look at the description of 'FullName'
                     delete (*networkAdapterList)[i]->FullName();
                 }
 
@@ -300,6 +302,7 @@ namespace RaumserverInstaller
 
         std::vector<NetworkAdaperInformation> DeviceDiscovery_UPNP::getNetworkAdaptersInformation()
         {
+            std::unique_lock<std::mutex> lock(adapterListMutex);            
             return networkAdapterInfomationList;
         }
 

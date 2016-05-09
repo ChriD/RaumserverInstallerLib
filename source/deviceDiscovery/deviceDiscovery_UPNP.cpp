@@ -246,6 +246,8 @@ namespace RaumserverInstaller
                 networkAdapterInfomationList.clear();
 
                 logDebug("Retrieve network adapter list", CURRENT_POSITION);
+
+                /*
                 networkAdapterList = OpenHome::Net::UpnpLibrary::CreateSubnetList();
 
                 if ((*networkAdapterList).size() == 0)
@@ -274,6 +276,13 @@ namespace RaumserverInstaller
 
                 // clean up the subnet list, we do not need it anymore...
                 OpenHome::Net::UpnpLibrary::DestroySubnetList(networkAdapterList);
+                */
+                NetworkAdaperInformation adapterInfo;
+                adapterInfo.id = 0;
+                adapterInfo.name = "TEST";
+                adapterInfo.fullName = "TEST FULL NAME";
+                adapterInfo.address = 1;
+                networkAdapterInfomationList.push_back(adapterInfo);
 
             }
             catch (Raumkernel::Exception::RaumkernelException &e)

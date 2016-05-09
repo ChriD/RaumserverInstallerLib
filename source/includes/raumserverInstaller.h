@@ -65,6 +65,7 @@ namespace RaumserverInstaller
             * init has to be run before this will return any stuff
             */
             EXPORT std::vector<NetworkAdaperInformation> getNetworkAdapterList();
+            EXPORT std::vector<std::string> getNetworkAdapterListTEST();
             /**
             * Returns the Network Adapter Information by Id
             */

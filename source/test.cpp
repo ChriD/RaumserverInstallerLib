@@ -11,8 +11,7 @@ int main()
     raumServerInstaller.initLogObject(Raumkernel::Log::LogType::LOGTYPE_INFO);
     raumServerInstaller.initDiscover();
 
-    
-    auto testVector = raumServerInstaller.getNetworkAdapterListTEST();
+       
     auto adapterList = raumServerInstaller.getNetworkAdapterList();
     for (auto item : adapterList)
     {

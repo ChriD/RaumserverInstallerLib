@@ -3,7 +3,7 @@
 ifeq ($(arch),X64) 
   ARCHITECTURE = -m64
   CC = g++-4.9
-  CXX = g++-4.9 
+  CXX = g++-4.9
   LIBSPATH = libs/linux_x64/
   TARGET = libs/_tmpBuild/raumserverInstaller.so
 endif

@@ -12,14 +12,13 @@ int main()
     raumServerInstaller.initDiscover();
 
     
+    auto testVector = raumServerInstaller.getNetworkAdapterListTEST();
     auto adapterList = raumServerInstaller.getNetworkAdapterList();
-    /*
     for (auto item : adapterList)
     {
         std::cout << item.name + " - " + item.fullName;
         std::cout << std::endl;
-    } 
-    */
+    }    
 
     std::int16_t    idx;
     std::cout << "Adapter IDX: ";

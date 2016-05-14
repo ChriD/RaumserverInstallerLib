@@ -12,10 +12,11 @@ namespace RaumserverInstaller
             abortInstallThread = false;
             fileCopyPercentage = 0;
 
-            binaryDir = "binaries/raumserverDaemon/";
-            installDir = "raumserverDaemon/";
+            binaryDir = "binaries/raumserverDaemon/";            
+            installDir = remoteInstallationPath;
+            installDirStartScript = remoteInstallationPathInitScript;
 
-            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
+            connections.connect(sshClient.sftp.sigStartFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
             connections.connect(sshClient.sftp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
             connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
         }
@@ -61,7 +62,7 @@ namespace RaumserverInstaller
 
         void DeviceInstaller_RaumfeldDevice::onStartFileCopying(std::string _filename, std::uint64_t _size)
         {            
-            progressInfo("Copying File " + _filename, CURRENT_POSITION);
+            progressInfo("Copying file: " + _filename, CURRENT_POSITION);
             progressPercentage += fileCopyPercentage;
         }
 
@@ -105,12 +106,13 @@ namespace RaumserverInstaller
                 progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
                 sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
-            }
-
-            // TODO: stop raumserver deamon if is running
+            }                        
 
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
+
+            // TODO: stop raumserver deamon if is running
+
             progressInfo("Copying files to remote device...", CURRENT_POSITION);
 
             // for a simple progress we do count the number of files and do divide them by the percentage value whcih is left (70 for now)
@@ -129,12 +131,12 @@ namespace RaumserverInstaller
             // abporting may not be possible now because of 'sync' call but we may accept this for now
             // (so 'abortInstallThread' has no funkcion right now)
             sshClient.sftp.copyDir(binaryDir, installDir, true, true);
-       
-            
-
+                   
             progressPercentage = 80;
 
-            // TODO: copy init script
+            // copy init script            
+            sshClient.sftp.copyFile(binaryDir + "raumserver", installDirStartScript + "S99raumserver");
+            sshClient.sftp.setChmod(installDirStartScript + "S99raumserver", S_IRWXU | S_IRWXG | S_IRWXO);
 
             progressPercentage = 85;
 

@@ -73,6 +73,7 @@ namespace RaumserverInstaller
         Json::Value deviceInfo;
         deviceInfo["deviceInfo"]["ip"] = ip;
         deviceInfo["deviceInfo"]["name"] = name;
+        deviceInfo["deviceInfo"]["friendlyName"] = friendlyName;
         deviceInfo["deviceInfo"]["udn"] = UDN;
         deviceInfo["deviceInfo"]["sshAccess"] = sshAccess;
         deviceInfo["deviceInfo"]["raumserverInstalled"] = raumserverInstalled;

@@ -63,12 +63,22 @@ namespace RaumserverInstaller
                 bool upnpStarted;
                 
                 std::mutex adapterListMutex;
+                std::mutex deviceListMutex;
+
+                std::thread refreshDeviceListThreadObject;
+                std::atomic_bool stopThreads;
 
                 void initAdapter();
                 void discover();
                 void addRemoveInstallableDevice(const std::string &_location, const std::string &_deviceXML, bool _add = true);
                 void addInstallableDevice(const std::string &_location, const std::string &_deviceXML);
                 void removeInstallableDevice(const std::string &_location, const std::string &_deviceXML);
+
+                /**
+                * Not intended for external use
+                * ist a thread which will do the refresh of the device list
+                */
+                void refreshDeviceListThread(std::uint32_t _refreshTimeMS);
 
                 void onDeviceFound(OpenHome::Net::CpDeviceCpp& _device);
                 void onDeviceLost(OpenHome::Net::CpDeviceCpp& _device);

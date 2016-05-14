@@ -274,11 +274,10 @@ namespace RaumserverInstaller
 
                 it->second.sshAccess = hasSFTPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
 
-                // TODO: Check if installed (check if there is a specific file)
-                // we have to check ehich folder stays online wehn updateing the firmware
+                // check if the raumserver is installed by checking if the folder is there
                 if (hasSFTPAccess)
                 {
-                    if (sshClient.sftp.existsFile("raumserverDaemon/raumserver")) // TODO: @@@
+                    if (sshClient.sftp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length()-1))) 
                         it->second.raumserverInstalled = UnknownYesNo::YES;
                     else
                         it->second.raumserverInstalled = UnknownYesNo::NO;

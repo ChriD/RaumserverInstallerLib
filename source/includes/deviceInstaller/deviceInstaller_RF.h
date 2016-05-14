@@ -48,6 +48,7 @@ namespace RaumserverInstaller
 
                 std::string binaryDir;                
                 std::string installDir;
+                std::string installDirStartScript;
 
                 std::atomic_bool abortInstallThread;
                 std::thread installThreadObject;  

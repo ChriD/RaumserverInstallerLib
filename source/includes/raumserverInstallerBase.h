@@ -32,6 +32,9 @@
 namespace RaumserverInstaller
 {
 
+    const std::string remoteInstallationPath = "../etc/raumfeld/raumserverDaemon/";
+    const std::string remoteInstallationPathInitScript = "../etc/init.d/";
+
     enum DeviceType { DT_UNKNOWN = 0 , DT_UPNPDEVICE_RAUMFELD = 1};
     enum UnknownYesNo  { UNKNOWN = -1, YES = 1, NO = 0 };    
   
@@ -66,6 +69,7 @@ namespace RaumserverInstaller
         EXPORT Json::Value getJsonValue();      
 
         std::string name = "";
+        std::string friendlyName = "";
         std::string ip = "";
         std::string UDN = "";
         DeviceType type = DeviceType::DT_UNKNOWN;

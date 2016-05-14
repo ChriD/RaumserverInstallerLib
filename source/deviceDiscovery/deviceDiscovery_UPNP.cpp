@@ -12,12 +12,21 @@ namespace RaumserverInstaller
         {        
             upnpStarted = false;
             upupDeviceListAll = nullptr;
+            stopThreads = false;
         }
 
 
         DeviceDiscovery_UPNP::~DeviceDiscovery_UPNP()
         {
             logDebug("Closing OpenHome UPNP Control Stack", CURRENT_POSITION);  
+
+            stopThreads = true;
+            if (refreshDeviceListThreadObject.joinable())
+            {
+                logDebug("Waiting for DeviceRefeshList thread to finish (This may take some time...)", CURRENT_POSITION);
+                refreshDeviceListThreadObject.join();
+            }
+
             delete upupDeviceListAll;
             delete initParams;
             //OpenHome::Net::UpnpLibrary::Close(); // TODO: will fail! No idea why. Have to investigate
@@ -93,17 +102,74 @@ namespace RaumserverInstaller
             if (!upnpStarted)
                 return;
 
+            if (refreshDeviceListThreadObject.joinable())
+            {
+                stopThreads = true;
+                refreshDeviceListThreadObject.join();
+            }
+
             if (upupDeviceListAll != nullptr)
                 delete upupDeviceListAll;
 
             OpenHome::Net::FunctorCpDeviceCpp functorDeviceFound = OpenHome::Net::MakeFunctorCpDeviceCpp(*this, &DeviceDiscovery_UPNP::onDeviceFound);
             OpenHome::Net::FunctorCpDeviceCpp functorDeviceLost = OpenHome::Net::MakeFunctorCpDeviceCpp(*this, &DeviceDiscovery_UPNP::onDeviceLost);
             upupDeviceListAll = new OpenHome::Net::CpDeviceListCppUpnpAll(functorDeviceFound, functorDeviceLost);
+            
+            stopThreads = false;
+            std::uint32_t refreshTime = 5000;            
+            refreshDeviceListThreadObject = std::thread(&DeviceDiscovery_UPNP::refreshDeviceListThread, this, refreshTime);
+              
+        }
+
+
+        void DeviceDiscovery_UPNP::refreshDeviceListThread(std::uint32_t _refreshTimeMS)
+        {
+            std::uint32_t timeCount = 0;
+
+            while (!stopThreads)
+            {
+                try
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                    timeCount += 250;
+                    if (timeCount > _refreshTimeMS)
+                    {
+                        logDebug("Refreshing UPNP device list", CURRENT_POSITION);
+                        // force refreshing of the upnpDevice list which may lead to 'deviceFound' or 'deviceLost' signals
+                        if (upupDeviceListAll != nullptr)
+                            upupDeviceListAll->Refresh();
+                        timeCount = 0;
+                    }
+                    
+                }
+                catch (Raumkernel::Exception::RaumkernelException &e)
+                {
+                    if (e.type() == Raumkernel::Exception::ExceptionType::EXCEPTIONTYPE_APPCRASH)
+                        throw e;
+                }
+                catch (std::exception &e)
+                {
+                    logError(e.what(), CURRENT_POSITION);
+                }
+                catch (std::string &e)
+                {
+                    logError(e, CURRENT_POSITION);
+                }
+                catch (OpenHome::Exception &e)
+                {
+                    logError(e.Message(), CURRENT_POSITION);;
+                }
+                catch (...)
+                {
+                    logError("Unknown exception!", CURRENT_POSITION);
+                }
+            }
         }
 
         
         void DeviceDiscovery_UPNP::onDeviceFound(OpenHome::Net::CpDeviceCpp& _device)
         {
+            std::unique_lock<std::mutex> lock(deviceListMutex);            
             std::string deviceFriendlyName, location, deviceXml;
 
             _device.GetAttribute("Upnp.FriendlyName", deviceFriendlyName);
@@ -118,6 +184,7 @@ namespace RaumserverInstaller
         
         void DeviceDiscovery_UPNP::onDeviceLost(OpenHome::Net::CpDeviceCpp& _device)
         {
+            std::unique_lock<std::mutex> lock(deviceListMutex);
             std::string deviceFriendlyName, location, deviceXml;
             
             _device.GetAttribute("Upnp.FriendlyName", deviceFriendlyName);
@@ -146,7 +213,7 @@ namespace RaumserverInstaller
         {
             pugi::xml_document doc;
             pugi::xml_node deviceNode, rootNode, valueNode;
-            std::string deviceType, modelName, friendlyName, udn;
+            std::string deviceType, modelName, friendlyName, udn, manufacturer, modelDescription;
 
             pugi::xml_parse_result result = doc.load_string(_deviceXML.c_str());
 
@@ -200,9 +267,24 @@ namespace RaumserverInstaller
             }
             udn = valueNode.child_value();
 
+            valueNode = deviceNode.child("manufacturer");
+            if (!valueNode)
+            {
+                logError("Device XML from device does not contain manufacturer information!", CURRENT_POSITION);
+                return;
+            }
+            manufacturer = valueNode.child_value();
 
-            if (deviceType      == "urn:schemas-raumfeld-com:device:RaumfeldDevice:1" &&
-                friendlyName    == "Raumfeld Device")
+            valueNode = deviceNode.child("modelDescription");
+            if (!valueNode)
+                modelDescription = "";
+            else
+                modelDescription = valueNode.child_value();      
+
+            //if (deviceType      == "urn:schemas-raumfeld-com:device:RaumfeldDevice:1" &&
+            //    friendlyName    == "Raumfeld Device")
+            if ((deviceType == "urn:schemas-upnp-org:device:MediaRenderer:1" || deviceType == "urn:schemas-upnp-org:device:MediaServer:1") &&
+                manufacturer == "Raumfeld GmbH" && modelDescription != "Virtual Media Player")
             {
                 // parse the location uri to get the ip
                 LUrlParser::clParseURL url = LUrlParser::clParseURL::ParseURL(_location);
@@ -211,6 +293,7 @@ namespace RaumserverInstaller
                 DeviceInformation   deviceInformation;                
                 deviceInformation.ip = url.m_Host;
                 deviceInformation.name = modelName;               
+                deviceInformation.friendlyName = friendlyName;
                 deviceInformation.UDN = udn;
                 deviceInformation.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;                           
                 

@@ -79,6 +79,8 @@ namespace RaumserverInstaller
         deviceInfo["deviceInfo"]["raumserverInstalled"] = raumserverInstalled;
         deviceInfo["deviceInfo"]["raumserverRuns"] = raumserverRuns;
         deviceInfo["deviceInfo"]["raumserverVersion"] = raumserverVersion;
+        deviceInfo["deviceInfo"]["hardwareType"] = hardwareType;
+        deviceInfo["deviceInfo"]["modelNumber"] = modelNumber;
         deviceInfo["deviceInfo"]["type"] = type;
         return deviceInfo;
     }

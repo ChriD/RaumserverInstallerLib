@@ -57,6 +57,56 @@ namespace RaumserverInstaller
         }
 
 
+        bool SFTPActions::removeDir(std::string _dir)
+        {
+            if (!sessionsExists())
+                return false;      
+
+            std::int32_t returnCode;
+               
+            sftp_dir remoteDir;
+            sftp_attributes remoteFileAttributes;
+
+            remoteDir = sftp_opendir(sftpSession, _dir.c_str());
+            if (!remoteDir)
+            {
+                setError("Can't open directory " + _dir + ": " + std::string(ssh_get_error(sshSession)), sftp_get_error(sftpSession));
+                return false;
+            }
+
+            while ((remoteFileAttributes = sftp_readdir(sftpSession, remoteDir)) != NULL)
+            {            
+                std::string fileName = std::string(remoteFileAttributes->name);
+                if (fileName != "." && fileName != "..")
+                {
+                    switch (remoteFileAttributes->type)
+                    {
+                        case SSH_FILEXFER_TYPE_DIRECTORY:
+                            if (!removeDir(_dir + remoteFileAttributes->name + "/"))
+                                return false;
+                            break;
+                        default:
+                            if (!removeFile(_dir + remoteFileAttributes->name))
+                                return false;
+                    }
+                }
+                
+                sftp_attributes_free(remoteFileAttributes);
+            }
+           
+            sftp_closedir(remoteDir);
+            
+            returnCode = sftp_rmdir(sftpSession, _dir.c_str());         
+            if (returnCode != SSH_OK)
+            {
+                setError("Can't remove Directory: " + std::string(ssh_get_error(sshSession)) + " (" + std::to_string(sftp_get_error(sftpSession)) + ")", sftp_get_error(sftpSession));                
+                return false;                
+            }
+
+            return true;
+        }
+
+
         void SFTPActions::copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive, bool _sync)
         {
             if (!sessionsExists())
@@ -82,6 +132,21 @@ namespace RaumserverInstaller
             {                
                 copyFile(_clientDir + file, _remoteDir + file);
             }            
+        }
+
+        bool SFTPActions::removeFile(std::string _file)
+        {
+            if (!sessionsExists())
+                return false;
+
+            std::int32_t returnCode;
+            returnCode = sftp_unlink(sftpSession, _file.c_str());
+            if (returnCode != SSH_OK)
+            {
+                setError("Can't remove file: " + std::string(ssh_get_error(sshSession)) + " (" + std::to_string(sftp_get_error(sftpSession)) + ")", sftp_get_error(sftpSession));
+                return false;                
+            }
+            return true;
         }
 
 

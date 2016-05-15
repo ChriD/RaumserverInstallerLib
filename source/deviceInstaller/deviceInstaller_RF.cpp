@@ -24,6 +24,7 @@ namespace RaumserverInstaller
 
         DeviceInstaller_RaumfeldDevice::~DeviceInstaller_RaumfeldDevice()
         {
+            abortRemove();
             abortInstall();
         }
 
@@ -35,6 +36,7 @@ namespace RaumserverInstaller
             sshClient.setLogObject(getLogObject());
             sshClient.sftp.setLogObject(getLogObject());           
 
+            abortRemove();
             abortInstall();
 
             installThreadObject = std::thread(&DeviceInstaller_RaumfeldDevice::installThread, this);
@@ -52,6 +54,34 @@ namespace RaumserverInstaller
                 installThreadObject.join();
             }
             abortInstallThread = false;
+        }
+
+
+        void DeviceInstaller_RaumfeldDevice::startRemove()
+        {
+            DeviceInstaller::startRemove();
+
+            sshClient.setLogObject(getLogObject());
+            sshClient.sftp.setLogObject(getLogObject());
+
+            abortRemove();
+            abortInstall();
+
+            removeThreadObject = std::thread(&DeviceInstaller_RaumfeldDevice::removeThread, this);
+        }
+
+
+        void DeviceInstaller_RaumfeldDevice::abortRemove()
+        {
+            DeviceInstaller::abortRemove();
+
+            abortRemoveThread = true;
+            if (removeThreadObject.joinable())
+            {
+                logDebug("Waiting for uninstall thread to abort!", CURRENT_POSITION);
+                removeThreadObject.join();
+            }
+            abortRemoveThread = false;
         }
 
 
@@ -73,17 +103,19 @@ namespace RaumserverInstaller
 
 
         void DeviceInstaller_RaumfeldDevice::installThread()
-        {
+        {            
             // the device we do install the raumserver on with this installer object has to be a raumfeld device!
             if (deviceInformation.type != DeviceType::DT_UPNPDEVICE_RAUMFELD)
             {
                 progressError("Device '" + deviceInformation.name + "' not compatible with installer!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             if (deviceInformation.ip.empty())
             {
                 progressError("Device '" + deviceInformation.name + "' has no IP!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
@@ -97,7 +129,7 @@ namespace RaumserverInstaller
             if (!sshClient.connectSSH())
             {
                 progressError("Could not connect to Device! (SSH)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));    
                 return;
             }
                          
@@ -128,7 +160,7 @@ namespace RaumserverInstaller
             fileCopyPercentage = (70 / filesToCopy.size());
 
             // copy the files. Due the installation is in a thread we can do a 'sync' copy 
-            // abporting may not be possible now because of 'sync' call but we may accept this for now
+            // aborting may not be possible now because of 'sync' call but we may accept this for now
             // (so 'abortInstallThread' has no funkcion right now)
             sshClient.sftp.copyDir(binaryDir, installDir, true, true);
                    
@@ -152,6 +184,91 @@ namespace RaumserverInstaller
 
             progressInfo("Installation done!", CURRENT_POSITION);
             sigInstallDone.fire(DeviceInstallerProgressInfo("Installation done!", (std::uint8_t)progressPercentage, false));
+        }
+
+
+        void DeviceInstaller_RaumfeldDevice::removeThread()
+        {
+            bool hasError = false;
+
+            // the device we do install the raumserver on with this installer object has to be a raumfeld device!
+            if (deviceInformation.type != DeviceType::DT_UPNPDEVICE_RAUMFELD)
+            {
+                progressError("Device '" + deviceInformation.name + "' not compatible with installer!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
+                return;
+            }
+
+            if (deviceInformation.ip.empty())
+            {
+                progressError("Device '" + deviceInformation.name + "' has no IP!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
+                return;
+            }
+
+            progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
+
+            sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
+
+            // The authentication (user and password) is the same on every device
+            sshClient.setAuth("root", "");
+
+            if (!sshClient.connectSSH())
+            {
+                progressError("Could not connect to Device! (SSH)", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                return;
+            }
+
+            if (!sshClient.connectSFTP())
+            {
+                progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                return;
+            }
+
+            progressPercentage = 10;
+            progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
+
+            // TODO: stop raumserver deamon if is running
+
+            progressInfo("Removing files from remote device...", CURRENT_POSITION);
+
+            // delete raumserver directory
+            progressPercentage = 80;
+            //if (!sshClient.sftp.removeDir(installDir.substr(0, installDir.length() - 1)))
+            if (!sshClient.sftp.removeDir(installDir))
+            {
+                progressError("Can't delete raumserver install folder!", CURRENT_POSITION);
+                hasError = true;
+            }
+            else
+                progressInfo("Raumserver install folder deleted!", CURRENT_POSITION);
+
+            // delete init script            
+            if (!sshClient.sftp.removeFile(installDirStartScript + "S99raumserver"))
+            {
+                progressError("Can't delete raumserver start script!", CURRENT_POSITION);
+                hasError = true;
+            }
+            else
+                progressInfo("Raumserver start script deleted!", CURRENT_POSITION);
+           
+            progressPercentage = 100;
+            progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);
+            sshClient.closeSFTP();
+            sshClient.closeSSH();
+
+            if (hasError)
+            {
+                progressError("Uninstall has errors!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Uninstall has errors!", (std::uint8_t)progressPercentage, hasError));
+            }
+            else
+            {
+                progressInfo("Uninstall done!", CURRENT_POSITION);
+                sigInstallDone.fire(DeviceInstallerProgressInfo("Uninstall done!", (std::uint8_t)progressPercentage, hasError));
+            }
         }
 
 

@@ -91,9 +91,11 @@ namespace RaumserverInstaller
                 EXPORT void setSessions(ssh_session _sshSession, sftp_session _sftpSession);
                 EXPORT void cancelActions();
                 
-                EXPORT bool makeDir(std::string _clientDir);
+                EXPORT bool makeDir(std::string _remoteDir);
+                EXPORT bool removeDir(std::string _remoteDir);
                 EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false);
                 EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile);
+                EXPORT bool removeFile(std::string _remoteFile);
                 EXPORT bool setChmod(std::string _fileOrDir, std::uint16_t _chmod);
                 EXPORT bool existsFile(std::string _file);
                 

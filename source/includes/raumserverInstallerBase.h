@@ -72,6 +72,8 @@ namespace RaumserverInstaller
         std::string friendlyName = "";
         std::string ip = "";
         std::string UDN = "";
+        std::string modelNumber = "0";
+        std::string hardwareType = "0";
         DeviceType type = DeviceType::DT_UNKNOWN;
         UnknownYesNo sshAccess = UnknownYesNo::UNKNOWN;
         UnknownYesNo raumserverRuns = UnknownYesNo::UNKNOWN;

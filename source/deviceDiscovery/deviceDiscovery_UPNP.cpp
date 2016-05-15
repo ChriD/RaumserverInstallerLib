@@ -286,6 +286,23 @@ namespace RaumserverInstaller
             if ((deviceType == "urn:schemas-upnp-org:device:MediaRenderer:1" || deviceType == "urn:schemas-upnp-org:device:MediaServer:1") &&
                 manufacturer == "Raumfeld GmbH" && modelDescription != "Virtual Media Player")
             {
+
+                valueNode = deviceNode.child("modelNumber");
+                if (!valueNode)
+                {
+                    logError("Device XML from device does not contain modelNumber information!", CURRENT_POSITION);
+                    return;
+                }
+                std::string modelNumber = valueNode.child_value();
+
+                valueNode = deviceNode.child("raumfeld:hardwareType");
+                if (!valueNode)
+                {
+                    logError("Device XML from device does not contain raumfeld:hardwareType information!", CURRENT_POSITION);
+                    return;
+                }
+                std::string hardwareType = valueNode.child_value();
+
                 // parse the location uri to get the ip
                 LUrlParser::clParseURL url = LUrlParser::clParseURL::ParseURL(_location);
 
@@ -295,6 +312,8 @@ namespace RaumserverInstaller
                 deviceInformation.name = modelName;               
                 deviceInformation.friendlyName = friendlyName;
                 deviceInformation.UDN = udn;
+                deviceInformation.modelNumber = modelNumber;
+                deviceInformation.hardwareType = hardwareType;
                 deviceInformation.type = DeviceType::DT_UPNPDEVICE_RAUMFELD;                           
                 
                 if (_add)

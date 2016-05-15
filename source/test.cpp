@@ -38,8 +38,12 @@ int main()
 
     //rlutil::getkey();
 
-    deviceInfo.ip = "10.0.0.9";
+    deviceInfo.ip = "10.0.0.8";
     raumServerInstaller.startInstallToDevice(deviceInfo);
+
+    rlutil::getkey();
+
+    raumServerInstaller.startRemoveFromDevice(deviceInfo);
 
     rlutil::getkey();
 

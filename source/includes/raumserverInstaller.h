@@ -61,6 +61,11 @@ namespace RaumserverInstaller
             */
             EXPORT void startInstallToDevice(DeviceInformation _deviceInformation);
             /**
+            * Starts removing the Raumserver from the given device
+            * This method will do an async remove. The current status and progress can be consumed by attaching to the removeProgress signal
+            */
+            EXPORT void startRemoveFromDevice(DeviceInformation _deviceInformation);
+            /**
             * Returns a vector of NetworkAdapters structures
             * init has to be run before this will return any stuff
             */

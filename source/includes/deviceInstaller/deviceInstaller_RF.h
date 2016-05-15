@@ -42,6 +42,8 @@ namespace RaumserverInstaller
 
                 EXPORT virtual void startInstall() override;
                 EXPORT virtual void abortInstall() override;
+                EXPORT virtual void startRemove() override;
+                EXPORT virtual void abortRemove() override;
 
             protected:
                 SSHClient::SSHClient sshClient;
@@ -53,9 +55,13 @@ namespace RaumserverInstaller
                 std::atomic_bool abortInstallThread;
                 std::thread installThreadObject;  
 
+                std::atomic_bool abortRemoveThread;
+                std::thread removeThreadObject;
+
                 std::double_t fileCopyPercentage;
 
                 void installThread();
+                void removeThread();
 
                 void onStartFileCopying(std::string _filename, std::uint64_t _size);
                 void onFileCopying(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size);

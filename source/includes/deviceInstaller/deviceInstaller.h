@@ -52,6 +52,8 @@ namespace RaumserverInstaller
 
                 EXPORT virtual void startInstall();
                 EXPORT virtual void abortInstall();
+                EXPORT virtual void startRemove();
+                EXPORT virtual void abortRemove();
                 EXPORT virtual void setDevice(const DeviceInformation &_deviceInfo);
 
                 /**

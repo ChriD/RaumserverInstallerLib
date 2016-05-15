@@ -202,6 +202,13 @@ namespace RaumserverInstaller
         deviceInstaller.startInstall();
     }
 
+    void RaumserverInstaller::startRemoveFromDevice(DeviceInformation _deviceInformation)
+    {
+        deviceInstaller.setLogObject(getLogObject());
+        deviceInstaller.setDevice(_deviceInformation);
+        deviceInstaller.startRemove();
+    }
+
 
     void RaumserverInstaller::startSSHAccessCheckerThread(const std::string &_ip)
     {              

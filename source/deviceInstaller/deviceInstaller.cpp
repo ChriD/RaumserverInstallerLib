@@ -28,6 +28,16 @@ namespace RaumserverInstaller
         }
 
 
+        void DeviceInstaller::startRemove()
+        {
+        }
+
+
+        void DeviceInstaller::abortRemove()
+        {
+        }
+
+
         void DeviceInstaller::setDevice(const DeviceInformation &_deviceInfo)
         {
             deviceInformation = _deviceInfo;

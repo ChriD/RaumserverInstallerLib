@@ -27,7 +27,7 @@
 
 #include <string>
 
-const std::string AppName = "Raumkernel Library";
+const std::string AppName = "Raumserver Installer Library";
 const std::string VersionNumber = "1.0.0";
 const std::string VersionName = "";
 

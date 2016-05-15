@@ -10,6 +10,7 @@ namespace RaumserverInstaller
         DeviceInstaller::DeviceInstaller() : RaumserverInstallerBase()
         {
             progressPercentage = 0;
+            progressType = DeviceInstallerProgressType::DIPT_INSTALL;
         }
 
 
@@ -20,6 +21,7 @@ namespace RaumserverInstaller
 
         void DeviceInstaller::startInstall()
         {
+            progressType = DeviceInstallerProgressType::DIPT_INSTALL;
         }
 
 
@@ -30,6 +32,7 @@ namespace RaumserverInstaller
 
         void DeviceInstaller::startRemove()
         {
+            progressType = DeviceInstallerProgressType::DIPT_REMOVE;
         }
 
 
@@ -47,35 +50,36 @@ namespace RaumserverInstaller
         void DeviceInstaller::progressDebug(const std::string &_progressInfo, const std::string &_location)
         {
             logDebug(_progressInfo, _location);                     
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(_progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
         }
 
 
         void DeviceInstaller::progressWarning(const std::string &_progressInfo, const std::string &_location)
         {
             logWarning(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(_progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
         }
 
 
         void DeviceInstaller::progressInfo(const std::string &_progressInfo, const std::string &_location)
         {
             logInfo(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(_progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
         }
 
 
         void DeviceInstaller::progressError(const std::string &_progressInfo, const std::string &_location)
         {
             logError(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(_progressInfo, (std::uint8_t)progressPercentage, true));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, true));
         }
  
 
 
 
-        DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error)
+        DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType,  const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error)
         {
+            actionType = _actionType;
             info = _info;
             completionPercentage = _completionPercentage;
             error = _error;
@@ -85,6 +89,7 @@ namespace RaumserverInstaller
         {
             Json::Value progressInfo;
             progressInfo["progressInfo"]["info"] = info;
+            progressInfo["progressInfo"]["actionType"] = actionType;
             progressInfo["progressInfo"]["percentage"] = completionPercentage;
             progressInfo["progressInfo"]["error"] = error;
             return progressInfo;

@@ -108,14 +108,14 @@ namespace RaumserverInstaller
             if (deviceInformation.type != DeviceType::DT_UPNPDEVICE_RAUMFELD)
             {
                 progressError("Device '" + deviceInformation.name + "' not compatible with installer!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             if (deviceInformation.ip.empty())
             {
                 progressError("Device '" + deviceInformation.name + "' has no IP!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
@@ -129,14 +129,14 @@ namespace RaumserverInstaller
             if (!sshClient.connectSSH())
             {
                 progressError("Could not connect to Device! (SSH)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));    
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
                          
             if (!sshClient.connectSFTP())
             {
                 progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }                        
 
@@ -153,7 +153,7 @@ namespace RaumserverInstaller
             if (filesToCopy.size() == 0)
             {
                 progressError("Could not find Raumserver binaries for installing!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not find Raumserver binaries for installing!", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not find Raumserver binaries for installing!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace RaumserverInstaller
             sshClient.closeSSH();
 
             progressInfo("Installation done!", CURRENT_POSITION);
-            sigInstallDone.fire(DeviceInstallerProgressInfo("Installation done!", (std::uint8_t)progressPercentage, false));
+            sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done!", (std::uint8_t)progressPercentage, false));
         }
 
 
@@ -195,14 +195,14 @@ namespace RaumserverInstaller
             if (deviceInformation.type != DeviceType::DT_UPNPDEVICE_RAUMFELD)
             {
                 progressError("Device '" + deviceInformation.name + "' not compatible with installer!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' not compatible with installer!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             if (deviceInformation.ip.empty())
             {
                 progressError("Device '" + deviceInformation.name + "' has no IP!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
@@ -216,14 +216,14 @@ namespace RaumserverInstaller
             if (!sshClient.connectSSH())
             {
                 progressError("Could not connect to Device! (SSH)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             if (!sshClient.connectSFTP())
             {
                 progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
@@ -235,8 +235,7 @@ namespace RaumserverInstaller
             progressInfo("Removing files from remote device...", CURRENT_POSITION);
 
             // delete raumserver directory
-            progressPercentage = 80;
-            //if (!sshClient.sftp.removeDir(installDir.substr(0, installDir.length() - 1)))
+            progressPercentage = 80;            
             if (!sshClient.sftp.removeDir(installDir))
             {
                 progressError("Can't delete raumserver install folder!", CURRENT_POSITION);
@@ -262,12 +261,12 @@ namespace RaumserverInstaller
             if (hasError)
             {
                 progressError("Uninstall has errors!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Uninstall has errors!", (std::uint8_t)progressPercentage, hasError));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Uninstall has errors!", (std::uint8_t)progressPercentage, hasError));
             }
             else
             {
                 progressInfo("Uninstall done!", CURRENT_POSITION);
-                sigInstallDone.fire(DeviceInstallerProgressInfo("Uninstall done!", (std::uint8_t)progressPercentage, hasError));
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Uninstall done!", (std::uint8_t)progressPercentage, hasError));
             }
         }
 

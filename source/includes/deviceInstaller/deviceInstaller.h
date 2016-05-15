@@ -32,15 +32,17 @@ namespace RaumserverInstaller
 {
     namespace DeviceInstaller
     {
+        enum DeviceInstallerProgressType { DIPT_INSTALL = 0, DIPT_UPDATE = 1, DIPT_REMOVE = 2 };
 
         struct DeviceInstallerProgressInfo
         {
-            DeviceInstallerProgressInfo(const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error);
+            DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType, const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error);
             EXPORT Json::Value getJsonValue();
 
             std::string info = "";
             std::uint8_t completionPercentage = 0;
             bool error = false;
+            DeviceInstallerProgressType actionType = DeviceInstallerProgressType::DIPT_INSTALL;
         };
 
 
@@ -68,6 +70,7 @@ namespace RaumserverInstaller
             protected:
                 DeviceInformation deviceInformation;
                 std::double_t progressPercentage;
+                DeviceInstallerProgressType progressType;
 
                 EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location);
                 EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location);

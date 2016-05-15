@@ -145,9 +145,6 @@
     <ClInclude Include="includes\tools\urlParser.h">
       <Filter>includes\tools</Filter>
     </ClInclude>
-    <ClInclude Include="includes\tools\versionInfo.h">
-      <Filter>includes\tools</Filter>
-    </ClInclude>
     <ClInclude Include="includes\signals\config.hpp">
       <Filter>includes\signals</Filter>
     </ClInclude>
@@ -225,6 +222,12 @@
     </ClInclude>
     <ClInclude Include="includes\json\json-forwards.h">
       <Filter>includes\json</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\versionNumber.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\versionInfo.h">
+      <Filter>includes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

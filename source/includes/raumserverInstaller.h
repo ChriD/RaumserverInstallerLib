@@ -32,6 +32,7 @@
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
 #include "deviceInstaller/deviceInstaller_RF.h"
 #include "httpclient/httpClient.h"
+#include "versionInfo.h"
 
 namespace RaumserverInstaller
 {
@@ -41,6 +42,10 @@ namespace RaumserverInstaller
             EXPORT RaumserverInstaller();
             EXPORT  ~RaumserverInstaller();
 
+            /**
+            * Returns the version information
+            */
+            EXPORT VersionInfo::VersionInfo getVersionInfo();
             /**
             * Does the Initialisation of the RaumserverInstallerLib
             */
@@ -138,7 +143,10 @@ namespace RaumserverInstaller
             std::atomic_bool stopSSHAccessCheckThreads;
 
             // client for cheking if server is running
-            HttpClient::HttpClient httpClient;            
+            HttpClient::HttpClient httpClient;    
+
+            // version info
+            VersionInfo::VersionInfo versionInfo;
 
             sigs::connections connections;
     };

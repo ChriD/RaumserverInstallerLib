@@ -28,6 +28,12 @@ namespace RaumserverInstaller
     }
 
 
+    VersionInfo::VersionInfo RaumserverInstaller::getVersionInfo()
+    {
+        return versionInfo;
+    }
+
+
     void RaumserverInstaller::initLogObject(Raumkernel::Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList)
     {
         // create the log object (if not already provided) which will be used throughout the whole kernel and his modules                

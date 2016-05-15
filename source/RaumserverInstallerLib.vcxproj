@@ -130,7 +130,8 @@
     <ClInclude Include="includes\tools\tinydircpp.h" />
     <ClInclude Include="includes\tools\uriUtil.h" />
     <ClInclude Include="includes\tools\urlParser.h" />
-    <ClInclude Include="includes\tools\versionInfo.h" />
+    <ClInclude Include="includes\versionInfo.h" />
+    <ClInclude Include="includes\versionNumber.h" />
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp" />
     <ClInclude Include="includes\xml\pugixml\pugixml.hpp" />
   </ItemGroup>

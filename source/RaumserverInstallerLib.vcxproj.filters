@@ -67,6 +67,12 @@
     <Filter Include="includes\json">
       <UniqueIdentifier>{a5ac673f-ba49-4436-a5bf-d6597a479df2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\ftplib">
+      <UniqueIdentifier>{57c8253b-b70f-4299-a415-331b4eb15f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ftplib">
+      <UniqueIdentifier>{60d7ebcd-7b67-4dc9-a7d0-756a563b3c85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -118,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="json\jsoncpp.cpp">
       <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="ftplib\ftplib.cpp">
+      <Filter>ftplib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,5 +238,11 @@
     <ClInclude Include="includes\versionInfo.h">
       <Filter>includes</Filter>
     </ClInclude>
+    <ClInclude Include="includes\ftplib\ftplib.h">
+      <Filter>includes\ftplib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="installBuild.xml" />
   </ItemGroup>
 </Project>

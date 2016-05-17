@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<install>
+    <currentVersion>bassmaniacs.com/raumserver/binaries/currentVersion.xml</currentVersion>
+    <installSource>
+        <!-- New raumfeld devices have modelNumber=2 and are ARMv7HF -->
+        <device modelNumber="2" hardwareType="">binaries/ARMV7/</device>
+        <!-- Old raumfeld devices have modelNumber=1 and are mostly ARMv5TE -->
+        <device modelNumber="1" hardwareType="">binaries/ARMV5/</device>
+        <!-- Old Raumfeld base is a X86 AMD GEODE -->
+        <device modelNumber="1" hardwareType="5">binaries/AMDGEODE/</device> 
+        <!-- Raumfeld one is also a ARMv7 -->
+        <device modelNumber="1" hardwareType="13">binaries/ARMV7/</device>
+    </installSource>
+</install>

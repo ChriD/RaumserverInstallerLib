@@ -103,7 +103,7 @@ namespace RaumserverInstaller
 
 
         void DeviceInstaller_RaumfeldDevice::installThread()
-        {            
+        {                      
             // the device we do install the raumserver on with this installer object has to be a raumfeld device!
             if (deviceInformation.type != DeviceType::DT_UPNPDEVICE_RAUMFELD)
             {
@@ -118,6 +118,12 @@ namespace RaumserverInstaller
                 sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
                 return;
             }
+
+            // TODO: Download new version if present!
+            // Call own method --> download current version (in base class)
+
+            // TODO: Get correct binary dir (Raumfeld devices hav different architectures)
+            // Call own method --> get binary path.. id empty throw error (unsupported device / maybe the old AMD geode base)
 
             progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
 

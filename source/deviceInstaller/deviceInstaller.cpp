@@ -10,7 +10,8 @@ namespace RaumserverInstaller
         DeviceInstaller::DeviceInstaller() : RaumserverInstallerBase()
         {
             progressPercentage = 0;
-            progressType = DeviceInstallerProgressType::DIPT_INSTALL;
+            deviceInstallerFilePath = "installBuild.xml";
+            progressType = DeviceInstallerProgressType::DIPT_INSTALL;            
         }
 
 
@@ -22,6 +23,7 @@ namespace RaumserverInstaller
         void DeviceInstaller::startInstall()
         {
             progressType = DeviceInstallerProgressType::DIPT_INSTALL;
+            loadDeviceInstallerInfoFile();
         }
 
 
@@ -72,6 +74,68 @@ namespace RaumserverInstaller
         {
             logError(_progressInfo, _location);
             sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, true));
+        }
+
+
+        std::string DeviceInstaller::getDeviceBinaryPath()
+        {
+            auto it = hardwareTypeBinaries.find(std::stoi(deviceInformation.hardwareType));
+            if (it == hardwareTypeBinaries.end())
+            {
+                logWarning("No valid binary found for device " + deviceInformation.friendlyName + "! Using standard ARMv7 binary!", CURRENT_POSITION);
+                it = hardwareTypeBinaries.find(0);
+            }
+            if (it == hardwareTypeBinaries.end())
+            {
+                logError("No binary found for device " + deviceInformation.friendlyName, CURRENT_POSITION);
+                return "";
+            }
+            
+            return it->second;
+        }
+
+        
+        void DeviceInstaller::loadDeviceInstallerInfoFile()
+        {           
+            pugi::xml_document doc;
+            pugi::xml_node rootNode, installSourceNode;            
+
+            pugi::xml_parse_result result = doc.load_file(deviceInstallerFilePath.c_str());
+
+            hardwareTypeBinaries.clear();
+
+            rootNode = doc.child("build");
+            if (!rootNode)
+            {
+                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'build' node!", CURRENT_POSITION);
+                throw std::runtime_error("Unrecoverable Error! Please check Log file!");
+            }
+
+            installSourceNode = rootNode.child("installSource");
+            if (!installSourceNode)
+            {
+                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'installSource' node!", CURRENT_POSITION);
+                throw std::runtime_error("Unrecoverable Error! Please check Log file!");
+            }
+
+            // loop through devices and store results in map
+            for (auto it : installSourceNode.children())
+            {
+                try
+                {                    
+                    auto attribute = it.attribute("hardwareType");
+                    if (attribute)
+                    {
+                        if (attribute.value() && it.value())
+                            hardwareTypeBinaries.insert(std::make_pair(std::stoi(attribute.value()), std::string(it.child_value())));
+                    }
+                    
+                }
+                catch ( ... )
+                {
+                    logError("Wrong formated devive node in '" + deviceInstallerFilePath + "'!", CURRENT_POSITION);
+                }
+            }            
         }
  
 

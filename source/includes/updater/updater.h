@@ -1,7 +1,7 @@
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2015 by ChriD
+// Copyright (c) 2016 by ChriD
 //
 // Permission is hereby granted, free of charge,  to any person obtaining a copy of
 // this software and  associated documentation  files  (the "Software"), to deal in
@@ -21,55 +21,52 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #pragma once
-#ifndef LOGGERADAPTER_H
-#define LOGGERADAPTER_H
+#ifndef UPDATER_H
+#define UPDATER_H
 
-#include <logger/loggerBase.h>
+#include "logger/logger.h"
+#include "signals/signals.hpp"
+#include "ftplib/ftplib.h"
 
-namespace Log
+namespace Updater
 {
-
-    class LogAdapter
+    
+    class Updater
     {
-    public:
-        LogAdapter();
-        virtual ~LogAdapter();
-        virtual void log(LogData _logData);
-    protected:
-        std::string getLogTypeString(LogType _logType);
-        std::string getFormattedCurrentDateTimeString(Raumkernel::Tools::DateTimeStamp _stamp);
+        public:
+            Updater();
+            ~Updater();
+
+            virtual void init();
+
+            // run(sync)
+
+            // getBinary(sync) // <-- thread
+            // getBinary_FTP(url, user, pass, source, destination)
+
+            // overwrite logInfo and logError aso.... and sig progress info
+            
+            // update() // <-- thread ? only id binary is ready
+            /*              
+            */
+
+            /**
+            * this signal will be fired when progress ....
+            */
+            //sigs::signal<void(TODO:@@@)> sigUpdateProgress;
+            //sigs::signal<void(TODO:@@@)> sigBinaryReady; // <-- will be called if binary is ready
+
+            // TODO: Inherit class --> Updater_RaumserverDaemon
+            // TODO: Inherit class --> Updater_RaumserverInstaller
+
+        protected: 
+            
+
     };
-
-
-
-    class LogAdapter_File : public LogAdapter
-    {
-    public:
-        EXPORT LogAdapter_File();
-        EXPORT virtual ~LogAdapter_File();
-        virtual void log(LogData _logData) override;
-        virtual void setLogFilePath(const std::string &_path);
-
-    protected:
-        std::string getCurrentDateTimeFileString();
-
-        std::string logFilePath;
-        std::string logFileName;
-    };
-
-
-
-    class LogAdapter_Console : public LogAdapter
-    {
-    public:
-        EXPORT LogAdapter_Console();
-        EXPORT virtual ~LogAdapter_Console();
-        virtual void log(LogData _logData) override;
-    };
-
+    
 }
-
 
 
 #endif

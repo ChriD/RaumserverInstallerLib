@@ -29,13 +29,12 @@
 #include <logger/loggerAdapter.h>
 
 
-namespace Raumkernel
-{
-    namespace Log
-    {
 
-        class Log
-        {
+namespace Log
+{
+
+    class Log
+    {
         public:
             EXPORT Log();
             EXPORT virtual ~Log();
@@ -62,9 +61,9 @@ namespace Raumkernel
 
             // a list of shared pointers to different log adapters which are registered to the log 
             std::vector<std::shared_ptr<LogAdapter>> logAdapterList;
-        };
+    };
 
-    }
 }
+
 
 #endif

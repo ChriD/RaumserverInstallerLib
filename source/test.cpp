@@ -8,7 +8,7 @@ int main()
     RaumserverInstaller::RaumserverInstaller    raumServerInstaller;
 
     raumServerInstaller.init();
-    raumServerInstaller.initLogObject(Raumkernel::Log::LogType::LOGTYPE_INFO);
+    raumServerInstaller.initLogObject(Log::LogType::LOGTYPE_INFO);
     raumServerInstaller.initDiscover();
 
        

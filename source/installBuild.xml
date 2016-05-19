@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<install>
+<build>
     <binariesSource>bassmaniacs.com/raumserver/binaries/currentVersion/</binariesSource>
     <currentVersion>bassmaniacs.com/raumserver/binaries/currentVersion/version.xml</currentVersion>
     <installSource>
@@ -27,4 +26,4 @@
         <device hardwareType="16">binaries/ARMV7/</device> <!-- Soundbar 1 --> 
         <device hardwareType="17">binaries/ARMV7/</device> <!-- Sounddeck 1 -->
     </installSource>
-</install>
+</build>

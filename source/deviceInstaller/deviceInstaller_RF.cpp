@@ -12,7 +12,7 @@ namespace RaumserverInstaller
             abortInstallThread = false;
             fileCopyPercentage = 0;
 
-            binaryDir = "binaries/raumserverDaemon/";            
+            binaryDir = "";            
             installDir = remoteInstallationPath;
             installDirStartScript = remoteInstallationPathInitScript;
 
@@ -122,8 +122,14 @@ namespace RaumserverInstaller
             // TODO: Download new version if present!
             // Call own method --> download current version (in base class)
 
-            // TODO: Get correct binary dir (Raumfeld devices hav different architectures)
-            // Call own method --> get binary path.. id empty throw error (unsupported device / maybe the old AMD geode base)
+            // Get correct binary dir (Raumfeld devices have different architectures)           
+            binaryDir = getDeviceBinaryPath();
+            if (binaryDir.empty())
+            {
+                progressInfo("No valoid binary found for device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
+                return;
+            }
+            binaryDir += "raumserverDaemon/";
 
             progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
 

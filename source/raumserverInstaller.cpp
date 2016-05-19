@@ -34,20 +34,20 @@ namespace RaumserverInstaller
     }
 
 
-    void RaumserverInstaller::initLogObject(Raumkernel::Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList)
+    void RaumserverInstaller::initLogObject(Log::LogType _defaultLogLevel, const std::string &_logFilePath, const std::vector<std::shared_ptr<Log::LogAdapter>> &_adapterList)
     {
         // create the log object (if not already provided) which will be used throughout the whole kernel and his modules                
-        logObject = std::shared_ptr<Raumkernel::Log::Log>(new Raumkernel::Log::Log());
+        logObject = std::shared_ptr<Log::Log>(new Log::Log());
 
         // we do register some log adapters for the log object with standard values and set to log only ERRORS and CRITICALERRORS
         // the log level itself will be set after reading the settings file but we want to have logging while reading settings file
         // so we create the logObject with some standard values if they are not given
         if (_adapterList.empty())
         {
-            auto logAdapterConsole = std::shared_ptr<Raumkernel::Log::LogAdapter_Console>(new Raumkernel::Log::LogAdapter_Console());
+            auto logAdapterConsole = std::shared_ptr<Log::LogAdapter_Console>(new Log::LogAdapter_Console());
             logObject->registerAdapter(logAdapterConsole);
 
-            auto logAdapterFile = std::shared_ptr<Raumkernel::Log::LogAdapter_File>(new Raumkernel::Log::LogAdapter_File());
+            auto logAdapterFile = std::shared_ptr<Log::LogAdapter_File>(new Log::LogAdapter_File());
             if (!_logFilePath.empty())
                 logAdapterFile->setLogFilePath(_logFilePath);
             logObject->registerAdapter(logAdapterFile);

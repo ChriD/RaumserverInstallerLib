@@ -73,6 +73,12 @@
     <Filter Include="ftplib">
       <UniqueIdentifier>{60d7ebcd-7b67-4dc9-a7d0-756a563b3c85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includes\updater">
+      <UniqueIdentifier>{1595d70a-9cb2-4752-8566-f5fb1b25e668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="updater">
+      <UniqueIdentifier>{c46e906b-852f-48d0-a690-5ab9ba2910d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -127,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="ftplib\ftplib.cpp">
       <Filter>ftplib</Filter>
+    </ClCompile>
+    <ClCompile Include="updater\updater.cpp">
+      <Filter>updater</Filter>
+    </ClCompile>
+    <ClCompile Include="logger\loggerBase.cpp">
+      <Filter>logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +252,9 @@
     </ClInclude>
     <ClInclude Include="includes\ftplib\ftplib.h">
       <Filter>includes\ftplib</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\updater\updater.h">
+      <Filter>includes\updater</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

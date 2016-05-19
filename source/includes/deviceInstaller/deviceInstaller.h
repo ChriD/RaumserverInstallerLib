@@ -27,6 +27,7 @@
 #define RAUMKSERVERINSTALLER_DEVICEINSTALLER_H
 
 #include "raumserverInstallerBase.h"
+#include "xml/pugixml/pugixml.hpp"
 
 namespace RaumserverInstaller
 {
@@ -71,6 +72,12 @@ namespace RaumserverInstaller
                 DeviceInformation deviceInformation;
                 std::double_t progressPercentage;
                 DeviceInstallerProgressType progressType;
+
+                std::string deviceInstallerFilePath;
+                std::map<std::uint16_t, std::string> hardwareTypeBinaries;
+
+                EXPORT virtual void loadDeviceInstallerInfoFile();
+                EXPORT virtual std::string getDeviceBinaryPath();
 
                 EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location);
                 EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location);

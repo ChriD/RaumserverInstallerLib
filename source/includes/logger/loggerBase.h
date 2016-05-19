@@ -22,8 +22,8 @@
 //
 
 #pragma once
-#ifndef RAUMKERNEL_LOGGERBASE_H
-#define RAUMKERNEL_LOGGERBASE_H
+#ifndef LOGGERBASE_H
+#define LOGGERBASE_H
 
 #include <string>
 #include <iostream>
@@ -39,22 +39,44 @@
 #include <signals/signals.hpp>
 #include <exception/exception.h>
 
-namespace Raumkernel
+
+namespace Log
 {
-    namespace Log
+
+    class Log;
+
+    enum class LogType : int8_t { LOGTYPE_CRITICALERROR = 0, LOGTYPE_ERROR = 1, LOGTYPE_WARNING = 2, LOGTYPE_INFO = 3, LOGTYPE_DEBUG = 4 };
+
+    struct LogData
     {
+        LogType type;
+        std::string log;
+        std::string location;
+        Raumkernel::Tools::DateTimeStamp logDateTimeStamp;
+    };
 
-        enum class LogType : int8_t { LOGTYPE_CRITICALERROR = 0, LOGTYPE_ERROR = 1, LOGTYPE_WARNING = 2, LOGTYPE_INFO = 3, LOGTYPE_DEBUG = 4 };
 
-        struct LogData
-        {
-            LogType type;
-            std::string log;
-            std::string location;
-            Raumkernel::Tools::DateTimeStamp logDateTimeStamp;
-        };
+    class LogBase
+    {
+        public:
+            EXPORT LogBase();
+            EXPORT virtual ~LogBase();       
 
-    }
+            EXPORT void logDebug(const std::string &_log, const std::string &_location);
+            EXPORT void logWarning(const std::string &_log, const std::string &_location);
+            EXPORT void logInfo(const std::string &_log, const std::string &_location);
+            EXPORT void logError(const std::string &_log, const std::string &_location);
+            EXPORT void logCritical(const std::string &_log, const std::string &_location);
+
+            EXPORT virtual void setLogObject(std::shared_ptr<Log> _log);
+            EXPORT std::shared_ptr<Log> getLogObject();
+
+        protected:
+            std::shared_ptr<Log> logObject;
+    };
+
+
 }
+
 
 #endif

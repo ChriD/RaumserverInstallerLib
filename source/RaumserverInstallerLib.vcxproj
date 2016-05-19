@@ -90,12 +90,14 @@
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="logger\logger.cpp" />
     <ClCompile Include="logger\loggerAdapter.cpp" />
+    <ClCompile Include="logger\loggerBase.cpp" />
     <ClCompile Include="raumserverInstaller.cpp" />
     <ClCompile Include="raumserverInstallerBase.cpp" />
     <ClCompile Include="sshClient\sftpActions.cpp" />
     <ClCompile Include="sshClient\sshClient.cpp" />
     <ClCompile Include="tools\tinydircpp.cpp" />
     <ClCompile Include="tools\urlParser.cpp" />
+    <ClCompile Include="updater\updater.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +134,7 @@
     <ClInclude Include="includes\tools\tinydircpp.h" />
     <ClInclude Include="includes\tools\uriUtil.h" />
     <ClInclude Include="includes\tools\urlParser.h" />
+    <ClInclude Include="includes\updater\updater.h" />
     <ClInclude Include="includes\versionInfo.h" />
     <ClInclude Include="includes\versionNumber.h" />
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp" />

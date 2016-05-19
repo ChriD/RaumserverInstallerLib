@@ -158,7 +158,7 @@ namespace RaumserverInstaller
         }
 
 
-        void SSHClient::setLogObject(std::shared_ptr<Raumkernel::Log::Log> _logger)
+        void SSHClient::setLogObject(std::shared_ptr<Log::Log> _logger)
         {
             RaumserverInstaller::RaumserverInstallerBase::setLogObject(_logger);
             sftp.setLogObject(_logger);

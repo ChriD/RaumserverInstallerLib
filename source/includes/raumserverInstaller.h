@@ -54,7 +54,7 @@ namespace RaumserverInstaller
             * initializes the log object
             * has to be called before init!
             */
-            EXPORT virtual void initLogObject(Raumkernel::Log::LogType _defaultLogLevel = Raumkernel::Log::LogType::LOGTYPE_ERROR, const std::string &_logFilePath = "logs/", const std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>> &_adapterList = std::vector<std::shared_ptr<Raumkernel::Log::LogAdapter>>());
+            EXPORT virtual void initLogObject(Log::LogType _defaultLogLevel = Log::LogType::LOGTYPE_ERROR, const std::string &_logFilePath = "logs/", const std::vector<std::shared_ptr<Log::LogAdapter>> &_adapterList = std::vector<std::shared_ptr<Log::LogAdapter>>());
             /**
             * Starts the discovering of devices where we can install the component on
             * this method is async

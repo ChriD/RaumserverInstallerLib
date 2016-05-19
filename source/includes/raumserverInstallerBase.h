@@ -73,23 +73,13 @@ namespace RaumserverInstaller
 
 
 
-    class RaumserverInstallerBase
+    class RaumserverInstallerBase : public Log::LogBase
     {
         public:
             RaumserverInstallerBase();
             ~RaumserverInstallerBase();
 
-            EXPORT virtual void setLogObject(std::shared_ptr<Raumkernel::Log::Log> _log);
-            EXPORT std::shared_ptr<Raumkernel::Log::Log> getLogObject();
-
-        protected:
-            std::shared_ptr<Raumkernel::Log::Log> logObject;
-
-            EXPORT virtual void logDebug(const std::string &_log, const std::string &_location);
-            EXPORT virtual void logWarning(const std::string &_log, const std::string &_location);
-            EXPORT virtual void logInfo(const std::string &_log, const std::string &_location);
-            EXPORT virtual void logError(const std::string &_log, const std::string &_location);
-            EXPORT virtual void logCritical(const std::string &_log, const std::string &_location);
+        protected:          
     };
 
 }

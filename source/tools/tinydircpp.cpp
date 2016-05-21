@@ -1,5 +1,7 @@
 
+#include "tools/stringUtil.h"
 #include "tools/tinydircpp.h"
+#include <direct.h>
 
 
 namespace TinyDirCpp
@@ -11,6 +13,29 @@ namespace TinyDirCpp
 
     TinyDirCpp::~TinyDirCpp()
     {
+    }
+
+
+    void TinyDirCpp::createDirectory(std::string _directory)
+    {
+        std::string seperator = "/";
+
+        std::vector<std::string> explodedPath = Raumkernel::Tools::StringUtil::explodeString(_directory, seperator);
+        std::string path = "";
+        
+        for (auto pathPart : explodedPath)
+        {
+            if (!pathPart.empty())
+            {
+                path += path.empty() ? "" : "/";
+                path += pathPart;
+                #if defined(_WIN32)
+                    mkdir(path.c_str());
+                #else 
+                     mkdir(path.c_str(), 0777); // notice that 777 is different than 0777
+                #endif
+            }
+        }
     }
 
 

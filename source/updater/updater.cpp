@@ -1,4 +1,5 @@
 #include <updater/updater.h>
+#include <zip/zip_file.hpp>
 
 namespace Updater
 {
@@ -11,7 +12,8 @@ namespace Updater
         downloadRequestDone = false; 
         source = "";
         destination = "";
-        tmpDestination = "";
+        downloadDestination = "";
+        getBinaryError = false;
     }
 
 
@@ -115,8 +117,8 @@ namespace Updater
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
-
-        return false;
+        
+        return !getBinaryError;
     }
 
 
@@ -124,7 +126,7 @@ namespace Updater
     {
         auto downloadedSize = _request->getResponse()->getData().size();
         auto size = _request->getResponse()->getContentSize();        
-        progressInfo("Prgress: " + std::to_string(downloadedSize) + "/" + std::to_string(size), CURRENT_FUNCTION, "DOWNLOADPROG");
+        progressInfo("Progress: " + std::to_string(downloadedSize) + "/" + std::to_string(size), CURRENT_FUNCTION, "DOWNLOADPROG");
     }
 
 
@@ -132,8 +134,8 @@ namespace Updater
     {
         if (_request->getResponse()->getErrorCode() == 0)
         {
-            progressInfo("Creating file " + destination, CURRENT_POSITION);
-            std::ofstream downloadedFile(destination, std::ios::out | std::ios::binary);
+            progressInfo("Creating file " + downloadDestination, CURRENT_POSITION);
+            std::ofstream downloadedFile(downloadDestination, std::ios::out | std::ios::binary);
             if (downloadedFile.good())
             {
                 auto responseData = _request->getResponse()->getData();
@@ -142,15 +144,18 @@ namespace Updater
                 downloadedFile.write(reinterpret_cast<const char*>(&responseData[0]), size * sizeof(responseData[0]));
                 downloadedFile.close();
                 progressInfo("Download finished", CURRENT_POSITION);
+                getBinaryError = false;
             }
             else
             {
-                progressError("Error when creating file " + destination, CURRENT_POSITION);
+                progressError("Error when creating file " + downloadDestination, CURRENT_POSITION);
+                getBinaryError = true;
             }
         }
         else
         {
             progressError("Error " + std::to_string(_request->getResponse()->getErrorCode())  + " when downloading file " + source, CURRENT_POSITION);
+            getBinaryError = true;
         }
 
         // Set file downloaded so the updater knows he can go on...
@@ -159,9 +164,30 @@ namespace Updater
 
 
     bool Updater::extractFile(std::string _file, std::string destination)       
-    {
-        // TODO: @@@
-        return false;
+    {        
+        if (!destination.empty() && (destination.back() == '/' || destination.back() == '\\'))
+            destination.pop_back();
+
+        progressInfo("Reading ZIP file. Please be patient!", CURRENT_POSITION);
+        try
+        {
+            zip_file f(_file);
+            progressInfo("Extracting ZIP file. This may take a while!", CURRENT_POSITION);
+            f.extractall(destination);
+            progressInfo("Extracting done!", CURRENT_POSITION);
+        }
+        catch (std::exception _ex)
+        {
+            progressError(_ex.what(), CURRENT_POSITION);
+            return false;
+        }
+        catch ( ... )
+        {
+            progressError("Unknown error handling ZIP file!", CURRENT_POSITION);
+            return false;
+        }
+
+        return true;
     }
 
 

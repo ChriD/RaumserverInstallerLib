@@ -41,7 +41,8 @@ namespace TinyDirCpp
             TinyDirCpp();
             ~TinyDirCpp();
 
-            std::vector<std::string> getFiles(std::string _folder, std::string _folderRel = "", std::uint32_t _level = 0, bool _recursive = true);
+            std::vector<std::string> getFiles(std::string _folder, std::string _folderRel = "", std::uint32_t _level = 0, bool _recursive = true);      
+            void createDirectory(std::string _directory);
 
         private:
     };

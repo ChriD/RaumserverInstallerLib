@@ -8,7 +8,7 @@ namespace Updater
         // TODO: get from installBuild.xml
         source = "http://bassmaniacs.com/data/binaries.zip";
         destination = "binaries/";
-        tmpDestination = "binaries/binaries.zip";
+        downloadDestination = "binaries/binaries.zip";
     }
 
 
@@ -19,7 +19,8 @@ namespace Updater
 
     bool Updater_RaumserverDaemon::doGetBinary()
     {                       
-        return doGetBinary_HTTP();
+        //return doGetBinary_HTTP();     
+        return true;
     }
 
 
@@ -27,7 +28,7 @@ namespace Updater
     {        
         // extract the downloaded ZIP file into the binaries folder
         // then we do not have to do anything here because the installer will update the binaries on the related device
-        if (extractFile(tmpDestination, destination))
+        if (extractFile(downloadDestination, destination))
         {
             progressInfo("RaumserverDaemon binaries been updated sucessfully!", CURRENT_POSITION);
             return true;

@@ -73,6 +73,12 @@
     <Filter Include="updater">
       <UniqueIdentifier>{c46e906b-852f-48d0-a690-5ab9ba2910d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="zip">
+      <UniqueIdentifier>{ec29317e-486d-4f84-95c4-c57726dfa6f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\zip">
+      <UniqueIdentifier>{6107ca25-9f04-428b-909c-c6515b5c3f15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -136,6 +142,15 @@
     </ClCompile>
     <ClCompile Include="updater\updater_RaumserverInstaller.cpp">
       <Filter>updater</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\miniz.c">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\test.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\zip_file.cpp">
+      <Filter>zip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +270,12 @@
     </ClInclude>
     <ClInclude Include="includes\updater\updater_RaumserverInstaller.h">
       <Filter>includes\updater</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\zip\miniz.h">
+      <Filter>includes\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\zip\zip_file.hpp">
+      <Filter>includes\zip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -100,6 +100,9 @@
     <ClCompile Include="updater\updater_RaumserverDaemon.cpp" />
     <ClCompile Include="updater\updater_RaumserverInstaller.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
+    <ClCompile Include="zip\miniz.c" />
+    <ClCompile Include="zip\test.cpp" />
+    <ClCompile Include="zip\zip_file.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\deviceDiscovery\deviceDiscovery.h" />
@@ -141,6 +144,8 @@
     <ClInclude Include="includes\versionNumber.h" />
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp" />
     <ClInclude Include="includes\xml\pugixml\pugixml.hpp" />
+    <ClInclude Include="includes\zip\miniz.h" />
+    <ClInclude Include="includes\zip\zip_file.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="installBuild.xml" />

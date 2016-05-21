@@ -143,9 +143,8 @@ namespace RaumserverInstaller
         bool DeviceInstaller::getActualBinaries()
         {         
             raumserverDaemonUpdater.setLogObject(getLogObject());
-            raumserverDaemonUpdater.run(true, false);
-
-            // TODO: @@@
+            raumserverDaemonUpdater.run(true, true);     
+            // TODO: @@@ Check if update was sucseeded?!
             return true;
         }
  

@@ -36,6 +36,7 @@
 #include <sstream>
 #include <time.h>
 #include <vector>
+#include <functional>
 
 namespace Raumkernel
 {

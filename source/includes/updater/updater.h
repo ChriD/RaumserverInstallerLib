@@ -81,10 +81,11 @@ namespace Updater
 
             HttpClient::HttpClient httpClient;
             bool downloadRequestDone;
+            bool getBinaryError;
 
-            std::string source;
-            std::string tmpDestination;
+            std::string source;            
             std::string destination;
+            std::string downloadDestination;
 
             virtual void stopThreads();
             virtual void getBinaryThread(); 

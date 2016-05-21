@@ -653,7 +653,7 @@ void zip_file::extract(const zip_info &member)
 
 void zip_file::extract(const zip_info &member, const std::string &path)
 {
-    // TODO: if it's a directory create it!
+    // if it's a directory we have to create it
     std::string directory = path + "/" + member.filename;
     if (!directory.empty() && (directory.back() == '/' || directory.back() == '\\'))
     {

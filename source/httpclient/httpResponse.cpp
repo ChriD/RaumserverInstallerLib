@@ -15,7 +15,6 @@ namespace HttpClient
     }
 
 
-
     HttpResponse::~HttpResponse()
     {
     }

@@ -146,9 +146,6 @@
     <ClCompile Include="zip\miniz.c">
       <Filter>zip</Filter>
     </ClCompile>
-    <ClCompile Include="zip\test.cpp">
-      <Filter>zip</Filter>
-    </ClCompile>
     <ClCompile Include="zip\zip_file.cpp">
       <Filter>zip</Filter>
     </ClCompile>

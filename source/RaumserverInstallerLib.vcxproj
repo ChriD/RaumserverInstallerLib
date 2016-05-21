@@ -101,7 +101,6 @@
     <ClCompile Include="updater\updater_RaumserverInstaller.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
     <ClCompile Include="zip\miniz.c" />
-    <ClCompile Include="zip\test.cpp" />
     <ClCompile Include="zip\zip_file.cpp" />
   </ItemGroup>
   <ItemGroup>

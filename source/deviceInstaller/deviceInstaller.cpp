@@ -129,8 +129,7 @@ namespace RaumserverInstaller
                     {
                         if (attribute.value() && it.value())
                             hardwareTypeBinaries.insert(std::make_pair(std::stoi(attribute.value()), std::string(it.child_value())));
-                    }
-                    
+                    }                    
                 }
                 catch ( ... )
                 {
@@ -142,9 +141,15 @@ namespace RaumserverInstaller
 
         bool DeviceInstaller::getActualBinaries()
         {         
+            // TODO: get actual version and get current version downloaded and check if
+            // actual version is greater than current downloaded version. If so, then download versions
+            // string versionInfoFileCurrent (local file)
+            // string versionInfoFileActual (web xml)
+            // getApplicationVersionFromFile("ApplicationName", "FileName")
+
             raumserverDaemonUpdater.setLogObject(getLogObject());
             raumserverDaemonUpdater.run(true, true);     
-            // TODO: @@@ Check if update was sucseeded?!
+            // TODO: @@@ Check if update was succseeded?!
             return true;
         }
  

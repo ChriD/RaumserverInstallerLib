@@ -140,7 +140,7 @@ namespace Updater
             {
                 auto responseData = _request->getResponse()->getData();
                 std::size_t size = responseData.size();
-                downloadedFile.write(reinterpret_cast<const char*>(&size), sizeof(size));
+                //downloadedFile.write(reinterpret_cast<const char*>(&size), sizeof(size));
                 downloadedFile.write(reinterpret_cast<const char*>(&responseData[0]), size * sizeof(responseData[0]));
                 downloadedFile.close();
                 progressInfo("Download finished", CURRENT_POSITION);

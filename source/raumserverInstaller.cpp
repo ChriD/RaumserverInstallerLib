@@ -23,8 +23,8 @@ namespace RaumserverInstaller
 
         connections.connect(deviceInstaller.sigInstallProgress, this, &RaumserverInstaller::onInstallProgress);
         connections.connect(deviceInstaller.sigInstallDone, this, &RaumserverInstaller::onInstallDone);
-
-        httpClient.init();
+        
+        httpClient.init();        
     }
 
 

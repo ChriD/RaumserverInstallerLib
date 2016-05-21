@@ -67,12 +67,6 @@
     <Filter Include="includes\json">
       <UniqueIdentifier>{a5ac673f-ba49-4436-a5bf-d6597a479df2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="includes\ftplib">
-      <UniqueIdentifier>{57c8253b-b70f-4299-a415-331b4eb15f5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ftplib">
-      <UniqueIdentifier>{60d7ebcd-7b67-4dc9-a7d0-756a563b3c85}</UniqueIdentifier>
-    </Filter>
     <Filter Include="includes\updater">
       <UniqueIdentifier>{1595d70a-9cb2-4752-8566-f5fb1b25e668}</UniqueIdentifier>
     </Filter>
@@ -131,14 +125,17 @@
     <ClCompile Include="json\jsoncpp.cpp">
       <Filter>json</Filter>
     </ClCompile>
-    <ClCompile Include="ftplib\ftplib.cpp">
-      <Filter>ftplib</Filter>
-    </ClCompile>
     <ClCompile Include="updater\updater.cpp">
       <Filter>updater</Filter>
     </ClCompile>
     <ClCompile Include="logger\loggerBase.cpp">
       <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="updater\updater_RaumserverDaemon.cpp">
+      <Filter>updater</Filter>
+    </ClCompile>
+    <ClCompile Include="updater\updater_RaumserverInstaller.cpp">
+      <Filter>updater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,10 +247,13 @@
     <ClInclude Include="includes\versionInfo.h">
       <Filter>includes</Filter>
     </ClInclude>
-    <ClInclude Include="includes\ftplib\ftplib.h">
-      <Filter>includes\ftplib</Filter>
-    </ClInclude>
     <ClInclude Include="includes\updater\updater.h">
+      <Filter>includes\updater</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\updater\updater_RaumserverDaemon.h">
+      <Filter>includes\updater</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\updater\updater_RaumserverInstaller.h">
       <Filter>includes\updater</Filter>
     </ClInclude>
   </ItemGroup>

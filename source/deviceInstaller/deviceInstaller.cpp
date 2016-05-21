@@ -11,7 +11,8 @@ namespace RaumserverInstaller
         {
             progressPercentage = 0;
             deviceInstallerFilePath = "installBuild.xml";
-            progressType = DeviceInstallerProgressType::DIPT_INSTALL;            
+            progressType = DeviceInstallerProgressType::DIPT_INSTALL;   
+            raumserverDaemonUpdater.init();
         }
 
 
@@ -137,6 +138,16 @@ namespace RaumserverInstaller
                 }
             }            
         }
+
+
+        bool DeviceInstaller::getActualBinaries()
+        {         
+            raumserverDaemonUpdater.setLogObject(getLogObject());
+            raumserverDaemonUpdater.run(true, false);
+
+            // TODO: @@@
+            return true;
+        }
  
 
 
@@ -158,6 +169,7 @@ namespace RaumserverInstaller
             progressInfo["progressInfo"]["error"] = error;
             return progressInfo;
         }
+      
 
     }
 }

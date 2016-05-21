@@ -28,6 +28,7 @@
 
 #include "raumserverInstallerBase.h"
 #include "xml/pugixml/pugixml.hpp"
+#include "updater/updater_RaumserverDaemon.h"
 
 namespace RaumserverInstaller
 {
@@ -57,6 +58,7 @@ namespace RaumserverInstaller
                 EXPORT virtual void abortInstall();
                 EXPORT virtual void startRemove();
                 EXPORT virtual void abortRemove();
+                EXPORT virtual bool getActualBinaries();
                 EXPORT virtual void setDevice(const DeviceInformation &_deviceInfo);
 
                 /**
@@ -75,6 +77,8 @@ namespace RaumserverInstaller
 
                 std::string deviceInstallerFilePath;
                 std::map<std::uint16_t, std::string> hardwareTypeBinaries;
+
+                Updater::Updater_RaumserverDaemon raumserverDaemonUpdater;
 
                 EXPORT virtual void loadDeviceInstallerInfoFile();
                 EXPORT virtual std::string getDeviceBinaryPath();

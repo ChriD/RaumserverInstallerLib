@@ -82,7 +82,6 @@
     <ClCompile Include="deviceDiscovery\deviceDiscovery_UPNP.cpp" />
     <ClCompile Include="deviceInstaller\deviceInstaller.cpp" />
     <ClCompile Include="deviceInstaller\deviceInstaller_RF.cpp" />
-    <ClCompile Include="ftplib\ftplib.cpp" />
     <ClCompile Include="httpclient\happyhttp.cpp" />
     <ClCompile Include="httpclient\httpClient.cpp" />
     <ClCompile Include="httpclient\httpRequest.cpp" />
@@ -98,6 +97,8 @@
     <ClCompile Include="tools\tinydircpp.cpp" />
     <ClCompile Include="tools\urlParser.cpp" />
     <ClCompile Include="updater\updater.cpp" />
+    <ClCompile Include="updater\updater_RaumserverDaemon.cpp" />
+    <ClCompile Include="updater\updater_RaumserverInstaller.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +107,6 @@
     <ClInclude Include="includes\deviceInstaller\deviceInstaller.h" />
     <ClInclude Include="includes\deviceInstaller\deviceInstaller_RF.h" />
     <ClInclude Include="includes\exception\exception.h" />
-    <ClInclude Include="includes\ftplib\ftplib.h" />
     <ClInclude Include="includes\httpclient\happyhttp.h" />
     <ClInclude Include="includes\httpclient\httpClient.h" />
     <ClInclude Include="includes\httpclient\httpRequest.h" />
@@ -135,6 +135,8 @@
     <ClInclude Include="includes\tools\uriUtil.h" />
     <ClInclude Include="includes\tools\urlParser.h" />
     <ClInclude Include="includes\updater\updater.h" />
+    <ClInclude Include="includes\updater\updater_RaumserverDaemon.h" />
+    <ClInclude Include="includes\updater\updater_RaumserverInstaller.h" />
     <ClInclude Include="includes\versionInfo.h" />
     <ClInclude Include="includes\versionNumber.h" />
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp" />

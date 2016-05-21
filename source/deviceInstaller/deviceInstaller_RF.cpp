@@ -119,14 +119,18 @@ namespace RaumserverInstaller
                 return;
             }
 
-            // TODO: Download new version if present!
-            // Call own method --> download current version (in base class)
+            // Download new version if present!           
+            if (!getActualBinaries())
+            {
+                progressError("Retrieving new binaries for RaumserverDaemon failed!", CURRENT_POSITION);
+                return;
+            }
 
             // Get correct binary dir (Raumfeld devices have different architectures)           
             binaryDir = getDeviceBinaryPath();
             if (binaryDir.empty())
             {
-                progressInfo("No valoid binary found for device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
+                progressError("No valid binary found for device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
                 return;
             }
             binaryDir += "raumserverDaemon/";

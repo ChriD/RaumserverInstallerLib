@@ -33,101 +33,104 @@
 #include <tools/urlParser.h>
 
 
-namespace RaumserverInstaller
+namespace HttpClient
 {
-    namespace HttpClient
-    {
       
-        class HttpRequest : public RaumserverInstallerBase
-        {
-            public:                
-                EXPORT HttpRequest();
-                EXPORT HttpRequest(const std::string _requestId, const std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars = nullptr, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars = nullptr, void *_userdata = nullptr, std::function<void(HttpRequest*)> _callback = nullptr);
-                EXPORT virtual ~HttpRequest();
-                EXPORT virtual std::string getId();
-                EXPORT virtual std::string getRequestUrl();
-                EXPORT virtual std::shared_ptr<HttpResponse> getResponse();
-                EXPORT virtual bool isFinished();
-                EXPORT virtual bool isRedirection();
-                EXPORT virtual bool isDeleteable();
-                EXPORT void setGotResponse(bool _gotResponse);
-                EXPORT void setRequestUrl(std::string _requestUrl);
-                EXPORT void setResponse(std::shared_ptr<HttpResponse> _httpResponse);
-                EXPORT void setFinished(bool _finished = true);
-                EXPORT void setDeleteable(bool _deletable = true);
-                EXPORT void emitRequestFinishCallback();
+    class HttpRequest : public Log::LogBase
+    {
+        public:                
+            EXPORT HttpRequest();
+            EXPORT HttpRequest(const std::string _requestId, const std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars = nullptr, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars = nullptr, void *_userdata = nullptr, std::function<void(HttpRequest*)> _requestFinishedCallback = nullptr, std::function<void(HttpRequest*)> _requestProcessingCallback = nullptr);
+            EXPORT virtual ~HttpRequest();
+            EXPORT virtual std::string getId();
+            EXPORT virtual std::string getRequestUrl();
+            EXPORT virtual std::shared_ptr<HttpResponse> getResponse();
+            EXPORT virtual bool isFinished();
+            EXPORT virtual bool isRedirection();
+            EXPORT virtual bool isDeleteable();
+            EXPORT void setGotResponse(bool _gotResponse);
+            EXPORT void setRequestUrl(std::string _requestUrl);
+            EXPORT void setResponse(std::shared_ptr<HttpResponse> _httpResponse);
+            EXPORT void setFinished(bool _finished = true);
+            EXPORT void setDeleteable(bool _deletable = true);
+            EXPORT void emitRequestFinishCallback();
+            EXPORT void emitRequestProcessingCallback();
 
-                EXPORT void setSleepTimeRequestPump(std::uint32_t _sleepTime);                
+            EXPORT void setSleepTimeRequestPump(std::uint32_t _sleepTime);                
 
-                EXPORT std::string getRedirectionLocation();
-                EXPORT std::string getRedirectionUrl();
+            EXPORT std::string getRedirectionLocation();
+            EXPORT std::string getRedirectionUrl();
 
-                EXPORT void doRequest();
-                EXPORT void abort();
+            EXPORT void doRequest();
+            EXPORT void abort();
 
-                EXPORT virtual std::string getPostVarsString();
-                EXPORT virtual std::string getHeaderVarsString();
+            EXPORT virtual std::string getPostVarsString();
+            EXPORT virtual std::string getHeaderVarsString();
 
 
-            protected:
-                virtual void createHeadersAndPostStringVars();
-                virtual void runRequestPumpThread();
+        protected:
+            virtual void createHeadersAndPostStringVars();
+            virtual void runRequestPumpThread();
 
-                void onBegin(const happyhttp::Response* _r);
-                void onData(const happyhttp::Response* _r, const unsigned char* _data, int _n);
-                void onComplete(const happyhttp::Response* _r);
+            void onBegin(const happyhttp::Response* _r);
+            void onData(const happyhttp::Response* _r, const unsigned char* _data, int _n);
+            void onComplete(const happyhttp::Response* _r);
               
-                static void onBeginCallback(const happyhttp::Response* _r, void* _userdata);
-                static void onDataCallback(const happyhttp::Response* _r, void* _userdata, const unsigned char* _data, int _n);
-                static void onCompleteCallback(const happyhttp::Response* _r, void* _userdata);
+            static void onBeginCallback(const happyhttp::Response* _r, void* _userdata);
+            static void onDataCallback(const happyhttp::Response* _r, void* _userdata, const unsigned char* _data, int _n);
+            static void onCompleteCallback(const happyhttp::Response* _r, void* _userdata);
 
-                /**
-                * shared pointer to the response object
-                * will only be filled when response is ready, otherwise its a nullptr
-                */
-                std::shared_ptr<HttpResponse> httpResponse;
-                /**
-                * url which we will request
-                */
-                std::string requestUrl;             
-                /**
-                *  unique request id 
-                */
-                std::string requestId;
-                /**
-                *  pointer to any user defined data
-                */
-                void *userData;
-                /**
-                * 
-                */
-                std::shared_ptr<std::unordered_map<std::string, std::string>> headerVars;
-                std::string headerVarsString = "";                
-                /**
-                *
-                */
-                std::shared_ptr<std::unordered_map<std::string, std::string>> postVars;
-                std::string postVarsString = "";
-                /**
-                *  the request callback function specified in the constructor by the developer
-                */
-                std::function<void(HttpRequest*)> requestFinishedUserCallback;         
+            /**
+            * shared pointer to the response object
+            * will only be filled when response is ready, otherwise its a nullptr
+            */
+            std::shared_ptr<HttpResponse> httpResponse;
+            /**
+            * url which we will request
+            */
+            std::string requestUrl;             
+            /**
+            *  unique request id 
+            */
+            std::string requestId;
+            /**
+            *  pointer to any user defined data
+            */
+            void *userData;
+            /**
+            * 
+            */
+            std::shared_ptr<std::unordered_map<std::string, std::string>> headerVars;
+            std::string headerVarsString = "";                
+            /**
+            *
+            */
+            std::shared_ptr<std::unordered_map<std::string, std::string>> postVars;
+            std::string postVarsString = "";
+            /**
+            *  the request callback function which is beening called when the request is finished specified in the constructor by the developer
+            */
+            std::function<void(HttpRequest*)> requestFinishedUserCallback;         
+            /**
+            *
+            */
+            std::function<void(HttpRequest*)> requestProcessingUserCallback;
 
-                std::thread threadRequestRun;
-                std::atomic_bool stopRequestThread;
 
-                std::atomic_bool finished;
-                std::atomic_bool deleteable;
-                std::atomic_bool redirection;
-                std::string redirectionLocation;
+            std::thread threadRequestRun;
+            std::atomic_bool stopRequestThread;
 
-                bool gotResponse;
+            std::atomic_bool finished;
+            std::atomic_bool deleteable;
+            std::atomic_bool redirection;
+            std::string redirectionLocation;
 
-                std::uint32_t sleepTimeRequestPump;
+            bool gotResponse;
+
+            std::uint32_t sleepTimeRequestPump;
                
 
-        };        
-    }
+    };        
 }
 
 #endif

@@ -429,7 +429,7 @@ void Connection::pump()
 	if( !datawaiting( m_Sock ) )
 		return;				// recv will block
 
-	unsigned char buf[ 2048 ];   
+	unsigned char buf[ 25000 ]; // 25kb buffer   
     
     int a = recv(m_Sock, (char*)buf, sizeof(buf), 0);
 	if( a<0 )

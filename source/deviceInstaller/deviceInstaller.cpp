@@ -1,5 +1,6 @@
 
 #include "deviceInstaller/deviceInstaller.h"
+#include "versionInfo.h"
 
 
 namespace RaumserverInstaller
@@ -99,7 +100,7 @@ namespace RaumserverInstaller
         void DeviceInstaller::loadDeviceInstallerInfoFile()
         {           
             pugi::xml_document doc;
-            pugi::xml_node rootNode, installSourceNode;            
+            pugi::xml_node rootNode, installSourceNode, binariesSourceNode, currentVersionNode;
 
             pugi::xml_parse_result result = doc.load_file(deviceInstallerFilePath.c_str());
 
@@ -111,6 +112,22 @@ namespace RaumserverInstaller
                 logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'build' node!", CURRENT_POSITION);
                 throw std::runtime_error("Unrecoverable Error! Please check Log file!");
             }
+
+            binariesSourceNode = rootNode.child("binariesSource");
+            if (!binariesSourceNode)
+            {
+                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'binariesSource' node!", CURRENT_POSITION);
+                throw std::runtime_error("Unrecoverable Error! Please check Log file!");
+            }
+            binariesSourceWebUrl = binariesSourceNode.child_value();
+
+            currentVersionNode = rootNode.child("currentVersion");
+            if (!currentVersionNode)
+            {
+                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'currentVersion' node!", CURRENT_POSITION);
+                throw std::runtime_error("Unrecoverable Error! Please check Log file!");
+            }
+            currentVersionInfoWebUrl = currentVersionNode.child_value();
 
             installSourceNode = rootNode.child("installSource");
             if (!installSourceNode)
@@ -140,15 +157,27 @@ namespace RaumserverInstaller
 
 
         bool DeviceInstaller::getActualBinaries()
-        {         
-            // TODO: get actual version and get current version downloaded and check if
-            // actual version is greater than current downloaded version. If so, then download versions
-            // string versionInfoFileCurrent (local file)
-            // string versionInfoFileActual (web xml)
-            // getApplicationVersionFromFile("ApplicationName", "FileName")
+        {                  
+            VersionInfo::VersionInfo currentVersion, newestVersion;
 
-            raumserverDaemonUpdater.setLogObject(getLogObject());
-            raumserverDaemonUpdater.run(true, true);     
+            progressInfo("Getting current version info...", CURRENT_POSITION);
+            currentVersion.loadFromXMLFile("binaries/version.xml");
+
+            progressInfo("Getting newest version info...", CURRENT_POSITION);            
+            newestVersion.loadFromUrl(currentVersionInfoWebUrl);
+
+            if (currentVersion.appVersionBuild < newestVersion.appVersionBuild)
+            {
+                progressInfo("New version (" + newestVersion.appVersion + ") found! Now getting new version...", CURRENT_POSITION);
+                raumserverDaemonUpdater.setSource(binariesSourceWebUrl);
+                raumserverDaemonUpdater.setLogObject(getLogObject());
+                raumserverDaemonUpdater.run(true, true);
+            }
+            else
+            {
+                progressInfo("Current version (" + currentVersion.appVersion + ") is already the newest one!", CURRENT_POSITION);
+            }
+
             // TODO: @@@ Check if update was succseeded?!
             return true;
         }

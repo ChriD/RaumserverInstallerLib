@@ -75,6 +75,8 @@ namespace RaumserverInstaller
                 std::double_t progressPercentage;
                 DeviceInstallerProgressType progressType;
 
+                std::string binariesSourceWebUrl;
+                std::string currentVersionInfoWebUrl;
                 std::string deviceInstallerFilePath;
                 std::map<std::uint16_t, std::string> hardwareTypeBinaries;
 

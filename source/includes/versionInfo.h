@@ -28,14 +28,26 @@
 
 #include <string>
 #include "versionNumber.h"
+#include "xml\pugixml\pugixml.hpp"
+#include "httpClient\httpClient.h"
 
 namespace VersionInfo
 {
     struct VersionInfo
     {
-        std::string appName = AppName;
-        std::string appVersion = VersionNumber;
-        std::string appVersionName = VersionName;
+        public:
+            std::string appName = AppName;
+            std::string appVersion = AppVersionNumber;
+            std::string appVersionName = AppVersionName;
+            std::uint32_t appVersionBuild = AppVersionBuild;
+
+            void loadFromVersionInfo(std::string _versionInfoXMLString);
+            void loadFromXMLFile(std::string _xmlFile);
+            void loadFromUrl(std::string _url);
+
+        protected:
+            void VersionInfo::loadFromXMLDoc(pugi::xml_document &_doc);
+
     };           
 }
 

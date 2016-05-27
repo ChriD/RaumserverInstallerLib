@@ -51,7 +51,7 @@ namespace HttpClient
             * this method is async and in fact the callback function has to be given if you want to have a response info
             * currently there is no sync version of this method
             */
-            EXPORT void request(std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars = nullptr, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars = nullptr, void *_userData = nullptr, std::function<void(HttpRequest*)> _requestDoneCallback = nullptr, std::function<void(HttpRequest*)> _requestProcessingCallback = nullptr);
+            EXPORT std::shared_ptr<HttpRequest> request(std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars = nullptr, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars = nullptr, void *_userData = nullptr, std::function<void(HttpRequest*)> _requestDoneCallback = nullptr, std::function<void(HttpRequest*)> _requestProcessingCallback = nullptr);
             /**
             * aborts all pending requests
             */

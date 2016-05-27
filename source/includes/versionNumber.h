@@ -26,9 +26,11 @@
 #define VERSIONNUMBER_H
 
 #include <string>
+#include <cstdint>
 
 const std::string AppName = "Raumserver Installer Library";
-const std::string VersionNumber = "1.0.0";
-const std::string VersionName = "";
+const std::string AppVersionNumber = "1.0.0";
+const std::string AppVersionName = "";
+const std::uint32_t AppVersionBuild = 1000;
 
 #endif

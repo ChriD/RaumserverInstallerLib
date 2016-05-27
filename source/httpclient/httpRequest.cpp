@@ -205,6 +205,19 @@ namespace HttpClient
     }
 
 
+    // well.. this method is not really nice because the client itself polls the requests and this may lead to undef behaviour?
+    void HttpRequest::waitTillFinished()
+    {
+        while (true)
+        {
+            if (isFinished())
+            {
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
+    }
+
                 
     void HttpRequest::runRequestPumpThread()
     {

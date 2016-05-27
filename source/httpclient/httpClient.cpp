@@ -90,7 +90,7 @@ namespace HttpClient
     }
         
         
-    void HttpClient::request(std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars, void *_userData, std::function<void(HttpRequest*)> _requestDoneCallback, std::function<void(HttpRequest*)> _requestProcessingCallback)
+    std::shared_ptr<HttpRequest> HttpClient::request(std::string _requestUrl, std::shared_ptr<std::unordered_map<std::string, std::string>> _headerVars, std::shared_ptr<std::unordered_map<std::string, std::string>> _postVars, void *_userData, std::function<void(HttpRequest*)> _requestDoneCallback, std::function<void(HttpRequest*)> _requestProcessingCallback)
     {                                 
         // be sure threads don't interfere each others
         std::unique_lock<std::mutex> lock(mutexRequestMap);
@@ -112,7 +112,9 @@ namespace HttpClient
         requestMap.insert(std::make_pair(httpRequest->getId(), httpRequest));                                 
         httpRequest->doRequest();
             
-        logDebug("Request '" + httpRequest->getId() + "' (" + httpRequest->getRequestUrl() + ") started", CURRENT_POSITION);                                   
+        logDebug("Request '" + httpRequest->getId() + "' (" + httpRequest->getRequestUrl() + ") started", CURRENT_POSITION);  
+
+        return httpRequest;
     }
 
 

@@ -99,6 +99,7 @@
     <ClCompile Include="updater\updater.cpp" />
     <ClCompile Include="updater\updater_RaumserverDaemon.cpp" />
     <ClCompile Include="updater\updater_RaumserverInstaller.cpp" />
+    <ClCompile Include="versionInfo.cpp" />
     <ClCompile Include="xml\pugixml\pugixml.cpp" />
     <ClCompile Include="zip\miniz.c" />
     <ClCompile Include="zip\zip_file.cpp" />

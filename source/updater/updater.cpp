@@ -40,11 +40,23 @@ namespace Updater
     }
 
 
+    void Updater::setSource(const std::string &_source)
+    {
+        source = _source;
+    }
+
+
     void Updater::run(bool _sync, bool _doUpdate)
     {
         sync = _sync;
         doImmediateUpdate = _doUpdate;
         getBinary(_sync);
+    }
+
+
+    bool Updater::needsBinaryUpdate()
+    {             
+        return true;
     }
 
 
@@ -58,7 +70,9 @@ namespace Updater
 
     void Updater::getBinaryThread()
     {
-        if (doGetBinary())
+        if (!needsBinaryUpdate())        
+            binaryReady();                    
+        else if (doGetBinary())
             binaryReady();
     }
 

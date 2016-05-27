@@ -53,6 +53,7 @@ namespace Updater
             EXPORT virtual void run(bool _sync = false, bool _doUpdate = true);
             EXPORT virtual void getBinary(bool _sync = false);
             EXPORT virtual void update(bool _sync = false);   
+            EXPORT virtual void setSource(const std::string &_source);
             
             EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
             EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
@@ -91,6 +92,7 @@ namespace Updater
             virtual void getBinaryThread(); 
             virtual void updateThread();
             virtual bool doGetBinary(); 
+            virtual bool needsBinaryUpdate();
             virtual bool doUpdate();
             virtual void binaryReady();
             virtual void updateDone();

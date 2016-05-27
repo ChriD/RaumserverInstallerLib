@@ -63,6 +63,7 @@ namespace HttpClient
 
             EXPORT void doRequest();
             EXPORT void abort();
+            EXPORT void waitTillFinished();
 
             EXPORT virtual std::string getPostVarsString();
             EXPORT virtual std::string getHeaderVarsString();

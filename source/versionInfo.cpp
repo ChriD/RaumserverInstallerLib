@@ -23,10 +23,10 @@ namespace VersionInfo
     void VersionInfo::loadFromUrl(std::string _url)
     {
         HttpClient::HttpClient  httpClient;
-        // TODO: @@@
+       
         auto request = httpClient.request(_url, nullptr, nullptr, nullptr, nullptr, nullptr);
-        // the request itsefl will be handled by the httpClient and will be deleted in there but due we use a shared pointer
-        // the request will at least stay as long as this method
+        // the request itself will be handled by the httpClient and will be deleted in there but due we use a shared pointer
+        // the request will at least stay as long as the run of this method
         request->waitTillFinished();
         if (request->getResponse()->getErrorCode() == 0)
         {

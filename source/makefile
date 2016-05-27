@@ -59,13 +59,15 @@ RM = rm -f
 SRCS = $(wildcard *.cpp)
 SRCS += $(wildcard deviceDiscovery/*.cpp)
 SRCS += $(wildcard deviceInstaller/*.cpp)
-SRCS += $(wildcard httpclient/*.cpp)
+SRCS += $(wildcard httpClient/*.cpp)
+SRCS += $(wildcard updater/*.cpp)
 SRCS += $(wildcard json/*.cpp)
 SRCS += $(wildcard logger/*.cpp)
 SRCS += $(wildcard sshClient/*.cpp)
 SRCS += $(wildcard tools/*.cpp)
 SRCS += $(wildcard xml/*.cpp)
 SRCS += $(wildcard xml/pugixml/*.cpp)
+SRCS += $(wildcard zip/*.cpp)
 
 OBJS = $(SRCS:.cpp=.o)
 

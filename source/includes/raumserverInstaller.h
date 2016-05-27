@@ -31,7 +31,7 @@
 #include "raumserverInstallerBase.h"
 #include "deviceDiscovery/deviceDiscovery_UPNP.h"
 #include "deviceInstaller/deviceInstaller_RF.h"
-#include "httpclient/httpClient.h"
+#include "httpClient/httpClient.h"
 #include "versionInfo.h"
 
 namespace RaumserverInstaller

@@ -28,8 +28,8 @@
 
 #include <string>
 #include "versionNumber.h"
-#include "xml\pugixml\pugixml.hpp"
-#include "httpClient\httpClient.h"
+#include "xml/pugixml/pugixml.hpp"
+#include "httpClient/httpClient.h"
 
 namespace VersionInfo
 {
@@ -46,7 +46,7 @@ namespace VersionInfo
             void loadFromUrl(std::string _url);
 
         protected:
-            void VersionInfo::loadFromXMLDoc(pugi::xml_document &_doc);
+            void loadFromXMLDoc(pugi::xml_document &_doc);
 
     };           
 }

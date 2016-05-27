@@ -28,8 +28,8 @@
 #include <functional>
 #include <unordered_map>
 #include <raumserverInstallerBase.h>
-#include <httpclient/happyhttp.h>
-#include <httpclient/httpResponse.h>
+#include <httpClient/happyhttp.h>
+#include <httpClient/httpResponse.h>
 #include <tools/urlParser.h>
 
 

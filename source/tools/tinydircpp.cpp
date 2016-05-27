@@ -1,7 +1,10 @@
 
 #include "tools/stringUtil.h"
 #include "tools/tinydircpp.h"
-#include <direct.h>
+#ifdef __linux__ 
+#elif _WIN32
+    #include <direct.h>
+#endif
 
 
 namespace TinyDirCpp

@@ -42,7 +42,7 @@ namespace VersionInfo
             std::uint32_t appVersionBuild = AppVersionBuild;
 
             void loadFromVersionInfo(std::string _versionInfoXMLString);
-            void loadFromXMLFile(std::string _xmlFile);
+            bool loadFromXMLFile(std::string _xmlFile);
             void loadFromUrl(std::string _url);
 
         protected:

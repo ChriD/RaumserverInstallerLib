@@ -1,6 +1,6 @@
 
-#include <httpclient/httpResponse.h>
-#include <httpclient/httpClient.h>
+#include <httpClient/httpResponse.h>
+#include <httpClient/httpClient.h>
 
 
 namespace HttpClient

@@ -1,5 +1,5 @@
 
-#include <httpclient/httpRequest.h>
+#include <httpClient/httpRequest.h>
 
 
 namespace HttpClient

@@ -143,13 +143,13 @@
     <ClCompile Include="updater\updater_RaumserverInstaller.cpp">
       <Filter>updater</Filter>
     </ClCompile>
-    <ClCompile Include="zip\miniz.c">
-      <Filter>zip</Filter>
-    </ClCompile>
     <ClCompile Include="zip\zip_file.cpp">
       <Filter>zip</Filter>
     </ClCompile>
     <ClCompile Include="versionInfo.cpp" />
+    <ClCompile Include="zip\miniz.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp">

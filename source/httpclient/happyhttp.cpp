@@ -25,7 +25,7 @@
  */
 
 
-#include <httpclient/happyhttp.h>
+#include <httpClient/happyhttp.h>
 
 #ifndef _WIN32
 //	#include <sys/types.h>

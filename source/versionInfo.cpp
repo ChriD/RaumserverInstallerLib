@@ -12,11 +12,22 @@ namespace VersionInfo
     }
 
 
-    void VersionInfo::loadFromXMLFile(std::string _xmlFile)
+    bool VersionInfo::loadFromXMLFile(std::string _xmlFile)
     {
         pugi::xml_document doc;            
         pugi::xml_parse_result result = doc.load_file(_xmlFile.c_str());
-        loadFromXMLDoc(doc);
+        if (result.status != 1) // 1 = file not found
+        {
+            loadFromXMLDoc(doc);
+            return true;
+        }
+        else
+        {
+            appVersion = "";
+            appVersionName = "";
+            appVersionBuild = 0;
+            return false;
+        }
     }
 
 

@@ -24,8 +24,15 @@ namespace RaumserverInstaller
 
         void DeviceInstaller::startInstall()
         {
-            progressType = DeviceInstallerProgressType::DIPT_INSTALL;
-            loadDeviceInstallerInfoFile();
+            try
+            {
+                progressType = DeviceInstallerProgressType::DIPT_INSTALL;
+                loadDeviceInstallerInfoFile();
+            }
+            catch (...)
+            {
+                sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Errors occured!", (std::uint8_t)progressPercentage, true));
+            }
         }
 
 
@@ -109,14 +116,14 @@ namespace RaumserverInstaller
             rootNode = doc.child("build");
             if (!rootNode)
             {
-                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'build' node!", CURRENT_POSITION);
+                progressError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'build' node!", CURRENT_POSITION);                
                 throw std::runtime_error("Unrecoverable Error! Please check Log file!");
             }
 
             binariesSourceNode = rootNode.child("binariesSource");
             if (!binariesSourceNode)
             {
-                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'binariesSource' node!", CURRENT_POSITION);
+                progressError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'binariesSource' node!", CURRENT_POSITION);
                 throw std::runtime_error("Unrecoverable Error! Please check Log file!");
             }
             binariesSourceWebUrl = binariesSourceNode.child_value();
@@ -124,7 +131,7 @@ namespace RaumserverInstaller
             currentVersionNode = rootNode.child("currentVersion");
             if (!currentVersionNode)
             {
-                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'currentVersion' node!", CURRENT_POSITION);
+                progressError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'currentVersion' node!", CURRENT_POSITION);
                 throw std::runtime_error("Unrecoverable Error! Please check Log file!");
             }
             currentVersionInfoWebUrl = currentVersionNode.child_value();
@@ -132,7 +139,7 @@ namespace RaumserverInstaller
             installSourceNode = rootNode.child("installSource");
             if (!installSourceNode)
             {
-                logError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'installSource' node!", CURRENT_POSITION);
+                progressError("Wrong formated file '" + deviceInstallerFilePath + "'! Missing 'installSource' node!", CURRENT_POSITION);
                 throw std::runtime_error("Unrecoverable Error! Please check Log file!");
             }
 
@@ -150,7 +157,7 @@ namespace RaumserverInstaller
                 }
                 catch ( ... )
                 {
-                    logError("Wrong formated devive node in '" + deviceInstallerFilePath + "'!", CURRENT_POSITION);
+                    progressError("Wrong formated devive node in '" + deviceInstallerFilePath + "'!", CURRENT_POSITION);
                 }
             }            
         }
@@ -171,6 +178,9 @@ namespace RaumserverInstaller
                 progressInfo("New version (" + newestVersion.appVersion + ") found! Now getting new version...", CURRENT_POSITION);
                 raumserverDaemonUpdater.setSource(binariesSourceWebUrl);
                 raumserverDaemonUpdater.setLogObject(getLogObject());
+
+                // TODO: @@@ sigUpdateProgress --> auf install Progress... 
+
                 raumserverDaemonUpdater.run(true, true);
             }
             else

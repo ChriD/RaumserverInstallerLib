@@ -202,17 +202,31 @@ namespace RaumserverInstaller
    
 
     void RaumserverInstaller::startInstallToDevice(DeviceInformation _deviceInformation)
-    {       
-        deviceInstaller.setLogObject(getLogObject());
-        deviceInstaller.setDevice(_deviceInformation);
-        deviceInstaller.startInstall();
+    {    
+        try
+        {
+            deviceInstaller.setLogObject(getLogObject());
+            deviceInstaller.setDevice(_deviceInformation);
+            deviceInstaller.startInstall();
+        }
+        catch ( ... )
+        {
+            logError("Error while installing!", CURRENT_POSITION);            
+        }
     }
 
     void RaumserverInstaller::startRemoveFromDevice(DeviceInformation _deviceInformation)
     {
-        deviceInstaller.setLogObject(getLogObject());
-        deviceInstaller.setDevice(_deviceInformation);
-        deviceInstaller.startRemove();
+        try
+        {
+            deviceInstaller.setLogObject(getLogObject());
+            deviceInstaller.setDevice(_deviceInformation);
+            deviceInstaller.startRemove();
+        }
+        catch (...)
+        {
+            logError("Error while removing!", CURRENT_POSITION);
+        }
     }
 
 

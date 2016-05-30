@@ -197,12 +197,11 @@ namespace RaumserverInstaller
 
 
         void DeviceInstaller::onUpdaterUpdateProgress(Updater::ProgressInfo _progressInfo)
-        {
-            // TODO: @@@
+        {            
             if(_progressInfo.error)
-                progressError(_progressInfo.info, CURRENT_POSITION);
+                progressError(_progressInfo.info, CURRENT_POSITION, _progressInfo.id);
             else
-                progressInfo(_progressInfo.info, CURRENT_POSITION);
+                progressInfo(_progressInfo.info, CURRENT_POSITION, _progressInfo.id);
         }
 
 

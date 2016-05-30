@@ -13,7 +13,12 @@ namespace RaumserverInstaller
             progressPercentage = 0;
             deviceInstallerFilePath = "installBuild.xml";
             progressType = DeviceInstallerProgressType::DIPT_INSTALL;   
+
             raumserverDaemonUpdater.init();
+                   
+            connections.connect(raumserverDaemonUpdater.sigUpdateProgress, this, &DeviceInstaller::onUpdaterUpdateProgress);
+            connections.connect(raumserverDaemonUpdater.sigBinaryReady, this, &DeviceInstaller::onUpdaterBinaryReady);
+            connections.connect(raumserverDaemonUpdater.sigBinaryUpdated, this, &DeviceInstaller::onUpdaterBinaryUpdated);
         }
 
 
@@ -58,31 +63,31 @@ namespace RaumserverInstaller
         }
 
 
-        void DeviceInstaller::progressDebug(const std::string &_progressInfo, const std::string &_location)
+        void DeviceInstaller::progressDebug(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
         {
             logDebug(_progressInfo, _location);                     
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false, _id));
         }
 
 
-        void DeviceInstaller::progressWarning(const std::string &_progressInfo, const std::string &_location)
+        void DeviceInstaller::progressWarning(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
         {
             logWarning(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false, _id));
         }
 
 
-        void DeviceInstaller::progressInfo(const std::string &_progressInfo, const std::string &_location)
+        void DeviceInstaller::progressInfo(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
         {
             logInfo(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, false, _id));
         }
 
 
-        void DeviceInstaller::progressError(const std::string &_progressInfo, const std::string &_location)
+        void DeviceInstaller::progressError(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
         {
             logError(_progressInfo, _location);
-            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, true));
+            sigInstallProgress.fire(DeviceInstallerProgressInfo(progressType, _progressInfo, (std::uint8_t)progressPercentage, true, _id));
         }
 
 
@@ -177,10 +182,8 @@ namespace RaumserverInstaller
             {
                 progressInfo("New version (" + newestVersion.appVersion + ") found! Now getting new version...", CURRENT_POSITION);
                 raumserverDaemonUpdater.setSource(binariesSourceWebUrl);
-                raumserverDaemonUpdater.setLogObject(getLogObject());
-
-                // TODO: @@@ sigUpdateProgress --> auf install Progress... 
-
+                raumserverDaemonUpdater.setLogObject(getLogObject());          
+                raumserverDaemonUpdater.setLogProgress(false);
                 raumserverDaemonUpdater.run(true, true);
             }
             else
@@ -191,22 +194,45 @@ namespace RaumserverInstaller
             // TODO: @@@ Check if update was succseeded?!
             return true;
         }
+
+
+        void DeviceInstaller::onUpdaterUpdateProgress(Updater::ProgressInfo _progressInfo)
+        {
+            // TODO: @@@
+            if(_progressInfo.error)
+                progressError(_progressInfo.info, CURRENT_POSITION);
+            else
+                progressInfo(_progressInfo.info, CURRENT_POSITION);
+        }
+
+
+        void DeviceInstaller::onUpdaterBinaryReady()
+        {
+            progressInfo("Binary is ready!", CURRENT_POSITION);
+        }
+
+
+        void DeviceInstaller::onUpdaterBinaryUpdated()
+        {            
+        }
  
 
 
 
-        DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType,  const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error)
+        DeviceInstallerProgressInfo::DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType, const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error, const std::string &_id)
         {
             actionType = _actionType;
             info = _info;
             completionPercentage = _completionPercentage;
             error = _error;
+            id = _id;
         }
 
         EXPORT Json::Value DeviceInstallerProgressInfo::getJsonValue()
         {
             Json::Value progressInfo;
             progressInfo["progressInfo"]["info"] = info;
+            progressInfo["progressInfo"]["id"] = id;
             progressInfo["progressInfo"]["actionType"] = actionType;
             progressInfo["progressInfo"]["percentage"] = completionPercentage;
             progressInfo["progressInfo"]["error"] = error;

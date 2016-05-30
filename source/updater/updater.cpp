@@ -14,6 +14,7 @@ namespace Updater
         destination = "";
         downloadDestination = "";
         getBinaryError = false;
+        logProgress = true;
     }
 
 
@@ -43,6 +44,12 @@ namespace Updater
     void Updater::setSource(const std::string &_source)
     {
         source = _source;
+    }
+
+
+    void Updater::setLogProgress(bool _logProgress)
+    {
+        logProgress = _logProgress;
     }
 
 
@@ -207,28 +214,32 @@ namespace Updater
 
     void Updater::progressDebug(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
     {
-        logDebug(_progressInfo, _location);
+        if (logProgress)
+            logDebug(_progressInfo, _location);
         //sigUpdateProgress.fire(ProgressInfo(_progressInfo, _id, false));
     }
 
 
     void Updater::progressWarning(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
     {
-        logWarning(_progressInfo, _location);
+        if (logProgress)
+            logWarning(_progressInfo, _location);
         sigUpdateProgress.fire(ProgressInfo(_progressInfo, _id, false));
     }
 
 
     void Updater::progressInfo(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
     {
-        logInfo(_progressInfo, _location);
+        if (logProgress)
+            logInfo(_progressInfo, _location);
         sigUpdateProgress.fire(ProgressInfo(_progressInfo, _id, false));
     }
 
 
     void Updater::progressError(const std::string &_progressInfo, const std::string &_location, const std::string &_id)
     {
-        logError(_progressInfo, _location);
+        if (logProgress)
+            logError(_progressInfo, _location);
         sigUpdateProgress.fire(ProgressInfo(_progressInfo, _id, true));
     }
 

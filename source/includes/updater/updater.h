@@ -54,6 +54,7 @@ namespace Updater
             EXPORT virtual void getBinary(bool _sync = false);
             EXPORT virtual void update(bool _sync = false);   
             EXPORT virtual void setSource(const std::string &_source);
+            EXPORT virtual void setLogProgress(bool _logProgress = true);
             
             EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
             EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
@@ -74,6 +75,7 @@ namespace Updater
             sigs::signal<void()> sigBinaryUpdated;
 
         protected: 
+            bool logProgress;
             bool sync;
             bool doImmediateUpdate;
             std::thread getBinaryThreadObject;

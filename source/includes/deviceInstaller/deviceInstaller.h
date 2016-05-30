@@ -38,10 +38,11 @@ namespace RaumserverInstaller
 
         struct DeviceInstallerProgressInfo
         {
-            DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType, const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error);
+            DeviceInstallerProgressInfo(DeviceInstallerProgressType _actionType, const std::string &_info, const std::uint8_t &_completionPercentage, const bool &_error, const std::string &_id = "");
             EXPORT Json::Value getJsonValue();
 
             std::string info = "";
+            std::string id = "";
             std::uint8_t completionPercentage = 0;
             bool error = false;
             DeviceInstallerProgressType actionType = DeviceInstallerProgressType::DIPT_INSTALL;
@@ -82,13 +83,19 @@ namespace RaumserverInstaller
 
                 Updater::Updater_RaumserverDaemon raumserverDaemonUpdater;
 
+                sigs::connections connections;
+
+                void onUpdaterUpdateProgress(Updater::ProgressInfo _progressInfo);
+                void onUpdaterBinaryReady();
+                void onUpdaterBinaryUpdated();
+
                 EXPORT virtual void loadDeviceInstallerInfoFile();
                 EXPORT virtual std::string getDeviceBinaryPath();
 
-                EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location);
-                EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location);
-                EXPORT virtual void progressInfo(const std::string &_progressInfo, const std::string &_location);
-                EXPORT virtual void progressError(const std::string &_progressInfo, const std::string &_location);
+                EXPORT virtual void progressDebug(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
+                EXPORT virtual void progressWarning(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
+                EXPORT virtual void progressInfo(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
+                EXPORT virtual void progressError(const std::string &_progressInfo, const std::string &_location, const std::string &_id = "");
 
         };
     }

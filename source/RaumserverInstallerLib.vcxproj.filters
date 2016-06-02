@@ -79,6 +79,12 @@
     <Filter Include="includes\zip">
       <UniqueIdentifier>{6107ca25-9f04-428b-909c-c6515b5c3f15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="settings">
+      <UniqueIdentifier>{059b7383-0e58-424e-a121-b5de786d7c72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includes\settings">
+      <UniqueIdentifier>{875dd0a2-c8bb-4ef8-a22f-c613ec8d9dcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xml\pugixml\pugixml.cpp">
@@ -149,6 +155,9 @@
     <ClCompile Include="versionInfo.cpp" />
     <ClCompile Include="zip\miniz.cpp">
       <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="settings\settings.cpp">
+      <Filter>settings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="includes\zip\zip_file.hpp">
       <Filter>includes\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\settings\settings.h">
+      <Filter>includes\settings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

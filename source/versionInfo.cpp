@@ -3,6 +3,13 @@
 namespace VersionInfo
 {
 
+    void VersionInfo::clear()
+    {
+        appName = "";
+        appVersion = "";
+        appVersionName = "";
+        appVersionBuild = 0;
+    }
  
     void VersionInfo::loadFromVersionInfo(std::string _versionInfoXMLString)
     {

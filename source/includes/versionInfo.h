@@ -41,9 +41,10 @@ namespace VersionInfo
             std::string appVersionName = AppVersionName;
             std::uint32_t appVersionBuild = AppVersionBuild;
 
-            void loadFromVersionInfo(std::string _versionInfoXMLString);
-            bool loadFromXMLFile(std::string _xmlFile);
-            void loadFromUrl(std::string _url);
+            EXPORT void loadFromVersionInfo(std::string _versionInfoXMLString);
+            EXPORT bool loadFromXMLFile(std::string _xmlFile);
+            EXPORT void loadFromUrl(std::string _url);
+            EXPORT void clear();
 
         protected:
             void loadFromXMLDoc(pugi::xml_document &_doc);

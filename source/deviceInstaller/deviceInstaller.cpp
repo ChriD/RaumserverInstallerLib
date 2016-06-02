@@ -11,7 +11,7 @@ namespace RaumserverInstaller
         DeviceInstaller::DeviceInstaller() : RaumserverInstallerBase()
         {
             progressPercentage = 0;
-            deviceInstallerFilePath = "installBuild.xml";
+            deviceInstallerFilePath = "installSettings.xml";
             progressType = DeviceInstallerProgressType::DIPT_INSTALL;   
 
             raumserverDaemonUpdater.init();
@@ -191,7 +191,7 @@ namespace RaumserverInstaller
                 progressInfo("Current version (" + currentVersion.appVersion + ") is already the newest one!", CURRENT_POSITION);
             }
 
-            // TODO: @@@ Check if update was succseeded?!
+            // TODO: @@@ Check if update was successfull?!
             return true;
         }
 

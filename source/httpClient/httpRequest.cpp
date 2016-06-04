@@ -310,6 +310,16 @@ namespace HttpClient
             setResponse(httpResponse);                
             finished = true;
         }
+        catch (std::exception _ex)
+        {
+            std::string errorString = _ex.what();
+            std::vector<unsigned char> data(errorString.begin(), errorString.end());
+            httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());
+            httpResponse->setData(data, false);
+            httpResponse->setErrorCode(900);
+            setResponse(httpResponse);
+            finished = true;
+        }
         catch ( ... )
         { 
             std::string errorString = "Unknown Error";

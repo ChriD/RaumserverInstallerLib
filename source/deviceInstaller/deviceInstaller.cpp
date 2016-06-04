@@ -43,6 +43,8 @@ namespace RaumserverInstaller
 
         void DeviceInstaller::abortInstall()
         {
+            // TODO: @@@
+            //raumserverDaemonUpdater.abortUpdate();
         }
 
 
@@ -54,6 +56,8 @@ namespace RaumserverInstaller
 
         void DeviceInstaller::abortRemove()
         {
+            // TODO: @@@
+            //raumserverDaemonUpdater.abortUpdate();
         }
 
 

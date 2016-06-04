@@ -1,18 +1,20 @@
 
-#include <raumserverInstaller.h>
+#include <raumServerInstaller.h>
 #include <rlutil/rlutil.h>
 
 
 int main()
 {
-    RaumserverInstaller::RaumserverInstaller    raumServerInstaller;
+    RaumserverInstaller::RaumserverInstaller    *raumServerInstaller;
 
-    raumServerInstaller.init();
-    raumServerInstaller.initLogObject(Log::LogType::LOGTYPE_INFO);
-    raumServerInstaller.initDiscover();
+    raumServerInstaller = new RaumserverInstaller::RaumserverInstaller();
+
+    raumServerInstaller->init();
+    raumServerInstaller->initLogObject(Log::LogType::LOGTYPE_INFO);
+    raumServerInstaller->initDiscover();
 
        
-    auto adapterList = raumServerInstaller.getNetworkAdapterList();
+    auto adapterList = raumServerInstaller->getNetworkAdapterList();
     for (auto item : adapterList)
     {
         std::cout << item.name + " - " + item.fullName;
@@ -23,8 +25,8 @@ int main()
     std::cout << "Adapter IDX: ";
     std::cin >> idx;
 
-    raumServerInstaller.setNetworkAdapter(adapterList[idx]);
-    raumServerInstaller.startDiscoverDevicesForInstall();    
+    raumServerInstaller->setNetworkAdapter(adapterList[idx]);
+    raumServerInstaller->startDiscoverDevicesForInstall();    
 
     rlutil::getkey();
 
@@ -34,18 +36,23 @@ int main()
     deviceInfo.ip = "10.0.0.4";
     deviceInfo.type = RaumserverInstaller::DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
-    //raumServerInstaller.startInstallToDevice(deviceInfo);
+    //raumServerInstaller->startInstallToDevice(deviceInfo);
 
     //rlutil::getkey();
 
     deviceInfo.ip = "10.0.0.8";
-    raumServerInstaller.startInstallToDevice(deviceInfo);
+    raumServerInstaller->startInstallToDevice(deviceInfo);
 
     rlutil::getkey();
 
-    raumServerInstaller.startRemoveFromDevice(deviceInfo);
+    delete raumServerInstaller;
+    raumServerInstaller = new RaumserverInstaller::RaumserverInstaller();
+
+    raumServerInstaller->startRemoveFromDevice(deviceInfo);
 
     rlutil::getkey();
+
+    delete raumServerInstaller;
 
     return 0;
 }

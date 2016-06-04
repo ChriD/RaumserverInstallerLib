@@ -13,6 +13,7 @@ namespace RaumserverInstaller
     {
         stopSSHAccessCheckerThreads();        
         httpClient.abortAllRequests();
+        deviceInstaller.abortInstall();
     }
 
 

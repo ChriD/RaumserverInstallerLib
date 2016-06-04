@@ -135,6 +135,9 @@ namespace RaumserverInstaller
             }
             binaryDir += "raumserverDaemon/";
 
+            if (abortInstallThread)
+                return;
+
             progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
 
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
@@ -154,7 +157,10 @@ namespace RaumserverInstaller
                 progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
                 sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
-            }                        
+            }      
+
+            if (abortInstallThread)
+                return;
 
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);

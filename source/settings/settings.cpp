@@ -22,63 +22,33 @@ namespace Settings
     }
 
 
-    void SettingsManager::loadSettings()
+    void SettingsManager::initSettings()
     {
-        logDebug("Load settings", CURRENT_POSITION);
-        loadSettingsFromFile(settingsFileName);        
+        logDebug("Init settings file", CURRENT_POSITION);
+        initSettingsFile(settingsFileName);        
     }
 
 
-    std::string SettingsManager::getValue(const std::string &_settingsPath, const std::string &_defaultValue, const std::map<std::string, std::string> &_attributeFilter, const std::uint16_t &_index)
+    std::string SettingsManager::getValue(const std::string &_xPath, const std::string &_defaultValue)
     {
         // lock the map while we do read some settings
-        std::lock_guard<std::mutex> lock(mutexSettingsMapAccess);
+        std::lock_guard<std::mutex> lock(mutexSettingsAccess);        
 
-
-        // TODO: @@@ attribute filter
-
-        if (settingsMap.find(_settingsPath) != settingsMap.end())
-            return settingsMap.at(_settingsPath);
+        auto settingsXPathNode = applicationNode.select_single_node(_xPath.c_str());
+        if (settingsXPathNode)
+            return  settingsXPathNode.node().child_value();
         return _defaultValue;
     }
 
-
-    void SettingsManager::walkNode(pugi::xml_node _node, const std::string &_path, const int &_indent)
-    {
-        const auto ind = std::string(_indent * 4, ' ');
-        std::string path = "";
-
-        // we do not want to have the "Application" node be stored in the path!
-        if (_indent >= 1)
-            path = _path;
-
-        for (auto childNode : _node.children())
-        {
-            if (childNode.value() && !std::string(childNode.value()).empty())
-            {
-                logDebug("Found setting: " + path + " = " + std::string(childNode.value()), CURRENT_POSITION);
-                settingsMap.insert(std::make_pair(path, childNode.value()));
-            }
-            walkNode(childNode, path + "/" + childNode.name(), _indent + 1);
-        }
-    }
-
-
-    void SettingsManager::loadSettingsFromFile(const std::string &_fileName)
+    void SettingsManager::initSettingsFile(const std::string &_fileName)
     {
         logDebug("Loading settings from file '" + _fileName + "'", CURRENT_POSITION);
 
         // lock the map while we do update it
-        std::lock_guard<std::mutex> lock(mutexSettingsMapAccess);
-
-        // start with a nice clean map.
-        settingsMap.clear();
+        std::lock_guard<std::mutex> lock(mutexSettingsAccess);
 
         try
-        {
-            pugi::xml_document doc;
-            pugi::xml_node applicationNode;
-
+        {            
             // we do have to have a settings file. if no file name is given or we are not able to open the file we have to crash the kernel!
             if (_fileName.empty())
             {
@@ -103,14 +73,7 @@ namespace Settings
                 throw std::runtime_error("Unrecoverable error! ABORT!");
             }
 
-            logDebug("Parsing settings file...", CURRENT_POSITION);
-
-            // go through all nodes and load those values and path into the settings map
-            walkNode(applicationNode);
-
-            logDebug("Parsing settings file is done!", CURRENT_POSITION);
-            logDebug("Settings loaded!", CURRENT_POSITION);
-
+            logDebug("Settings file initialized...", CURRENT_POSITION);          
         }
         catch (std::exception &e)
         {
@@ -122,7 +85,7 @@ namespace Settings
         }
         catch (...)
         {
-            throw std::runtime_error("Unknown exception! [SettingsManager::loadSettingsFromFile]");
+            throw std::runtime_error("Unknown exception! [SettingsManager::initSettingsFile]");
         }
 
     }

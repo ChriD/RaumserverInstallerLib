@@ -37,24 +37,22 @@ namespace Settings
         public:
             EXPORT SettingsManager();
             EXPORT virtual ~SettingsManager();
-            EXPORT void loadSettings();
+            EXPORT void initSettings();
             EXPORT void setFileName(const std::string &_settingsFileName);
-            EXPORT std::string getValue(const std::string &_settingsPath, const std::string &_defaultValue = "", const std::map<std::string, std::string> &_attributeFilter = std::map<std::string, std::string>(), const std::uint16_t &_index = 0);
-
+            EXPORT std::string getValue(const std::string &_xPath, const std::string &_defaultValue = "");
 
         protected:
-            void loadSettingsFromFile(const std::string &_fileName);
-            void walkNode(pugi::xml_node _node, const std::string &_path = "", const int &_indent = 0);      
+            void initSettingsFile(const std::string &_fileName);               
+
+            // persistent application node of file
+            pugi::xml_node applicationNode;
+            pugi::xml_document doc;            
 
             // a mutex that will secure our settings map 
-            std::mutex mutexSettingsMapAccess;
+            std::mutex mutexSettingsAccess;
 
             // filename and path for settings file
             std::string settingsFileName;
-
-            // a map whicxh contains a path as id to the settings and the value
-            std::map<std::string, std::string> settingsMap;
-
     };
     
 }

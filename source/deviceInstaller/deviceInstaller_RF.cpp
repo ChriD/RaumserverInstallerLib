@@ -196,7 +196,7 @@ namespace RaumserverInstaller
 
             // TODO: start raumserver (if no reboot)
 
-            // TODO: Then check if port of Raumserver is open
+            // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???
 
             progressPercentage = 100;

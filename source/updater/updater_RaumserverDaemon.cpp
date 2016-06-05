@@ -4,9 +4,8 @@ namespace Updater
 {
 
     Updater_RaumserverDaemon::Updater_RaumserverDaemon() : Updater()
-    {
-        // TODO: get from installBuild.xml
-        source = "http://bassmaniacs.com/data/binaries.zip";
+    {        
+        source = "";
         destination = "binaries/";
         downloadDestination = "binaries/binaries.zip";
     }

@@ -307,17 +307,19 @@ namespace HttpClient
             httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());
             httpResponse->setData(data);
             httpResponse->setErrorCode(999);
-            setResponse(httpResponse);                
+            setResponse(httpResponse);    
+            this->logError(errorString, CURRENT_POSITION);
             finished = true;
         }
         catch (std::exception _ex)
-        {
+        {            
             std::string errorString = _ex.what();
             std::vector<unsigned char> data(errorString.begin(), errorString.end());
             httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());
             httpResponse->setData(data, false);
             httpResponse->setErrorCode(900);
             setResponse(httpResponse);
+            this->logError(errorString, CURRENT_POSITION);
             finished = true;
         }
         catch ( ... )
@@ -327,6 +329,7 @@ namespace HttpClient
             httpResponse = std::shared_ptr<HttpResponse>(new HttpResponse());            
             httpResponse->setData(data, false);
             httpResponse->setErrorCode(998);
+            this->logError(errorString, CURRENT_POSITION);
             setResponse(httpResponse);
             finished = true;
         }

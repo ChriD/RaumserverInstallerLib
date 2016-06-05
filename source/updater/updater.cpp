@@ -37,6 +37,7 @@ namespace Updater
 
     void Updater::init()
     {
+        httpClient.setLogObject(this->getLogObject());
         httpClient.init();
     }
 
@@ -55,6 +56,7 @@ namespace Updater
 
     void Updater::run(bool _sync, bool _doUpdate)
     {
+        httpClient.setLogObject(this->getLogObject());
         sync = _sync;
         doImmediateUpdate = _doUpdate;
         getBinary(_sync);

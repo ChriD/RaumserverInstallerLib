@@ -198,20 +198,14 @@ namespace RaumserverInstaller
 
             logDebug("Reading command return data", CURRENT_POSITION);
             
+            // TODO: better result buffer...
+
             std::string result = "";
             char buffer[256];
             std::int32_t nbytes, sumBytes = 0;
             nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
             while (nbytes > 0)
-            {
-                /*if (fwrite(buffer, 1, nbytes, stdout) != nbytes) // TODO: not to stdout... do a signal?!
-                {
-                    logError("Error reading command result: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
-                    ssh_channel_close(channel);
-                    ssh_channel_free(channel);
-                    return false;
-                }
-                */
+            {      
                 result += buffer;
                 sumBytes += nbytes;
                 nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);

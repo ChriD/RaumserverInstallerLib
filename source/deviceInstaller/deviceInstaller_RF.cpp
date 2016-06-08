@@ -211,7 +211,7 @@ namespace RaumserverInstaller
             progressPercentage = 100;
             progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);
             sshClient.closeSFTP();
-            sshClient.closeSSH();
+            sshClient.closeSSH();            
 
             progressInfo("Installation done!", CURRENT_POSITION);
             sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done!", (std::uint8_t)progressPercentage, false));

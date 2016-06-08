@@ -358,10 +358,25 @@ namespace RaumserverInstaller
 
                 it->second.raumserverRuns = !_request->getResponse()->getErrorCode() ? UnknownYesNo::YES : UnknownYesNo::NO;
                
-                if (it->second.raumserverRuns == UnknownYesNo::YES)
-                {
-                    //_request->getResponse();
-                    // TODO: @@@ get version info from json response
+                if (it->second.raumserverRuns == UnknownYesNo::YES && _request->getResponse()->getData().size())
+                {              
+                    Json::Value rootValue;
+                    Json::Reader jsonReader;
+
+                    //auto jsonString = std::string(_request->getResponse()->getData().data());
+                    auto responseData = _request->getResponse()->getData();
+                    auto jsonString = std::string(responseData.begin(), responseData.end());
+
+                    if (jsonReader.parse(jsonString, rootValue, false))
+                    {      
+                        auto versionInfoNode = rootValue["versionInfo"];
+                        if (!versionInfoNode.isNull())
+                        {
+                            auto raumserverLibNode = versionInfoNode["raumserverLib"];
+                            if (!raumserverLibNode.isNull())
+                                it->second.raumserverVersion = raumserverLibNode.asString();
+                        }                    
+                    }                   
                 }
 
                 // get a copy of the info struct

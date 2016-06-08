@@ -32,11 +32,18 @@ namespace Settings
     std::string SettingsManager::getValue(const std::string &_xPath, const std::string &_defaultValue)
     {
         // lock the map while we do read some settings
-        std::lock_guard<std::mutex> lock(mutexSettingsAccess);        
+        std::lock_guard<std::mutex> lock(mutexSettingsAccess); 
 
-        auto settingsXPathNode = applicationNode.select_single_node(_xPath.c_str());
-        if (settingsXPathNode)
-            return  settingsXPathNode.node().child_value();
+        try
+        {
+            auto settingsXPathNode = applicationNode.select_single_node(_xPath.c_str());
+            if (settingsXPathNode)
+                return  settingsXPathNode.node().child_value();
+        }
+        catch (...)
+        {
+            logError("Exception while getting value from: " + _xPath, CURRENT_FUNCTION);
+        }
         return _defaultValue;
     }
 

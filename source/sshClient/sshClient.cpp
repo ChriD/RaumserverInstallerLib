@@ -164,5 +164,72 @@ namespace RaumserverInstaller
             sftp.setLogObject(_logger);
         }
 
+
+        bool SSHClient::executeCommand(const std::string &_command, std::string &_result)
+        {
+            ssh_channel channel;
+            int rc;
+
+            channel = ssh_channel_new(sshSession);
+            if (channel == NULL)
+            {
+                logError("Can't create channel: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                return false;
+            }
+
+            rc = ssh_channel_open_session(channel);
+            if (rc != SSH_OK)
+            {
+                logError("Can't create session: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                ssh_channel_free(channel);                
+                return false;
+            }
+
+            logDebug("Execute SSH command: " + _command, CURRENT_POSITION);
+
+            rc = ssh_channel_request_exec(channel, _command.c_str());
+            if (rc != SSH_OK)
+            {
+                logError("Can't execute command: " + _command + " : " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                ssh_channel_close(channel);
+                ssh_channel_free(channel);
+                return false;
+            }
+
+            logDebug("Reading command return data", CURRENT_POSITION);
+            
+            std::string result = "";
+            char buffer[256];
+            std::int32_t nbytes, sumBytes = 0;
+            nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
+            while (nbytes > 0)
+            {
+                /*if (fwrite(buffer, 1, nbytes, stdout) != nbytes) // TODO: not to stdout... do a signal?!
+                {
+                    logError("Error reading command result: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                    ssh_channel_close(channel);
+                    ssh_channel_free(channel);
+                    return false;
+                }
+                */
+                result += buffer;
+                sumBytes += nbytes;
+                nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
+            }
+            if (nbytes < 0)
+            {
+                // Well, no return is ok...
+            }
+            result.resize(sumBytes);
+
+            ssh_channel_send_eof(channel);
+            ssh_channel_close(channel);
+            ssh_channel_free(channel);
+
+            _result = result;
+
+            return true;
+        }
+
     }
 }

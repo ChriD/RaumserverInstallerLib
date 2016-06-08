@@ -57,6 +57,8 @@ namespace RaumserverInstaller
                 
                 EXPORT void setLogObject(std::shared_ptr<Log::Log> _logger) override;
 
+                EXPORT bool executeCommand(const std::string &_command, std::string &_result);
+
                 SFTPActions sftp;
 
             protected:

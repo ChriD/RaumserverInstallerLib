@@ -117,7 +117,7 @@ namespace RaumserverInstaller
                 progressError("Device '" + deviceInformation.name + "' has no IP!", CURRENT_POSITION);
                 sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Device '" + deviceInformation.name + "' has no IP!", (std::uint8_t)progressPercentage, true));
                 return;
-            }
+            }                     
 
             // Download new version if present!           
             if (!getActualBinaries())
@@ -132,8 +132,7 @@ namespace RaumserverInstaller
             {
                 progressError("No valid binary found for device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
                 return;
-            }
-            binaryDir += "raumserverDaemon/";
+            }            
 
             if (abortInstallThread)
                 return;
@@ -165,7 +164,11 @@ namespace RaumserverInstaller
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
 
-            // TODO: stop raumserver deamon if is running
+            // stop raumserver deamon if is running   
+            progressInfo("Stopping Raumserver on device! Please wait...", CURRENT_POSITION);
+            std::string returnDataStopDaemon;
+            sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver stop", returnDataStopDaemon);
+            progressInfo("REMOTE: " + returnDataStopDaemon, CURRENT_POSITION);
 
             progressInfo("Copying files to remote device...", CURRENT_POSITION);
 
@@ -188,16 +191,22 @@ namespace RaumserverInstaller
                    
             progressPercentage = 80;
 
-            // copy init script            
-            sshClient.sftp.copyFile(binaryDir + "raumserver", installDirStartScript + "S99raumserver");
+            // copy init script
+            sshClient.sftp.copyFile(binaryDir + "S99raumserver", installDirStartScript + "S99raumserver");
             sshClient.sftp.setChmod(installDirStartScript + "S99raumserver", S_IRWXU | S_IRWXG | S_IRWXO);
 
             progressPercentage = 85;
 
-            // TODO: start raumserver (if no reboot)
+            // start raumserver         
+            progressInfo("Starting Raumserver on device! Please wait...", CURRENT_POSITION);
+            std::string returnDataStartDaemon;            
+            sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver start", returnDataStartDaemon);   
+            progressInfo("REMOTE: " + returnDataStartDaemon, CURRENT_POSITION);
 
             // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???
+            //httpClient.request("http://" + _deviceInformation.ip + ":8080/raumserver/data/getVersion", nullptr, nullptr, this, std::bind(&RaumserverInstaller::onRequestResult, this, std::placeholders::_1));
+            // request.wait();
 
             progressPercentage = 100;
             progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);

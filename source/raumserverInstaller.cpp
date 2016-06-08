@@ -358,6 +358,12 @@ namespace RaumserverInstaller
 
                 it->second.raumserverRuns = !_request->getResponse()->getErrorCode() ? UnknownYesNo::YES : UnknownYesNo::NO;
                
+                if (it->second.raumserverRuns == UnknownYesNo::YES)
+                {
+                    //_request->getResponse();
+                    // TODO: @@@ get version info from json response
+                }
+
                 // get a copy of the info struct
                 deviceInfo = it->second;
             }

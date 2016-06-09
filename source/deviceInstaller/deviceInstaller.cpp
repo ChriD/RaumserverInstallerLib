@@ -176,15 +176,15 @@ namespace RaumserverInstaller
         {                  
             VersionInfo::VersionInfo currentVersion, newestVersion;
 
-            progressInfo("Getting current version info...", CURRENT_POSITION);
+            //progressInfo("Getting current version info...", CURRENT_POSITION);
             currentVersion.loadFromXMLFile("binaries/version.xml");
 
-            progressInfo("Getting newest version info...", CURRENT_POSITION);            
+            //progressInfo("Getting newest version info...", CURRENT_POSITION);            
             newestVersion.loadFromUrl(currentVersionInfoWebUrl);
 
             if (currentVersion.appVersionBuild < newestVersion.appVersionBuild)
             {
-                progressInfo("New version (" + newestVersion.appVersion + ") found! Now getting new version...", CURRENT_POSITION);
+                progressInfo("New version (" + newestVersion.appVersion + ") found! Starting download...", CURRENT_POSITION);
                 raumserverDaemonUpdater.setSource(binariesSourceWebUrl);
                 raumserverDaemonUpdater.setLogObject(getLogObject());          
                 raumserverDaemonUpdater.setLogProgress(false);

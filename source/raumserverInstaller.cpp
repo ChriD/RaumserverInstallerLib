@@ -305,7 +305,8 @@ namespace RaumserverInstaller
                 // check if the raumserver is installed by checking if the folder is there
                 if (hasSFTPAccess)
                 {
-                    if (sshClient.sftp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length()-1))) 
+                    if (sshClient.sftp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length() - 1)) && 
+                        sshClient.sftp.existsFile(remoteInstallationPathInitScript + "S99raumserver"))
                         it->second.raumserverInstalled = UnknownYesNo::YES;
                     else
                         it->second.raumserverInstalled = UnknownYesNo::NO;

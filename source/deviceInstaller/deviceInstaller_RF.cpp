@@ -161,6 +161,8 @@ namespace RaumserverInstaller
             if (abortInstallThread)
                 return;
 
+            std::vector<std::string> remoteConsoleLines;
+
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
 
@@ -168,9 +170,11 @@ namespace RaumserverInstaller
             progressInfo("Stopping Raumserver on device! Please wait...", CURRENT_POSITION);
             std::string returnDataStopDaemon;
             sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver stop", returnDataStopDaemon);
-
-            // TODO: each \n!
-            progressInfo("REMOTE: " + returnDataStopDaemon, CURRENT_POSITION);
+            remoteConsoleLines = Tools::StringUtil::explodeString(returnDataStopDaemon, "\n");
+            for (auto it : remoteConsoleLines)
+            {
+                progressInfo("REMOTE: " + it, CURRENT_POSITION);
+            }                      
 
             progressInfo("Copying files to remote device...", CURRENT_POSITION);
 
@@ -202,10 +206,12 @@ namespace RaumserverInstaller
             // start raumserver         
             progressInfo("Starting Raumserver on device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;            
-            sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver start", returnDataStartDaemon); 
-
-            // TODO: each \n!
-            progressInfo("REMOTE: " + returnDataStartDaemon, CURRENT_POSITION);
+            sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver start", returnDataStartDaemon);             
+            remoteConsoleLines = Tools::StringUtil::explodeString(returnDataStartDaemon, "\n");
+            for (auto it : remoteConsoleLines)
+            {
+                progressInfo("REMOTE: " + it, CURRENT_POSITION);
+            }
 
             // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???

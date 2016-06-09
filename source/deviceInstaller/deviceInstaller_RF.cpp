@@ -173,7 +173,8 @@ namespace RaumserverInstaller
             remoteConsoleLines = Tools::StringUtil::explodeString(returnDataStopDaemon, "\n");
             for (auto it : remoteConsoleLines)
             {
-                progressInfo("REMOTE: " + it, CURRENT_POSITION);
+                if (!it.empty())
+                    progressInfo("REMOTE: " + it, CURRENT_POSITION);
             }                      
 
             progressInfo("Copying files to remote device...", CURRENT_POSITION);
@@ -210,7 +211,8 @@ namespace RaumserverInstaller
             remoteConsoleLines = Tools::StringUtil::explodeString(returnDataStartDaemon, "\n");
             for (auto it : remoteConsoleLines)
             {
-                progressInfo("REMOTE: " + it, CURRENT_POSITION);
+                if (!it.empty())
+                    progressInfo("REMOTE: " + it, CURRENT_POSITION);
             }
 
             // TODO: Then check if Raumserver is running (use standard port)

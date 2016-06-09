@@ -206,7 +206,9 @@ namespace RaumserverInstaller
             nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
             while (nbytes > 0)
             {      
-                result += buffer;
+                std::string partResult = buffer;
+                partResult.resize(nbytes);
+                result += partResult;
                 sumBytes += nbytes;
                 nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
             }
@@ -214,8 +216,7 @@ namespace RaumserverInstaller
             {
                 // Well, no return is ok...
             }
-            result.resize(sumBytes);
-
+            
             ssh_channel_send_eof(channel);
             ssh_channel_close(channel);
             ssh_channel_free(channel);

@@ -40,16 +40,16 @@ namespace Log
     }
 
 
-    std::string LogAdapter::getFormattedCurrentDateTimeString(Raumkernel::Tools::DateTimeStamp _stamp)
+    std::string LogAdapter::getFormattedCurrentDateTimeString(Tools::DateTimeStamp _stamp)
     {
         std::string milisecondsString = std::to_string(_stamp.millisecond);
         return  std::to_string(_stamp.year) + "." +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.month), 2, '0') + "." +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.day), 2, '0') + " " +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.hour), 2, '0') + ":" +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.minute), 2, '0') + ":" +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.second), 2, '0') + "." +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(_stamp.millisecond), 3, '0');
+            Tools::StringUtil::padL(std::to_string(_stamp.month), 2, '0') + "." +
+            Tools::StringUtil::padL(std::to_string(_stamp.day), 2, '0') + " " +
+            Tools::StringUtil::padL(std::to_string(_stamp.hour), 2, '0') + ":" +
+            Tools::StringUtil::padL(std::to_string(_stamp.minute), 2, '0') + ":" +
+            Tools::StringUtil::padL(std::to_string(_stamp.second), 2, '0') + "." +
+            Tools::StringUtil::padL(std::to_string(_stamp.millisecond), 3, '0');
     }
 
 
@@ -76,7 +76,7 @@ namespace Log
 
     void LogAdapter_File::log(LogData _logData)
     {
-        std::string logString = getFormattedCurrentDateTimeString(_logData.logDateTimeStamp) + " " + Raumkernel::Tools::StringUtil::padR(getLogTypeString(_logData.type) + ":", 10) + _logData.log + " [" + _logData.location + "]";
+        std::string logString = getFormattedCurrentDateTimeString(_logData.logDateTimeStamp) + " " + Tools::StringUtil::padR(getLogTypeString(_logData.type) + ":", 10) + _logData.log + " [" + _logData.location + "]";
 
         // write log into logFile. we do open and close the file each time we write a log. This is a little bit slower than keeping the handle open (about 0.3ms per log entry)  
         // But we will be sure the log file is not locked in the worst case of an unexpected application shutdown.            
@@ -98,14 +98,14 @@ namespace Log
 
     std::string LogAdapter_File::getCurrentDateTimeFileString()
     {
-        Raumkernel::Tools::DateTimeStamp stamp = Raumkernel::Tools::DateUtil::getCurrentDateTimeStamp();
+        Tools::DateTimeStamp stamp = Tools::DateUtil::getCurrentDateTimeStamp();
         return  std::to_string(stamp.year) +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.month), 2, '0') +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.day), 2, '0') +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.hour), 2, '0') +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.minute), 2, '0') +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.second), 2, '0') +
-            Raumkernel::Tools::StringUtil::padL(std::to_string(stamp.millisecond), 3, '0');
+            Tools::StringUtil::padL(std::to_string(stamp.month), 2, '0') +
+            Tools::StringUtil::padL(std::to_string(stamp.day), 2, '0') +
+            Tools::StringUtil::padL(std::to_string(stamp.hour), 2, '0') +
+            Tools::StringUtil::padL(std::to_string(stamp.minute), 2, '0') +
+            Tools::StringUtil::padL(std::to_string(stamp.second), 2, '0') +
+            Tools::StringUtil::padL(std::to_string(stamp.millisecond), 3, '0');
     }
 
 
@@ -123,7 +123,7 @@ namespace Log
 
     void LogAdapter_Console::log(LogData _logData)
     {
-        std::string logString = getFormattedCurrentDateTimeString(_logData.logDateTimeStamp) + " " + Raumkernel::Tools::StringUtil::padR(getLogTypeString(_logData.type) + ":", 10) + _logData.log;
+        std::string logString = getFormattedCurrentDateTimeString(_logData.logDateTimeStamp) + " " + Tools::StringUtil::padR(getLogTypeString(_logData.type) + ":", 10) + _logData.log;
 
         // output of log to console (here we are limited to 79 on windows, linux provides more cols)    
         if (CONSOLE_COLS > 0)

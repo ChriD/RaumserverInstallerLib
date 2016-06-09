@@ -38,7 +38,7 @@ namespace Log
         virtual void log(LogData _logData);
     protected:
         std::string getLogTypeString(LogType _logType);
-        std::string getFormattedCurrentDateTimeString(Raumkernel::Tools::DateTimeStamp _stamp);
+        std::string getFormattedCurrentDateTimeString(Tools::DateTimeStamp _stamp);
     };
 
 

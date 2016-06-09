@@ -22,8 +22,8 @@
 //
 
 #pragma once
-#ifndef RAUMKERNEL_STRINGUTIL_H
-#define RAUMKERNEL_STRINGUTIL_H
+#ifndef STRINGUTIL_H
+#define STRINGUTIL_H
 
 #include <stdio.h>
 #include <iostream>
@@ -38,132 +38,130 @@
 #include <vector>
 #include <functional>
 
-namespace Raumkernel
+namespace Tools
 {
-    namespace Tools
+    class StringUtil
     {
-        class StringUtil
-        {
-            public:            
+        public:            
 
 
-                static std::string tolower(std::string _string)
-                {
-                    std::transform(_string.begin(), _string.end(), _string.begin(), ::tolower);
-                    return _string;
-                }
+            static std::string tolower(std::string _string)
+            {
+                std::transform(_string.begin(), _string.end(), _string.begin(), ::tolower);
+                return _string;
+            }
 
 
-                static std::string toupper(std::string _string)
-                {
-                    std::transform(_string.begin(), _string.end(), _string.begin(), ::toupper);
-                    return _string;
-                }
+            static std::string toupper(std::string _string)
+            {
+                std::transform(_string.begin(), _string.end(), _string.begin(), ::toupper);
+                return _string;
+            }
 
 
-                static std::string ltrim(std::string  _s)
-                {
-                    _s.erase(_s.begin(), std::find_if(_s.begin(), _s.end(), std::not1(std::ptr_fun<int, int>(::isspace))));
-                    return _s;
-                }
+            static std::string ltrim(std::string  _s)
+            {
+                _s.erase(_s.begin(), std::find_if(_s.begin(), _s.end(), std::not1(std::ptr_fun<int, int>(::isspace))));
+                return _s;
+            }
 
 
-                static std::string rtrim(std::string _s)
-                {
-                    _s.erase(std::find_if(_s.rbegin(), _s.rend(), std::not1(std::ptr_fun<int, int>(::isspace))).base(), _s.end());
-                    return _s;
-                }
+            static std::string rtrim(std::string _s)
+            {
+                _s.erase(std::find_if(_s.rbegin(), _s.rend(), std::not1(std::ptr_fun<int, int>(::isspace))).base(), _s.end());
+                return _s;
+            }
 
 
-                static std::string trim(std::string _s)
-                {
-                    return ltrim(rtrim(_s));
-                }
+            static std::string trim(std::string _s)
+            {
+                return ltrim(rtrim(_s));
+            }
 
 
-                static std::string padL(std::string _s, const size_t _num, const char _paddingChar = ' ')
-                {
-                    if (_num > _s.size())
-                        _s.insert(0, _num - _s.size(), _paddingChar);
-                    return _s;
-                }
+            static std::string padL(std::string _s, const size_t _num, const char _paddingChar = ' ')
+            {
+                if (_num > _s.size())
+                    _s.insert(0, _num - _s.size(), _paddingChar);
+                return _s;
+            }
 
 
-                static std::string padR(std::string _s, const size_t _num, const char _paddingChar = ' ')
-                {
-                    _s.resize( _num, _paddingChar);
-                    return _s;
-                }
+            static std::string padR(std::string _s, const size_t _num, const char _paddingChar = ' ')
+            {
+                _s.resize( _num, _paddingChar);
+                return _s;
+            }
 
 
-                static std::string center(std::string _s, int _width)
-                {
-                    _s = StringUtil::ltrim(StringUtil::rtrim(_s));
-                    return std::string((_width - _s.length()) / 2, ' ') + _s;
-                }
+            static std::string center(std::string _s, int _width)
+            {
+                _s = StringUtil::ltrim(StringUtil::rtrim(_s));
+                return std::string((_width - _s.length()) / 2, ' ') + _s;
+            }
 
 
-                static std::uint32_t toTimeMs(const std::string &_timeString)
-                {
-                    // eg.: 00:04:02
-                    if (_timeString.empty())
-                        return 0;
+            static std::uint32_t toTimeMs(const std::string &_timeString)
+            {
+                // eg.: 00:04:02
+                if (_timeString.empty())
+                    return 0;
                     
-                    std::uint32_t timeInSeconds = 0;                    
+                std::uint32_t timeInSeconds = 0;                    
 
-                    try
-                    {                                              
-                        // Get_Time wont work with gcc compilers older than 4.9?!
-                        // So we do need an alternative for that (see C code below)
-                        /*
-                        struct std::tm tm;
-                        std::istringstream ss(_timeString);
-                        ss >> std::get_time(&tm, "%H:%M:%S");                                             
-                        timeInSeconds = (tm.tm_hour * 60 * 60) + (tm.tm_min * 60) + tm.tm_sec;
-                        */      
+                try
+                {                                              
+                    // Get_Time wont work with gcc compilers older than 4.9?!
+                    // So we do need an alternative for that (see C code below)
+                    /*
+                    struct std::tm tm;
+                    std::istringstream ss(_timeString);
+                    ss >> std::get_time(&tm, "%H:%M:%S");                                             
+                    timeInSeconds = (tm.tm_hour * 60 * 60) + (tm.tm_min * 60) + tm.tm_sec;
+                    */      
 
-                        int hh, mm, ss;
-                        #ifdef _MSC_VER
-                        sscanf_s(_timeString.c_str(), "%d:%d:%d", &hh, &mm, &ss);
-                        #else
-                        sscanf(_timeString.c_str(), "%d:%d:%d", &hh, &mm, &ss);
-                        #endif
-                        timeInSeconds = (hh * 60 * 60) + (mm * 60) + ss;
-                    }
-                    catch (...)
-                    {
-                        // TODO: what to do?
-                    }
-            
-                    return timeInSeconds * 1000;
-                 }
-
-
-                /**
-                * Used to explode a string into multiple string with the given sepaerator
-                */
-                static std::vector<std::string> explodeString(const std::string &inString, const std::string &separator, std::uint32_t _maxSplits = 0)
-                {
-                    std::vector<std::string> returnVector;
-                    std::string::size_type start = 0;
-                    std::string::size_type end = 0;
-                    std::uint32_t splits = 0;
-
-                    while ((end = inString.find(separator, start)) != std::string::npos) 
-                    {
-                        returnVector.push_back(inString.substr(start, end - start));
-                        start = end + separator.size();
-                        splits++;
-                        if (_maxSplits && splits>=_maxSplits)
-                            break;
-                    }
-                    returnVector.push_back(inString.substr(start));
-                    return returnVector;
+                    int hh, mm, ss;
+                    #ifdef _MSC_VER
+                    sscanf_s(_timeString.c_str(), "%d:%d:%d", &hh, &mm, &ss);
+                    #else
+                    sscanf(_timeString.c_str(), "%d:%d:%d", &hh, &mm, &ss);
+                    #endif
+                    timeInSeconds = (hh * 60 * 60) + (mm * 60) + ss;
                 }
-        };
+                catch (...)
+                {
+                    // TODO: what to do?
+                }
             
-    }
+                return timeInSeconds * 1000;
+                }
+
+
+            /**
+            * Used to explode a string into multiple string with the given sepaerator
+            */
+            static std::vector<std::string> explodeString(const std::string &inString, const std::string &separator, std::uint32_t _maxSplits = 0)
+            {
+                std::vector<std::string> returnVector;
+                std::string::size_type start = 0;
+                std::string::size_type end = 0;
+                std::uint32_t splits = 0;
+
+                while ((end = inString.find(separator, start)) != std::string::npos) 
+                {
+                    returnVector.push_back(inString.substr(start, end - start));
+                    start = end + separator.size();
+                    splits++;
+                    if (_maxSplits && splits>=_maxSplits)
+                        break;
+                }
+                returnVector.push_back(inString.substr(start));
+                return returnVector;
+            }
+    };
+            
 }
+
 
 
 #endif

@@ -23,7 +23,7 @@ namespace TinyDirCpp
     {
         std::string seperator = "/";
 
-        std::vector<std::string> explodedPath = Raumkernel::Tools::StringUtil::explodeString(_directory, seperator);
+        std::vector<std::string> explodedPath = Tools::StringUtil::explodeString(_directory, seperator);
         std::string path = "";
         
         for (auto pathPart : explodedPath)

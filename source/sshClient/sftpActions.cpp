@@ -156,7 +156,7 @@ namespace RaumserverInstaller
                 return false;
 
             // create folders if not exists from '_remoteFile'
-            auto parts = Raumkernel::Tools::StringUtil::explodeString(_remoteFile, "/");
+            auto parts = Tools::StringUtil::explodeString(_remoteFile, "/");
             std::string folders = "";
             for (std::uint32_t i = 0; i < parts.size() - 1; i++)
             {

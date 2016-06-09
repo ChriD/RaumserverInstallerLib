@@ -77,7 +77,7 @@ namespace Log
         logData.type = _logType;
         logData.log = _log;
         logData.location = _location;
-        logData.logDateTimeStamp = Raumkernel::Tools::DateUtil::getCurrentDateTimeStamp();
+        logData.logDateTimeStamp = Tools::DateUtil::getCurrentDateTimeStamp();
 
         // run through all defined adapters (shared pointers) and call 'log' on them 
         // we will not catch any critical errors here, this has to be done by the adapter if necessary!

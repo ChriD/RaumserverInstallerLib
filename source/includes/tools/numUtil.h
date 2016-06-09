@@ -22,8 +22,8 @@
 //
 
 #pragma once
-#ifndef RAUMKERNEL_NUMUTIL_H
-#define RAUMKERNEL_NUMUTIL_H
+#ifndef NUMUTIL_H
+#define NUMUTIL_H
 
 #include <stdio.h>
 #include <iostream>
@@ -37,29 +37,26 @@
 #include <time.h>
 #include <vector>
 
-namespace Raumkernel
+namespace Tools
 {
-    namespace Tools
+    class NumUtil
     {
-        class NumUtil
-        {
-            public:            
+        public:            
 
-                static std::uint32_t toUInt32(std::string _s)
+            static std::uint32_t toUInt32(std::string _s)
+            {
+                try
                 {
-                    try
-                    {
-                        return std::stoi(_s);
-                    }
-                    catch (...)
-                    {
-                    }
-                    return 0;
+                    return std::stoi(_s);
                 }
+                catch (...)
+                {
+                }
+                return 0;
+            }
                
-        };
+    };
             
-    }
 }
 
 

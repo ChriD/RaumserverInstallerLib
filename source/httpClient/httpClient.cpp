@@ -81,7 +81,7 @@ namespace HttpClient
     {
         // getting a random number does not mean that the number is unique,  so we have to check if this number is present in the 
         // map and if its the case we change the number until its unqiue
-        std::uint32_t newId = Raumkernel::Tools::CommonUtil::randomUInt32();            
+        std::uint32_t newId = Tools::CommonUtil::randomUInt32();            
         while (requestMap.count(std::to_string(newId)))
         {
             newId += 1;

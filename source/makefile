@@ -69,6 +69,7 @@ SRCS += $(wildcard xml/*.cpp)
 SRCS += $(wildcard xml/pugixml/*.cpp)
 SRCS += $(wildcard zip/*.cpp)
 SRCS += $(wildcard settings/*.cpp)
+SRCS += $(wildcard ftplib/*.cpp)
 
 OBJS = $(SRCS:.cpp=.o)
 

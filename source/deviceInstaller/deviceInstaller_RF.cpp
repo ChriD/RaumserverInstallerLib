@@ -272,8 +272,16 @@ namespace RaumserverInstaller
 
             progressPercentage = 10;
             progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
-
-            // TODO: stop raumserver deamon if is running
+            // stop raumserver deamon if is running   
+            progressInfo("Stopping Raumserver on device! Please wait...", CURRENT_POSITION);
+            std::string returnDataStopDaemon;
+            sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver stop", returnDataStopDaemon);
+            auto remoteConsoleLines = Tools::StringUtil::explodeString(returnDataStopDaemon, "\n");
+            for (auto it : remoteConsoleLines)
+            {
+                if (!it.empty())
+                    progressInfo("REMOTE: " + it, CURRENT_POSITION);
+            }
 
             progressInfo("Removing files from remote device...", CURRENT_POSITION);
 

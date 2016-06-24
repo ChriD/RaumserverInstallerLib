@@ -40,8 +40,8 @@ int main()
 
     //rlutil::getkey();
 
-    deviceInfo.ip = "10.0.0.8";
-    deviceInfo.hardwareType = "3";
+    deviceInfo.ip = "10.0.0.2";
+    deviceInfo.hardwareType = "0";
     raumServerInstaller->startInstallToDevice(deviceInfo);
 
     rlutil::getkey();

@@ -11,7 +11,7 @@ namespace RaumserverInstaller
 
     RaumserverInstaller::~RaumserverInstaller()
     {
-        stopSSHAccessCheckerThreads();        
+        stopSSHAccessCheckerThreads();           
         httpClient.abortAllRequests();
         deviceInstaller.abortInstall();
     }

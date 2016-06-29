@@ -26,6 +26,7 @@ namespace RaumserverInstaller
         {
             abortRemove();
             abortInstall();
+            connections.disconnect_all();
         }
 
 

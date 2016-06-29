@@ -12,6 +12,7 @@ namespace RaumserverInstaller
         {        
             upnpStarted = false;
             upupDeviceListAll = nullptr;
+            initParams = nullptr;
             stopThreads = false;
         }
 
@@ -27,8 +28,10 @@ namespace RaumserverInstaller
                 refreshDeviceListThreadObject.join();
             }
 
-            delete upupDeviceListAll;
-            delete initParams;
+            if (upupDeviceListAll)
+                delete upupDeviceListAll;
+            if (initParams)
+                delete initParams;
             //OpenHome::Net::UpnpLibrary::Close(); // TODO: will fail! No idea why. Have to investigate
         }
 

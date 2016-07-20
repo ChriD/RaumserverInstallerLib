@@ -205,7 +205,8 @@ namespace RaumserverInstaller
 
             progressPercentage = 85;
 
-            // start raumserver         
+            // start raumserver    
+            /*
             progressInfo("Starting Raumserver on device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;            
             sshClient.executeCommand("/bin/sh /etc/init.d/S99raumserver start", returnDataStartDaemon);             
@@ -215,6 +216,12 @@ namespace RaumserverInstaller
                 if (!it.empty())
                     progressInfo("REMOTE: " + it, CURRENT_POSITION);
             }
+            */
+
+            // reboot raumserver                
+            progressInfo("Rebooting device! Please wait...", CURRENT_POSITION);
+            std::string returnDataStartDaemon;
+            sshClient.executeCommand("/bin/sh reboot", returnDataStartDaemon);            
 
             // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???
@@ -226,8 +233,8 @@ namespace RaumserverInstaller
             sshClient.closeSFTP();
             sshClient.closeSSH();            
 
-            progressInfo("Installation done!", CURRENT_POSITION);
-            sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done!", (std::uint8_t)progressPercentage, false));
+            progressInfo("Installation done! Device is now rebooting!", CURRENT_POSITION);
+            sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done! Device is now rebooting!", (std::uint8_t)progressPercentage, false));
         }
 
 

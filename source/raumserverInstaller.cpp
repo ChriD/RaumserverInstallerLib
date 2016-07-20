@@ -5,7 +5,9 @@ namespace RaumserverInstaller
     
     RaumserverInstaller::RaumserverInstaller()
     {
-        stopSSHAccessCheckThreads = false;        
+        stopSSHAccessCheckThreads = false;   
+        sshUser = "root";
+        sshPassword = "";
     }
 
 
@@ -263,9 +265,9 @@ namespace RaumserverInstaller
         sshClient.setLogObject(getLogObject());
 
         try
-        {            
+        {                        
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
-            sshClient.setAuth("root", "");
+            sshClient.setAuth(sshUser, sshPassword);
             if (sshClient.connectSSH())
             {
                 if (sshClient.connectSFTP())
@@ -401,6 +403,13 @@ namespace RaumserverInstaller
         sigDeviceInformationChanged.fire(deviceInfo);
 
 
+    }
+
+
+    void RaumserverInstaller::setSSHAuth(const std::string &_user, const std::string &_pass)
+    {
+        sshUser = _user;
+        sshPassword = _pass;
     }
 
 

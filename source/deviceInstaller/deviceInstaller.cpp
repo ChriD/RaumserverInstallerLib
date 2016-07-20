@@ -12,6 +12,8 @@ namespace RaumserverInstaller
         {
             progressPercentage = 0;
             deviceInstallerFilePath = "installSettings.xml";
+            sshUser = "root";
+            sshPassword = "";
             progressType = DeviceInstallerProgressType::DIPT_INSTALL;   
 
             raumserverDaemonUpdater.init();
@@ -218,6 +220,13 @@ namespace RaumserverInstaller
         void DeviceInstaller::onUpdaterBinaryUpdated()
         {            
         }
+
+
+        void DeviceInstaller::setSSHAuth(const std::string &_user, const std::string &_pass)
+        {
+            sshUser = _user;
+            sshPassword = _pass;
+        }
  
 
 
@@ -242,6 +251,7 @@ namespace RaumserverInstaller
             return progressInfo;
         }
       
+
 
     }
 }

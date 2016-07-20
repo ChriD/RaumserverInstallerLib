@@ -95,6 +95,10 @@ namespace RaumserverInstaller
             * returns a copy of the device map
             */
             EXPORT void initDiscover();;
+            /*
+            * sets ssh credentials
+            */
+            EXPORT void setSSHAuth(const std::string &_user, const std::string &_pass);
 
             /**
             * will be fired if a device was found where we can install the component on
@@ -144,6 +148,9 @@ namespace RaumserverInstaller
 
             // client for cheking if server is running
             HttpClient::HttpClient httpClient;    
+            
+            std::string sshUser;
+            std::string sshPassword;
 
             // version info
             VersionInfo::VersionInfo versionInfo;

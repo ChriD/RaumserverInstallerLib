@@ -143,7 +143,7 @@ namespace RaumserverInstaller
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
 
             // The authentication (user and password) is the same on every device
-            sshClient.setAuth("root", "");
+            sshClient.setAuth(sshUser, sshPassword);
            
             if (!sshClient.connectSSH())
             {
@@ -255,7 +255,7 @@ namespace RaumserverInstaller
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
 
             // The authentication (user and password) is the same on every device
-            sshClient.setAuth("root", "");
+            sshClient.setAuth(sshUser, sshPassword);
 
             if (!sshClient.connectSSH())
             {

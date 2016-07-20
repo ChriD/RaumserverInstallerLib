@@ -60,7 +60,11 @@ namespace RaumserverInstaller
                 EXPORT virtual void startRemove();
                 EXPORT virtual void abortRemove();
                 EXPORT virtual bool getActualBinaries();
-                EXPORT virtual void setDevice(const DeviceInformation &_deviceInfo);
+                EXPORT virtual void setDevice(const DeviceInformation &_deviceInfo);          
+                /*
+                * sets ssh credentials
+                */
+                EXPORT void setSSHAuth(const std::string &_user, const std::string &_pass);
 
                 /**
                 * 
@@ -75,6 +79,9 @@ namespace RaumserverInstaller
                 DeviceInformation deviceInformation;
                 std::double_t progressPercentage;
                 DeviceInstallerProgressType progressType;
+
+                std::string sshUser;
+                std::string sshPassword;
 
                 std::string binariesSourceWebUrl;
                 std::string currentVersionInfoWebUrl;

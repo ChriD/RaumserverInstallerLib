@@ -270,6 +270,7 @@ namespace RaumserverInstaller
             sshClient.setAuth(sshUser, sshPassword);
             if (sshClient.connectSSH())
             {
+                // TODO: use scp
                 if (sshClient.connectSFTP())
                 {
                     hasSFTPAccess = true;

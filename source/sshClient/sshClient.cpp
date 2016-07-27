@@ -73,8 +73,11 @@ namespace RaumserverInstaller
                 return failed("Error connecting to host!", sshError, returnCode);
             }
 
-            // Authenticate ourselves
-            returnCode = ssh_userauth_password(sshSession, user.c_str(), password.c_str());
+            // Authenticate ourselves 
+            if (password.empty())
+                returnCode = ssh_userauth_none(sshSession, user.c_str());
+            else
+                returnCode = ssh_userauth_password(sshSession, user.c_str(), password.c_str());
             if (returnCode != SSH_AUTH_SUCCESS)
             {
                 std::string sshError = ssh_get_error(sshSession);

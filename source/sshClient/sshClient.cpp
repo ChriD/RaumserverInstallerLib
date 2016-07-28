@@ -11,12 +11,14 @@ namespace RaumserverInstaller
         {
             sshSession = nullptr;
             sftpSession = nullptr;
+            scpSession = nullptr;            
         }
 
 
         SSHClient::~SSHClient()
         {
             closeSFTP();
+            closeSCP();
             closeSSH();
         }
 
@@ -159,7 +161,7 @@ namespace RaumserverInstaller
 
             return true;
         }
-
+       
 
         void SSHClient::setLogObject(std::shared_ptr<Log::Log> _logger)
         {
@@ -227,6 +229,19 @@ namespace RaumserverInstaller
             _result = result;
 
             return true;
+        }
+
+
+        bool SSHClient::connectSCP(std::string _directory, bool _readMode)
+        {
+            scp.setSessions(sshSession, nullptr);
+            return scp.connect(_directory, _readMode);
+        }
+
+
+        bool SSHClient::closeSCP()
+        {
+            return scp.close();
         }
 
     }

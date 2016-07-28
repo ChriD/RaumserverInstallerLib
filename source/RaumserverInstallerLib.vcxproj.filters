@@ -159,6 +159,9 @@
     <ClCompile Include="settings\settings.cpp">
       <Filter>settings</Filter>
     </ClCompile>
+    <ClCompile Include="sshClient\scpActions.cpp">
+      <Filter>sshClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="includes\settings\settings.h">
       <Filter>includes\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\sshClient\scpActions.h">
+      <Filter>includes\sshClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -94,6 +94,7 @@
     <ClCompile Include="raumserverInstaller.cpp" />
     <ClCompile Include="raumserverInstallerBase.cpp" />
     <ClCompile Include="settings\settings.cpp" />
+    <ClCompile Include="sshClient\scpActions.cpp" />
     <ClCompile Include="sshClient\sftpActions.cpp" />
     <ClCompile Include="sshClient\sshClient.cpp" />
     <ClCompile Include="tools\tinydircpp.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="includes\signals\connections.hpp" />
     <ClInclude Include="includes\signals\signal.hpp" />
     <ClInclude Include="includes\signals\signals.hpp" />
+    <ClInclude Include="includes\sshClient\scpActions.h" />
     <ClInclude Include="includes\sshClient\sftpActions.h" />
     <ClInclude Include="includes\sshClient\sshClient.h" />
     <ClInclude Include="includes\tools\commonUtil.h" />

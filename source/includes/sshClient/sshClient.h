@@ -31,6 +31,7 @@
 
 #include "raumserverInstallerBase.h"
 #include "sshClient/sftpActions.h"
+#include "sshClient/scpActions.h"
 
 #include <libssh/libssh.h> 
 #include <libssh/sftp.h>
@@ -48,9 +49,11 @@ namespace RaumserverInstaller
                 ~SSHClient();
 
                 EXPORT bool connectSSH();
-                EXPORT bool connectSFTP();
+                EXPORT bool connectSFTP();       
+                EXPORT bool connectSCP(std::string _directory = ".", bool _readMode = true);
                 EXPORT bool closeSSH();
-                EXPORT bool closeSFTP();
+                EXPORT bool closeSFTP();      
+                EXPORT bool closeSCP();
 
                 EXPORT void setOption(const ssh_options_e &_option, const std::string &_value);
                 EXPORT void setAuth(const std::string &_user, const std::string &_password);
@@ -60,13 +63,15 @@ namespace RaumserverInstaller
                 EXPORT bool executeCommand(const std::string &_command, std::string &_result);
 
                 SFTPActions sftp;
+                SCPActions scp;
 
             protected:
                 std::string user;
                 std::string password;
 
                 ssh_session sshSession;
-                sftp_session sftpSession;
+                sftp_session sftpSession; 
+                ssh_scp scpSession;
 
                 std::map<ssh_options_e, std::string> sshOptions;
 

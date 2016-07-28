@@ -254,8 +254,8 @@ namespace RaumserverInstaller
 
 
     void RaumserverInstaller::sshAccessCheckThread(std::string _ip)
-    {
-        bool hasSFTPAccess = false;
+    {        
+        bool hasSCPAccess = false;
         DeviceInformation deviceInfo;
         SSHClient::SSHClient sshClient;
 
@@ -271,9 +271,9 @@ namespace RaumserverInstaller
             if (sshClient.connectSSH())
             {
                 // TODO: use scp
-                if (sshClient.connectSFTP())
+                if (sshClient.connectSCP())
                 {
-                    hasSFTPAccess = true;
+                    hasSCPAccess = true;
                 }
             }
         }
@@ -300,16 +300,16 @@ namespace RaumserverInstaller
             auto it = deviceInformationMap.find(_ip);
             if (it != deviceInformationMap.end())
             {
-                auto access = hasSFTPAccess ? "yes" : "no";
+                auto access = hasSCPAccess ? "yes" : "no";
                 logInfo("SSH Access for " + it->second.name + " (" + it->second.ip + "): " + access, CURRENT_POSITION);               
 
-                it->second.sshAccess = hasSFTPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
+                it->second.sshAccess = hasSCPAccess ? UnknownYesNo::YES : UnknownYesNo::NO;
 
                 // check if the raumserver is installed by checking if the folder is there
-                if (hasSFTPAccess)
+                if (hasSCPAccess)
                 {
-                    if (sshClient.sftp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length() - 1)) && 
-                        sshClient.sftp.existsFile(remoteInstallationPathInitScript + "S99raumserver"))
+                    if (sshClient.scp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length() - 1)) && 
+                        sshClient.scp.existsFile(remoteInstallationPathInitScript + "S99raumserver"))
                         it->second.raumserverInstalled = UnknownYesNo::YES;
                     else
                         it->second.raumserverInstalled = UnknownYesNo::NO;

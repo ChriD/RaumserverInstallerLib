@@ -269,12 +269,13 @@ namespace RaumserverInstaller
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, _ip);
             sshClient.setAuth(sshUser, sshPassword);
             if (sshClient.connectSSH())
-            {
+            { 
                 // TODO: use scp
-                if (sshClient.connectSCP(".."))
-                {
-                    hasSCPAccess = true;
-                }
+                hasSCPAccess = true;
+                //if (sshClient.connectSCP(".."))
+                //{
+                //    hasSCPAccess = true;
+                //}
             }
         }
         catch (std::exception &e)

@@ -90,6 +90,7 @@ namespace RaumserverInstaller
             }
 
             sftp.setSessions(sshSession, nullptr);
+            scp.setSessions(sshSession, nullptr);
 
             return true;
         }

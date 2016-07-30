@@ -221,6 +221,9 @@ namespace RaumserverInstaller
             // reboot raumserver                
             progressInfo("Rebooting device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;
+
+            // reconnect
+            sshClient.connectSSH();
             sshClient.executeCommand("reboot", returnDataStartDaemon);            
 
             // TODO: Then check if Raumserver is running (use standard port)
@@ -295,7 +298,7 @@ namespace RaumserverInstaller
 
             // delete raumserver directory
             progressPercentage = 80;            
-            if (!sshClient.scp.removeDir(installDir))
+            if (!sshClient.scp.removeDir("/" + installDir))
             {
                 progressError("Can't delete raumserver install folder!", CURRENT_POSITION);
                 hasError = true;
@@ -304,7 +307,7 @@ namespace RaumserverInstaller
                 progressInfo("Raumserver install folder deleted!", CURRENT_POSITION);
 
             // delete init script            
-            if (!sshClient.scp.removeFile(installDirStartScript + "S99raumserver"))
+            if (!sshClient.scp.removeFile("/" + installDirStartScript + "S99raumserver"))
             {
                 progressError("Can't delete raumserver start script!", CURRENT_POSITION);
                 hasError = true;

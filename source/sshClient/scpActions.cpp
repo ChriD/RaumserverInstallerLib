@@ -10,6 +10,7 @@ namespace RaumserverInstaller
         SCPActions::SCPActions() : RaumserverInstallerBase()
         {  
             stopThreads = false;
+            scpSession = nullptr;
         }
 
 

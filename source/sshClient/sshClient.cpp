@@ -172,7 +172,64 @@ namespace RaumserverInstaller
 
 
         bool SSHClient::executeCommand(const std::string &_command, std::string &_result)
-        {
+         {
+            ssh_channel channel;
+            std::int16_t result;                    
+
+            channel = ssh_channel_new(sshSession);
+            if (channel == NULL)
+            {
+                logError("Can't create channel: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                return false;
+            }
+
+            result = ssh_channel_open_session(channel);
+            if (result < 0)
+            {
+                logError("Can't create session: " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                ssh_channel_free(channel);
+                return false;
+            }
+
+            logDebug("Execute SSH command: " + _command, CURRENT_POSITION);
+
+            result = ssh_channel_request_exec(channel, _command.c_str());
+            if (result < 0)
+            {
+                logError("Can't execute command: " + _command + " : " + std::string(ssh_get_error(sshSession)), CURRENT_POSITION);
+                ssh_channel_close(channel);
+                ssh_channel_free(channel);
+                return false;
+            }
+
+            logDebug("Reading command return data", CURRENT_POSITION);
+
+            
+            std::string returnStr = "";
+            char buffer[256];
+            std::int32_t nbytes, sumBytes = 0;
+            nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
+            while (nbytes > 0)
+            {
+                std::string partResult = buffer;
+                partResult.resize(nbytes);
+                returnStr += partResult;
+                sumBytes += nbytes;
+                nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
+            }
+            if (nbytes < 0)
+            {
+                // Well, no return is ok...
+            }
+
+            ssh_channel_send_eof(channel);
+            ssh_channel_close(channel);
+            ssh_channel_free(channel);
+
+            _result = returnStr;
+
+
+            /*
             ssh_channel channel;
             int rc;
 
@@ -228,6 +285,7 @@ namespace RaumserverInstaller
             ssh_channel_free(channel);
 
             _result = result;
+            */
 
             return true;
         }

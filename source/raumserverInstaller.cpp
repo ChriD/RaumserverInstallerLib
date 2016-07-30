@@ -271,7 +271,7 @@ namespace RaumserverInstaller
             if (sshClient.connectSSH())
             {
                 // TODO: use scp
-                if (sshClient.connectSCP())
+                if (sshClient.connectSCP(".."))
                 {
                     hasSCPAccess = true;
                 }
@@ -308,15 +308,15 @@ namespace RaumserverInstaller
                 // check if the raumserver is installed by checking if the folder is there
                 if (hasSCPAccess)
                 {
-                    if (sshClient.scp.existsFile(remoteInstallationPath.substr(0, remoteInstallationPath.length() - 1)) && 
-                        sshClient.scp.existsFile(remoteInstallationPathInitScript + "S99raumserver"))
+                    if (sshClient.scp.existsFile("/" + remoteInstallationPath.substr(0, remoteInstallationPath.length() - 1)) && 
+                        sshClient.scp.existsFile("/" + remoteInstallationPathInitScript + "S99raumserver"))
                         it->second.raumserverInstalled = UnknownYesNo::YES;
                     else
                         it->second.raumserverInstalled = UnknownYesNo::NO;
                 }
 
                 // get a copy of the info struct
-                deviceInfo = it->second;
+                 deviceInfo = it->second;
                
             }
         }

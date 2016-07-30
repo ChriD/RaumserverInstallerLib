@@ -240,8 +240,8 @@ namespace RaumserverInstaller
 
 
         bool SSHClient::closeSCP()
-        {
-            return scp.close();
+        {            
+            return scp.close();        
         }
 
     }

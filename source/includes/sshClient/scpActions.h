@@ -74,13 +74,14 @@ namespace RaumserverInstaller
                 
                 EXPORT bool makeDir(std::string _remoteDir);
                 EXPORT bool removeDir(std::string _remoteDir);
+                EXPORT bool previousDir();
                 EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false);
                 EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile);
                 EXPORT bool removeFile(std::string _remoteFile);
                 EXPORT bool setChmod(std::string _fileOrDir, std::uint16_t _chmod);
                 EXPORT bool existsFile(std::string _file);    
 
-                EXPORT bool connect(std::string _directory = ".", bool _readMode = true);
+                EXPORT bool connect(std::string _directory = ".", bool _readMode = true, bool _leaveDir = true);
                 EXPORT bool close();
                 
                 sigs::signal<void(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size)> sigFileCopying;
@@ -89,7 +90,7 @@ namespace RaumserverInstaller
 
             protected:
                 ssh_session sshSession;
-                ssh_scp scpSession;
+                ssh_scp scpSession;                
 
                 std::string error;
                 std::int16_t errorCode;
@@ -102,6 +103,7 @@ namespace RaumserverInstaller
                 
                 void setError(const std::string &_error = "", const std::int16_t &_errorCode = 999);
                 bool sessionsExists();
+                bool executeCommand(const std::string &_command, std::string &_result);
 
         };
        

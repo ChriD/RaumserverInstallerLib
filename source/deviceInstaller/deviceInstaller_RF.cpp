@@ -16,9 +16,9 @@ namespace RaumserverInstaller
             installDir = remoteInstallationPath;
             installDirStartScript = remoteInstallationPathInitScript;
 
-            connections.connect(sshClient.sftp.sigStartFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
-            connections.connect(sshClient.sftp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
-            connections.connect(sshClient.sftp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
+            connections.connect(sshClient.scp.sigStartFileCopying, this, &DeviceInstaller_RaumfeldDevice::onStartFileCopying);
+            connections.connect(sshClient.scp.sigFileCopying, this, &DeviceInstaller_RaumfeldDevice::onFileCopying);
+            connections.connect(sshClient.scp.sigEndFileCopying, this, &DeviceInstaller_RaumfeldDevice::onEndFileCopying);
         }
 
 
@@ -35,7 +35,7 @@ namespace RaumserverInstaller
             DeviceInstaller::startInstall();
 
             sshClient.setLogObject(getLogObject());
-            sshClient.sftp.setLogObject(getLogObject());           
+            sshClient.scp.setLogObject(getLogObject());
 
             abortRemove();
             abortInstall();
@@ -63,7 +63,7 @@ namespace RaumserverInstaller
             DeviceInstaller::startRemove();
 
             sshClient.setLogObject(getLogObject());
-            sshClient.sftp.setLogObject(getLogObject());
+            sshClient.scp.setLogObject(getLogObject());
 
             abortRemove();
             abortInstall();
@@ -138,7 +138,7 @@ namespace RaumserverInstaller
             if (abortInstallThread)
                 return;
 
-            progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
+            progressInfo("Try to establish SSH and SCP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
 
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
 
@@ -152,9 +152,9 @@ namespace RaumserverInstaller
                 return;
             }
                          
-            if (!sshClient.connectSFTP())
+            if (!sshClient.connectSCP("..", false))
             {
-                progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
+                progressError("Could not connect to Device! (SCP)", CURRENT_POSITION);
                 sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }      
@@ -165,7 +165,7 @@ namespace RaumserverInstaller
             std::vector<std::string> remoteConsoleLines;
 
             progressPercentage = 10;
-            progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
+            progressInfo("Connected to device (SSH/SCP)", CURRENT_POSITION);
 
             // stop raumserver deamon if is running   
             progressInfo("Stopping Raumserver on device! Please wait...", CURRENT_POSITION);
@@ -195,13 +195,13 @@ namespace RaumserverInstaller
             // copy the files. Due the installation is in a thread we can do a 'sync' copy 
             // aborting may not be possible now because of 'sync' call but we may accept this for now
             // (so 'abortInstallThread' has no funkcion right now)
-            sshClient.sftp.copyDir(binaryDir, installDir, true, true);
+            sshClient.scp.copyDir(binaryDir, installDir, true, true);
                    
             progressPercentage = 80;
 
             // copy init script
-            sshClient.sftp.copyFile(binaryDir + "S99raumserver", installDirStartScript + "S99raumserver");
-            sshClient.sftp.setChmod(installDirStartScript + "S99raumserver", S_IRWXU | S_IRWXG | S_IRWXO);
+            sshClient.scp.copyFile(binaryDir + "S99raumserver", installDirStartScript + "S99raumserver");
+            sshClient.scp.setChmod(installDirStartScript + "S99raumserver", S_IRWXU | S_IRWXG | S_IRWXO);
 
             progressPercentage = 85;
 
@@ -221,7 +221,7 @@ namespace RaumserverInstaller
             // reboot raumserver                
             progressInfo("Rebooting device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;
-            sshClient.executeCommand("/bin/sh reboot", returnDataStartDaemon);            
+            sshClient.executeCommand("reboot", returnDataStartDaemon);            
 
             // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???
@@ -229,8 +229,8 @@ namespace RaumserverInstaller
             // request.wait();
 
             progressPercentage = 100;
-            progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);
-            sshClient.closeSFTP();
+            progressInfo("Closing SSH/SCP connection", CURRENT_POSITION);
+            sshClient.closeSCP();
             sshClient.closeSSH();            
 
             progressInfo("Installation done! Device is now rebooting!", CURRENT_POSITION);
@@ -257,7 +257,7 @@ namespace RaumserverInstaller
                 return;
             }
 
-            progressInfo("Try to establish SSH and SFTP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
+            progressInfo("Try to establish SSH and SCP connection with device " + deviceInformation.name + " (" + deviceInformation.ip + ")", CURRENT_POSITION);
 
             sshClient.setOption(ssh_options_e::SSH_OPTIONS_HOST, deviceInformation.ip);
 
@@ -271,15 +271,15 @@ namespace RaumserverInstaller
                 return;
             }
 
-            if (!sshClient.connectSFTP())
+            if (!sshClient.connectSCP("..", false))
             {
-                progressError("Could not connect to Device! (SFTP)", CURRENT_POSITION);
+                progressError("Could not connect to Device! (SCP)", CURRENT_POSITION);
                 sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Could not connect to Device! (SSH)", (std::uint8_t)progressPercentage, true));
                 return;
             }
 
             progressPercentage = 10;
-            progressInfo("Connected to device (SSH/SFTP)", CURRENT_POSITION);
+            progressInfo("Connected to device (SSH/SCP)", CURRENT_POSITION);
             // stop raumserver deamon if is running   
             progressInfo("Stopping Raumserver on device! Please wait...", CURRENT_POSITION);
             std::string returnDataStopDaemon;
@@ -295,7 +295,7 @@ namespace RaumserverInstaller
 
             // delete raumserver directory
             progressPercentage = 80;            
-            if (!sshClient.sftp.removeDir(installDir))
+            if (!sshClient.scp.removeDir(installDir))
             {
                 progressError("Can't delete raumserver install folder!", CURRENT_POSITION);
                 hasError = true;
@@ -304,7 +304,7 @@ namespace RaumserverInstaller
                 progressInfo("Raumserver install folder deleted!", CURRENT_POSITION);
 
             // delete init script            
-            if (!sshClient.sftp.removeFile(installDirStartScript + "S99raumserver"))
+            if (!sshClient.scp.removeFile(installDirStartScript + "S99raumserver"))
             {
                 progressError("Can't delete raumserver start script!", CURRENT_POSITION);
                 hasError = true;
@@ -313,8 +313,8 @@ namespace RaumserverInstaller
                 progressInfo("Raumserver start script deleted!", CURRENT_POSITION);
            
             progressPercentage = 100;
-            progressInfo("Closing SSH/SFTP connection", CURRENT_POSITION);
-            sshClient.closeSFTP();
+            progressInfo("Closing SSH/SCP connection", CURRENT_POSITION);
+            sshClient.closeSCP();
             sshClient.closeSSH();
 
             if (hasError)

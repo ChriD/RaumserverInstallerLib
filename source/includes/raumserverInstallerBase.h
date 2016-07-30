@@ -32,8 +32,10 @@
 namespace RaumserverInstaller
 {
 
-    const std::string remoteInstallationPath = "../etc/raumfeld/raumserverDaemon/";
-    const std::string remoteInstallationPathInitScript = "../etc/init.d/";
+    //const std::string remoteInstallationPath = "../etc/raumfeld/raumserverDaemon/";
+    const std::string remoteInstallationPath = "etc/raumfeld/raumserverDaemon/";
+    //const std::string remoteInstallationPathInitScript = "../etc/init.d/";
+    const std::string remoteInstallationPathInitScript = "etc/init.d/";    
 
     enum DeviceType { DT_UNKNOWN = 0 , DT_UPNPDEVICE_RAUMFELD = 1};
     enum UnknownYesNo  { UNKNOWN = -1, YES = 1, NO = 0 };    

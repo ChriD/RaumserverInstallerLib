@@ -23,13 +23,14 @@
 
 
 #pragma once
-#ifndef RAUMKSERVERINSTALLER_SCPACTIONS_H
-#define RAUMKSERVERINSTALLER_SCPACTIONS_H
+#ifndef RAUMKSERVERINSTALLER_SCPACTIONS_LIBSSH2_H
+#define RAUMKSERVERINSTALLER_SCPACTIONS_LIBSSH2_H
 
 #include <map>
 
 #include "raumserverInstallerBase.h"
 #include "tools/tinydircpp.h"
+#include "sshClient/scpActions.h"
 
 #include <libssh/libssh.h> 
 #include <libssh/sftp.h>
@@ -63,26 +64,26 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
 
-        class SCPActions : public RaumserverInstallerBase
+        class SCPActions_Libssh2 : public SCPActions
         {
             public:
-                SCPActions();
-                ~SCPActions();
+                SCPActions_Libssh2();
+                ~SCPActions_Libssh2();
 
-                EXPORT virtual void setSessions(ssh_session _sshSession, ssh_scp _scpSession);
-                EXPORT virtual void cancelActions();
+                EXPORT void setSessions(ssh_session _sshSession, ssh_scp _scpSession) override;
+                EXPORT void cancelActions() override;
                 
-                EXPORT virtual bool makeDir(std::string _remoteDir);
-                EXPORT virtual bool removeDir(std::string _remoteDir);
-                EXPORT virtual bool previousDir();
-                EXPORT virtual void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false);
-                EXPORT virtual bool copyFile(std::string _clientFile, std::string _remoteFile);
-                EXPORT virtual bool removeFile(std::string _remoteFile);
-                EXPORT virtual bool setChmod(std::string _fileOrDir, std::uint16_t _chmod);
-                EXPORT virtual bool existsFile(std::string _file);
+                EXPORT bool makeDir(std::string _remoteDir) override;
+                EXPORT bool removeDir(std::string _remoteDir) override;
+                EXPORT bool previousDir() override;
+                EXPORT void copyDir(std::string _clientDir, std::string _remoteDir, bool _recursive = true, bool _sync = false) override;
+                EXPORT bool copyFile(std::string _clientFile, std::string _remoteFile) override;
+                EXPORT bool removeFile(std::string _remoteFile) override;
+                EXPORT bool setChmod(std::string _fileOrDir, std::uint16_t _chmod) override;
+                EXPORT bool existsFile(std::string _file) override;
 
-                EXPORT virtual bool connect(std::string _directory = ".", bool _readMode = true, bool _leaveDir = true);
-                EXPORT virtual bool close();
+                EXPORT bool connect(std::string _directory = ".", bool _readMode = true, bool _leaveDir = true) override;
+                EXPORT bool close() override;
                 
                 sigs::signal<void(std::string _filename, std::uint64_t _copiedSize, std::uint64_t _size)> sigFileCopying;
                 sigs::signal<void(std::string _filename, std::uint64_t _size)> sigEndFileCopying;
@@ -99,11 +100,11 @@ namespace RaumserverInstaller
 
                 std::atomic_bool stopThreads;
 
-                void virtual copyDirThread(std::string _clientDir, std::string _remoteDir, bool _recursive = true);
+                void copyDirThread(std::string _clientDir, std::string _remoteDir, bool _recursive = true) override;
                 
-                void virtual setError(const std::string &_error = "", const std::int16_t &_errorCode = 999);
-                bool virtual sessionsExists();
-                bool virtual executeCommand(const std::string &_command, std::string &_result);
+                void setError(const std::string &_error = "", const std::int16_t &_errorCode = 999);
+                bool sessionsExists() override;
+                bool executeCommand(const std::string &_command, std::string &_result) override;
 
         };
        

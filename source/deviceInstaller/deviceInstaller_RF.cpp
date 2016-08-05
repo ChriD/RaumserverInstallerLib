@@ -218,13 +218,14 @@ namespace RaumserverInstaller
             }
             */
 
+            progressInfo("Closing SCP connection", CURRENT_POSITION);
+            sshClient.closeSCP();
+
             // reboot raumserver                
             progressInfo("Rebooting device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;
 
-            // reconnect
-            sshClient.connectSSH();
-            sshClient.executeCommand("reboot", returnDataStartDaemon);            
+            sshClient.executeCommand("reboot", returnDataStartDaemon);        
 
             // TODO: Then check if Raumserver is running (use standard port)
             // while loop always adding one percentage???
@@ -232,8 +233,7 @@ namespace RaumserverInstaller
             // request.wait();
 
             progressPercentage = 100;
-            progressInfo("Closing SSH/SCP connection", CURRENT_POSITION);
-            sshClient.closeSCP();
+            progressInfo("Closing SSH connection", CURRENT_POSITION);            
             sshClient.closeSSH();            
 
             progressInfo("Installation done! Device is now rebooting!", CURRENT_POSITION);

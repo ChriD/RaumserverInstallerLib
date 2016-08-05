@@ -162,6 +162,12 @@
     <ClCompile Include="sshClient\scpActions.cpp">
       <Filter>sshClient</Filter>
     </ClCompile>
+    <ClCompile Include="sshClient\scpActions_libssh2.cpp">
+      <Filter>sshClient</Filter>
+    </ClCompile>
+    <ClCompile Include="sshClient\sshClient_libssh2.cpp">
+      <Filter>sshClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\xml\pugixml\pugiconfig.hpp">
@@ -291,6 +297,12 @@
       <Filter>includes\settings</Filter>
     </ClInclude>
     <ClInclude Include="includes\sshClient\scpActions.h">
+      <Filter>includes\sshClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\sshClient\scpActions_libssh2.h">
+      <Filter>includes\sshClient</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\sshClient\sshClient_libssh2.h">
       <Filter>includes\sshClient</Filter>
     </ClInclude>
   </ItemGroup>

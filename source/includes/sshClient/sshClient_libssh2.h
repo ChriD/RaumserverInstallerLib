@@ -23,15 +23,16 @@
 
 
 #pragma once
-#ifndef RAUMKSERVERINSTALLER_SSHCLIENT_H
-#define RAUMKSERVERINSTALLER_SSHCLIENT_H
+#ifndef RAUMKSERVERINSTALLER_SSHCLIENT_LIBSSH2_H
+#define RAUMKSERVERINSTALLER_SSHCLIENT_LIBSSH2_H
 
 
 #include <map>
 
 #include "raumserverInstallerBase.h"
 #include "sshClient/sftpActions.h"
-#include "sshClient/scpActions.h"
+#include "sshClient/scpActions_libssh2.h"
+#include "sshClient/sshClient.h"
 
 #include <libssh/libssh.h> 
 #include <libssh/sftp.h>
@@ -42,25 +43,25 @@ namespace RaumserverInstaller
     namespace SSHClient
     {
        
-        class SSHClient : public RaumserverInstallerBase
+        class SSHClient_Libssh2 : public SSHClient
         {
             public:
-                SSHClient();
-                ~SSHClient();
+                SSHClient_Libssh2();
+                ~SSHClient_Libssh2();
 
-                EXPORT virtual bool connectSSH();
-                EXPORT virtual bool connectSFTP();
-                EXPORT virtual bool connectSCP(std::string _directory = ".", bool _readMode = true);
-                EXPORT virtual bool closeSSH();
-                EXPORT virtual bool closeSFTP();
-                EXPORT virtual bool closeSCP();
+                EXPORT bool connectSSH() override;
+                EXPORT bool connectSFTP() override;
+                EXPORT bool connectSCP(std::string _directory = ".", bool _readMode = true) override;
+                EXPORT bool closeSSH() override;
+                EXPORT bool closeSFTP() override;
+                EXPORT bool closeSCP() override;
 
-                EXPORT virtual void setOption(const ssh_options_e &_option, const std::string &_value);
-                EXPORT virtual void setAuth(const std::string &_user, const std::string &_password);
+                EXPORT void setOption(const ssh_options_e &_option, const std::string &_value) override;
+                EXPORT void setAuth(const std::string &_user, const std::string &_password) override;
                 
-                EXPORT virtual void setLogObject(std::shared_ptr<Log::Log> _logger) override;
+                EXPORT void setLogObject(std::shared_ptr<Log::Log> _logger) override;
 
-                EXPORT virtual bool executeCommand(const std::string &_command, std::string &_result);
+                EXPORT bool executeCommand(const std::string &_command, std::string &_result) override;
 
                 SFTPActions sftp;
                 SCPActions scp;

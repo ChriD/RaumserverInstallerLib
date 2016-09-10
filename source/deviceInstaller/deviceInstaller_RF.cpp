@@ -222,22 +222,26 @@ namespace RaumserverInstaller
             sshClient.closeSCP();
 
             // reboot raumserver                
-            progressInfo("Rebooting device! Please wait...", CURRENT_POSITION);
+            progressInfo("Trying to reboot device! Please wait...", CURRENT_POSITION);
             std::string returnDataStartDaemon;
 
-            sshClient.executeCommand("reboot", returnDataStartDaemon);        
+            sshClient.executeCommand("reboot", returnDataStartDaemon);
+//            progressInfo("Closing SSH connection", CURRENT_POSITION);
+            sshClient.closeSSH();
 
-            // TODO: Then check if Raumserver is running (use standard port)
-            // while loop always adding one percentage???
-            //httpClient.request("http://" + _deviceInformation.ip + ":8080/raumserver/data/getVersion", nullptr, nullptr, this, std::bind(&RaumserverInstaller::onRequestResult, this, std::placeholders::_1));
-            // request.wait();
+            // wait 4,5 seconds and then try if device is reachable. if not reboot was sucsess, otherwise give info to user that a manuel restart has to be done!
+            std::this_thread::sleep_for(std::chrono::milliseconds(4500));
+            if(sshClient.connectSSH())
+                progressError("Reboot Failed! Please restart device manually!", CURRENT_POSITION);
+            else
+                progressInfo("Device is now rebooting!", CURRENT_POSITION);   
+            sshClient.closeSSH();
 
             progressPercentage = 100;
-            progressInfo("Closing SSH connection", CURRENT_POSITION);            
-            sshClient.closeSSH();            
+                  
 
-            progressInfo("Installation done! Device is now rebooting!", CURRENT_POSITION);
-            sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done! Device is now rebooting!", (std::uint8_t)progressPercentage, false));
+            progressInfo("Installation done!", CURRENT_POSITION);
+            sigInstallDone.fire(DeviceInstallerProgressInfo(progressType, "Installation done!", (std::uint8_t)progressPercentage, false));
         }
 
 

@@ -45,8 +45,8 @@ namespace RaumserverInstaller
         class SSHClient : public RaumserverInstallerBase
         {
             public:
-                SSHClient();
-                ~SSHClient();
+                EXPORT SSHClient();
+                EXPORT ~SSHClient();
 
                 EXPORT virtual bool connectSSH();
                 EXPORT virtual bool connectSFTP();

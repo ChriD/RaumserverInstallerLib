@@ -335,25 +335,27 @@ int main()
     RaumserverInstaller::DeviceInformation deviceInfo;
 
     deviceInfo.name = "Dummmy";
-    deviceInfo.ip = "10.0.0.4";
+    deviceInfo.ip = "10.0.0.1";
     deviceInfo.type = RaumserverInstaller::DeviceType::DT_UPNPDEVICE_RAUMFELD;
 
     //raumServerInstaller->startInstallToDevice(deviceInfo);
 
     //rlutil::getkey();
 
-    deviceInfo.ip = "10.0.0.2";
-    deviceInfo.hardwareType = "0";
+    deviceInfo.ip = "10.0.0.201";
+    deviceInfo.hardwareType = "3";
     raumServerInstaller->startInstallToDevice(deviceInfo);
 
-    rlutil::getkey();
-
-    delete raumServerInstaller;
-    raumServerInstaller = new RaumserverInstaller::RaumserverInstaller();
-
-    raumServerInstaller->startRemoveFromDevice(deviceInfo);
+    //deviceInfo.ip = "10.0.0.201";
+    //deviceInfo.hardwareType = "3";
+    //raumServerInstaller->startInstallToDevice(deviceInfo);
 
     rlutil::getkey();
+
+    //delete raumServerInstaller;
+    //raumServerInstaller = new RaumserverInstaller::RaumserverInstaller();/
+    //raumServerInstaller->startRemoveFromDevice(deviceInfo);
+   // rlutil::getkey();
 
     delete raumServerInstaller;
 
